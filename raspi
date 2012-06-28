@@ -23,7 +23,6 @@ my %ssidIps = (
 if(@ARGV >= 1 and $ARGV[0] eq '-vnc'){
   shift;
   my @args = @ARGV;
-  system $0, "-s", "startx &";
   exec "$baseDir/raspi-vnc", @args;
 }
 
