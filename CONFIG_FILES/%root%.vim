@@ -1,1 +1,1 @@
-/home/user/.vim
+/home/pi/.vim

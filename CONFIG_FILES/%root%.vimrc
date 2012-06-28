@@ -1,1 +1,1 @@
-/home/user/.vimrc
+/home/pi/.vimrc
