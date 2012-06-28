@@ -8,7 +8,7 @@ my $hostname = `cat $baseDir/.hostname`;
 my @ips = `cat $baseDir/.ipguesses`;
 my @macs = `cat $baseDir/.macs`;
 
-my $defaultUser = 'pi';
+my $defaultUser = 'root';
 
 chomp $hostname;
 chomp foreach @ips;
