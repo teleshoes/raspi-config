@@ -28,7 +28,9 @@ my %ssidIps = (
 if(@ARGV >= 1 and $ARGV[0] eq '-vnc'){
   shift;
   my @args = @ARGV;
-  exec "$baseDir/raspi-vnc", @args;
+  my $host = `$0`;
+  chomp $host;
+  exec "vnc", "$defaultUser\@$host", @args;
 }
 
 my $ssh = 0;
