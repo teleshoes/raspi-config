@@ -1,0 +1,12 @@
+!) sd card insert
+2) run this to copy it, assuming mmcblk0 is the sd card
+sudo dd bs=1M if=image of=/dev/mmcblk0
+3) insert sd card and ethernet cable
+4) start looking for hostname raspberrypi
+   wait 30s, reboot
+   wait 30s, reboot
+5) ssh pi@raspberrypi #pw=raspberry
+6) sudo raspi-config #resize sd card
+7) reboot
+8) wait 15min {try less! its probably 5 or so}
+9) reboot
