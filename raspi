@@ -10,6 +10,11 @@ my @macs = `cat $baseDir/.macs`;
 
 my $defaultUser = 'root';
 
+#if script invoked is `pi`, default to user pi
+if($0 =~ /^(.*\/)?pi$/){
+  $defaultUser = 'pi';
+}
+
 chomp $hostname;
 chomp foreach @ips;
 chomp foreach @macs;
