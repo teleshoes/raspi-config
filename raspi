@@ -28,13 +28,20 @@ if(@ARGV >= 1 and $ARGV[0] eq '-vnc'){
 
 my $ssh = 0;
 my $bash = 0;
-if(@ARGV >= 1 and $ARGV[0] eq '-s'){
-  shift;
+my $user;
+if(@ARGV > 0 and $ARGV[0] =~ /^(-s|-b)$/){
   $ssh = 1;
-}elsif(@ARGV == 2 and $ARGV[0] eq '-b'){
-  shift;
-  $ssh = 1;
-  $bash = 1;
+  my $arg = shift;
+  if(@ARGV > 1 and $ARGV[0] eq '-u'){
+    shift;
+    $user = shift;
+  }else{
+    $user = $defaultUser;
+  }
+  if($arg eq '-b'){
+    die "-b command must be a single string\n" if @ARGV != 1;
+    $bash = 1;
+  }
 }
 
 sub getHosts(){
@@ -95,9 +102,9 @@ if($ssh){
   if($bash){
     my $c = "@ARGV";
     $c =~ s/'/'\\''/g;
-    exec "ssh", "$defaultUser\@$hostname", "bash -c '$c'";
+    exec "ssh", "$user\@$hostname", "bash -c '$c'";
   }else{
-    exec "ssh", "$defaultUser\@$hostname", @ARGV;
+    exec "ssh", "$user\@$hostname", @ARGV;
   }
 }elsif(@ARGV > 0){
   die "Usage:
@@ -105,9 +112,9 @@ if($ssh){
       establish hosts file, up devices, and print hostname
     $0 -vnc <server args> [-- <client args>]
       call raspi-vnc {e.g. `$0 -vnc rotate90 -- -quality 0`}
-    $0 -s CMD ARG ARG..
+    $0 -s [-u USER] CMD ARG ARG..
       setup and then ssh with command and args
-    $0 -b SHELLCMD
+    $0 -b [-u USER] SHELLCMD 
       setup and then invoke single cmd string in bash\n";
 }else{
   print "$hostname\n";
