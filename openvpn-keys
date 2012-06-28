@@ -1,0 +1,5 @@
+#!/bin/bash
+rsync -av --progress $HOME/openvpn root@`raspi`:/home/pi --exclude=status
+scp $HOME/bin/escribe-hosts root@`raspi`:/tmp
+ssh root@`raspi` /tmp/escribe-hosts
+ssh root@`raspi` chown -R pi.pi /home/pi/openvpn
