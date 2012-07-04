@@ -33,17 +33,8 @@ sub handleFile($$){
   }
 }
 
-my @files = `ls -d $DIR/%*`;
-for my $file(@files){
-  chomp $file;
-  $file =~ s/^.*\///;
-  my $src = "$DIR/$file";
-  my $dest = $file;
-  handleFile $src, $dest;
-}
-
-for my $file(`cat $DIR/config-files-to-remove`){
-  chomp $file;
+sub removeFile($){
+  my $file = shift;
   if(-e $file){
     if(-d $file){
       $file =~ s/\/$//;
@@ -55,4 +46,17 @@ for my $file(`cat $DIR/config-files-to-remove`){
     }
     system "rm -r $file";
   }
+}
+
+for my $file(`ls -d $DIR/%*`){
+  chomp $file;
+  $file =~ s/^.*\///;
+  my $src = "$DIR/$file";
+  my $dest = $file;
+  handleFile $src, $dest;
+}
+
+for my $file(`cat $DIR/config-files-to-remove`){
+  chomp $file;
+  removeFile $file;
 }
