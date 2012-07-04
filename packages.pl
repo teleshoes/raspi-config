@@ -6,6 +6,9 @@ my %pkgGroups = (
   '1' => [qw(
     vim-gtk rsync wget git openvpn
   )],
+  '2' => [qw(
+    libterm-readkey-perl
+  )],
 );
 
 sub installPackages();
