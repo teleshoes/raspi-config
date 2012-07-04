@@ -12,7 +12,7 @@ my @rsyncOpts = qw(
   --out-format=%n
 );
 
-sub handleFile($$){
+sub overwriteFile($$){
   my ($src, $dest) = @_;
   $dest =~ s/%/\//g;
   my $destDir = `dirname $dest`;
@@ -53,7 +53,7 @@ for my $file(`ls -d $DIR/%*`){
   $file =~ s/^.*\///;
   my $src = "$DIR/$file";
   my $dest = $file;
-  handleFile $src, $dest;
+  overwriteFile $src, $dest;
 }
 
 for my $file(`cat $DIR/config-files-to-remove`){
