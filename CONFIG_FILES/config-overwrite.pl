@@ -3,7 +3,6 @@ use strict;
 use warnings;
 
 my $DIR = '/opt/CONFIG_FILES';
-my @files = `ls -d $DIR/%*`;
 my $user = 'pi';
 my $group = 'pi';
 
@@ -13,11 +12,8 @@ my @rsyncOpts = qw(
   --out-format=%n
 );
 
-for my $file(@files){
-  chomp $file;
-  $file =~ s/^.*\///;
-  my $src = "$DIR/$file";
-  my $dest = $file;
+sub handleFile($$){
+  my ($src, $dest) = @_;
   $dest =~ s/%/\//g;
   my $destDir = `dirname $dest`;
   chomp $destDir;
@@ -35,6 +31,15 @@ for my $file(@files){
     system "chown -R root.root $dest";
     system "chown root.root $destDir";
   }
+}
+
+my @files = `ls -d $DIR/%*`;
+for my $file(@files){
+  chomp $file;
+  $file =~ s/^.*\///;
+  my $src = "$DIR/$file";
+  my $dest = $file;
+  handleFile $src, $dest;
 }
 
 for my $file(`cat $DIR/config-files-to-remove`){
