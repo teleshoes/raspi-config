@@ -5,6 +5,7 @@ use warnings;
 my $DIR = '/opt/CONFIG_FILES';
 my $user = 'pi';
 my $group = 'pi';
+my $binTarget = '/usr/local/bin';
 
 my @rsyncOpts = qw(
   -a  --no-owner --no-group
@@ -19,6 +20,8 @@ sub main(@){
   die "Usage: $0\n" if @_ > 0;
   my @boingFiles = `cd $DIR; ls -d %*`;
   chomp foreach @boingFiles;
+  my @binFiles = `cd $DIR/bin; ls -d *`;
+  chomp foreach @binFiles;
   my @filesToRemove = `cat $DIR/config-files-to-remove`;
   chomp foreach @filesToRemove;
 
@@ -27,6 +30,11 @@ sub main(@){
     my $dest = $file;
     $dest =~ s/%/\//g;
     overwriteFile "$DIR/$file", $dest;
+  }
+
+  print "\n ---handling bin files...\n";
+  for my $file(@binFiles){
+    overwriteFile "$DIR/bin/$file", "$binTarget/$file";
   }
 
   print "\n ---removing files to remove...\n";
