@@ -12,20 +12,25 @@ my @rsyncOpts = qw(
   --out-format=%n
 );
 
+sub overwriteFile($$);
+sub removeFile($);
+
 sub main(@){
   die "Usage: $0\n" if @_ > 0;
-  my @boingFiles = `ls -d $DIR/%*`;
+  my @boingFiles = `cd $DIR; ls -d %*`;
+  chomp foreach @boingFiles;
+  my @filesToRemove = `cat $DIR/config-files-to-remove`;
+  chomp foreach @filesToRemove;
 
+  print "\n ---handling boing files...\n";
   for my $file(@boingFiles){
-    chomp $file;
-    $file =~ s/^.*\///;
-    my $src = "$DIR/$file";
     my $dest = $file;
     $dest =~ s/%/\//g;
-    overwriteFile $src, $dest;
+    overwriteFile "$DIR/$file", $dest;
   }
 
-  for my $file(`cat $DIR/config-files-to-remove`){
+  print "\n ---removing files to remove...\n";
+  for my $file(@filesToRemove){
     chomp $file;
     removeFile $file;
   }
