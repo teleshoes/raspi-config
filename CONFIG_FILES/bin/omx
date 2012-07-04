@@ -1,0 +1,6 @@
+#!/usr/bin/perl
+use strict;
+use warnings;
+
+system "omxplayer @ARGV";
+system "rm omxplayer*.log";
