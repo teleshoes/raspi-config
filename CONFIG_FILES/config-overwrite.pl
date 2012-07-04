@@ -12,9 +12,27 @@ my @rsyncOpts = qw(
   --out-format=%n
 );
 
+sub main(@){
+  die "Usage: $0\n" if @_ > 0;
+  my @boingFiles = `ls -d $DIR/%*`;
+
+  for my $file(@boingFiles){
+    chomp $file;
+    $file =~ s/^.*\///;
+    my $src = "$DIR/$file";
+    my $dest = $file;
+    $dest =~ s/%/\//g;
+    overwriteFile $src, $dest;
+  }
+
+  for my $file(`cat $DIR/config-files-to-remove`){
+    chomp $file;
+    removeFile $file;
+  }
+}
+
 sub overwriteFile($$){
   my ($src, $dest) = @_;
-  $dest =~ s/%/\//g;
   my $destDir = `dirname $dest`;
   chomp $destDir;
   system "mkdir -p $destDir";
@@ -48,15 +66,4 @@ sub removeFile($){
   }
 }
 
-for my $file(`ls -d $DIR/%*`){
-  chomp $file;
-  $file =~ s/^.*\///;
-  my $src = "$DIR/$file";
-  my $dest = $file;
-  overwriteFile $src, $dest;
-}
-
-for my $file(`cat $DIR/config-files-to-remove`){
-  chomp $file;
-  removeFile $file;
-}
+&main(@ARGV);
