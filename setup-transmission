@@ -58,6 +58,7 @@ sub configure(){
   run "rm $tmp";
   my $cmd = 'set -x; ';
   foreach my $dest(@dests){
+    $cmd .= "mkdir -p `dirname $dest`; ";
     $cmd .= "rm '$dest'; ";
     $cmd .= "cp $tmp '$dest'; ";
     $cmd .= "chmod a-rwx '$dest'; ";
