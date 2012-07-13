@@ -11,11 +11,13 @@ my @dests = qw(
 );
 
 my %config = (
-  'download-dir'          => '"/home/pi/Desktop/Torrents"',
-  'peer-port'             => '4257',
-  'rpc-password'          => '"raspberry"',
-  'rpc-username'          => '"pi"',
-  'rpc-whitelist-enabled' => 'false',
+  'download-dir'           => '"/home/pi/Desktop/Torrents"',
+  'peer-port'              => '4257',
+  'rpc-password'           => '"raspberry"',
+  'rpc-username'           => '"pi"',
+  'rpc-whitelist-enabled'  => 'false',
+  "speed-limit-up"         => '2000',
+  "speed-limit-up-enabled" => 'true',
 );
 
 sub run(@);
