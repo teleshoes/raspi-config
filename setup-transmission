@@ -3,6 +3,7 @@ use strict;
 use warnings;
 
 my $origFile = "$ENV{HOME}/Code/raspi/transmission-original-settings.json";
+my $initdFile = '/etc/init.d/transmission-daemon';
 
 my @dests = qw(
   /root/.config/transmission-daemon/settings.json
@@ -68,6 +69,8 @@ sub configure(){
   }
   $cmd .= "rm $tmp; ";
   system "raspi", "-s", $cmd;
+
+  system "raspi", "-s", "sed -i -e s/USER=.*/USER=root/ $initdFile";
 }
 
 sub getConfig(){
