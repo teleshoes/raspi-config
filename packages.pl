@@ -9,6 +9,9 @@ my %pkgGroups = (
   '2' => [qw(
     libterm-readkey-perl
   )],
+  '2' => [qw(
+    x11vnc
+  )],
 );
 
 sub installPackages();
