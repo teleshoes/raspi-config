@@ -10,7 +10,7 @@ my %pkgGroups = (
     libterm-readkey-perl
   )],
   '2' => [qw(
-    x11vnc
+    x11vnc lsof
   )],
 );
 
