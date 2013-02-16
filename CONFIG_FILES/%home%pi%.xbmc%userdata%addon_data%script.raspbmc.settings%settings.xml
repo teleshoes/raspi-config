@@ -43,7 +43,7 @@
     <setting id="sys.config.freq.sdram" value="400" />
     <setting id="sys.password" value="" />
     <setting id="sys.password_confirm" value="" />
-    <setting id="sys.service.cron" value="false" />
+    <setting id="sys.service.cron" value="true" />
     <setting id="sys.service.ftp" value="true" />
     <setting id="sys.service.remote" value="true" />
     <setting id="sys.service.samba" value="true" />
