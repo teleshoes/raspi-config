@@ -17,8 +17,8 @@ my %pkgGroups = (
 sub installPackages();
 
 sub main(@){
-  system "raspi", "-s", "apt-get update";
-  system "raspi", "-s", "apt-get upgrade";
+  system "raspi", "-b", "apt-get update";
+  system "raspi", "-b", "apt-get upgrade";
   installPackages();
 }
 
@@ -27,7 +27,7 @@ sub installPackages(){
   for my $pkgGroup(sort keys %pkgGroups){
     my @packages = @{$pkgGroups{$pkgGroup}}; 
     print "Installing group[$pkgGroup]:\n----\n@packages\n----\n";
-    system "raspi", "-s", ''
+    system "raspi", "-b", ''
       . " apt-get install"
       . " -y --allow-unauthenticated"
       . " @packages";
