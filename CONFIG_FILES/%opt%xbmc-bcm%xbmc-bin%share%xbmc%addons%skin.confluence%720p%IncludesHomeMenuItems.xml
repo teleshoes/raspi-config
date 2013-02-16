@@ -398,7 +398,7 @@
 		</item>
 	</include>
 	<include name="HomeAddonItemsPrograms">
-		<item id="13">
+		<item>
 			<label>chromium</label>
 			<onclick>XBMC.RunScript(/usr/local/bin/daemon-run,/usr/local/bin/kiosk-xbmc,openbox-run,chromium)</onclick>
 			<icon>/usr/share/icons/chromium.png</icon>
