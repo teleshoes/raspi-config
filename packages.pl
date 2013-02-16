@@ -12,6 +12,9 @@ my %pkgGroups = (
   '3' => [qw(
     x11vnc lsof zip unzip
   )],
+  '4' => [qw(
+    xinit openbox chromium-browser
+  )],
 );
 
 sub installPackages();
