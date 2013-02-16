@@ -1,0 +1,2 @@
+vcgencmd codec_enabled WVC1
+vcgencmd codec_enabled MPG2
