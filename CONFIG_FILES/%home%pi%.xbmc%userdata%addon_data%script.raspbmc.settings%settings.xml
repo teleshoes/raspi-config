@@ -30,8 +30,8 @@
     <setting id="sys.config.addition" value="" />
     <setting id="sys.config.decode.ac3" value="" />
     <setting id="sys.config.decode.dts" value="" />
-    <setting id="sys.config.decode.mpg2" value="" />
-    <setting id="sys.config.decode.wvc1" value="" />
+    <setting id="sys.config.decode.mpg2" value="0xc3b3c81a" />
+    <setting id="sys.config.decode.wvc1" value="0xd598d7a6" />
     <setting id="sys.config.disable.overscan" value="true" />
     <setting id="sys.config.freq.arm" value="800" />
     <setting id="sys.config.freq.core" value="250" />
