@@ -398,6 +398,12 @@
 		</item>
 	</include>
 	<include name="HomeAddonItemsPrograms">
+		<item id="13">
+			<label>chrome</label>
+			<onclick>XBMC.RunScript(/usr/local/bin/daemon-run,/usr/local/bin/kiosk-xbmc,openbox-run,chromium)</onclick>
+			<icon>-</icon>
+			<thumb>-</thumb>
+		</item>
 		<item>
 			<label>$INFO[system.addontitle(script.raspbmc.settings)]</label>
 			<onclick>RunAddon(script.raspbmc.settings)</onclick>
