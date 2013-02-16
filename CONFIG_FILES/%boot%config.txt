@@ -1,0 +1,6 @@
+arm_freq=800
+force_turbo=1
+gpu_mem=100
+disable_overscan=1
+start_file=start_x.elf
+fixup_file=fixup_x.dat
