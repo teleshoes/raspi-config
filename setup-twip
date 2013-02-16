@@ -20,7 +20,7 @@ system "rsync", "-avP", "--del", "$gitRepoDir/", "root\@$host:$gitRepoDir";
 
 system "rsync", "-avP", $twipConfig, "root\@$host:$tmpTwipConfig";
 
-system "raspi", "-s", ''
+system "raspi", "-b", ''
   . "set -x; "
   . "cp $tmpTwipConfig /root/.twip; "
   . "chown root.root /root/.twip; "
