@@ -935,6 +935,12 @@
 						<thumb>-</thumb>
 						<visible>!Skin.HasSetting(HomeMenuNoProgramsButton)</visible>
 					</item>
+					<item id="13">
+						<label>xchrome</label>
+						<onclick>XBMC.RunScript(/usr/local/bin/daemon-run,/usr/local/bin/kiosk-xbmc,openbox-run,chromium)</onclick>
+						<icon>-</icon>
+						<thumb>-</thumb>
+					</item>
 					<item id="6">
 						<label>341</label>
 						<onclick>XBMC.PlayDVD()</onclick>
