@@ -11,16 +11,16 @@ chomp $host;
 
 system "rsync", "-avP", $twipConfig, "root\@$host:$tmpTwipConfig";
 
-system "raspi", "-b", ''
-  . "set -x; "
-  . "rm -rf $gitRepoDir; "
-  . "mkdir -p $gitRepoDir; "
-  . "git clone $gitUrl $gitRepoDir; "
-  . "cp $tmpTwipConfig /root/.twip; "
-  . "chown root.root /root/.twip; "
-  . "cp $tmpTwipConfig /home/pi/.twip; "
-  . "chmod go-rw /home/pi/.twip /root/.twip; "
-  . "chown pi.pi /home/pi/.twip; "
-  . "cd $gitRepoDir; "
-  . "perl install.pl; "
-;
+system "raspi", "-b", "
+  set -x;
+  rm -rf $gitRepoDir;
+  mkdir -p $gitRepoDir;
+  git clone $gitUrl $gitRepoDir;
+  cp $tmpTwipConfig /root/.twip;
+  chown root.root /root/.twip;
+  cp $tmpTwipConfig /home/pi/.twip;
+  chmod go-rw /home/pi/.twip /root/.twip;
+  chown pi.pi /home/pi/.twip;
+  cd $gitRepoDir;
+  perl install.pl;
+";
