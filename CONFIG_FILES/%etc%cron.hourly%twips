@@ -1,3 +1,0 @@
-#!/bin/sh
-# run 'twips' to update twitter ip
-twips >/dev/null 2>&1
