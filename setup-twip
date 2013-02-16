@@ -2,7 +2,7 @@
 use strict;
 use warnings;
 
-my $gitUrl = 'git@github.com:teleshoes/twip.git';
+my $gitUrl = 'git://github.com/teleshoes/twip.git';
 my $gitRepoDir = "/tmp/twip";
 my $tmpTwipConfig = '/tmp/twip-config';
 my $twipConfig = "$ENV{HOME}/.twip";
