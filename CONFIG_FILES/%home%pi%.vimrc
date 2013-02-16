@@ -1,4 +1,15 @@
 """filetype plugin indent on
+filetype plugin on
+let g:omni_sql_no_default_maps = 1
+
+function LoadTemp()
+  LoadFileTemplate default
+  :normal! Gddgg
+endfunction
+autocmd! BufNewFile * call LoadTemp()
+
+set ofu=syntaxcomplete#Complete
+set backspace=2
 set uc=0 """no swapfile
 set ic
 set history=9000
@@ -43,9 +54,17 @@ nmap <C-C> :q<CR>
 imap <C-C> <Esc>:q<CR>
 """"""
 
+"""Quit"""
+nmap <C-N> :n<CR>
+imap <C-N> <Esc>:n<CR>
+""""""
+
 """delete/paste"""
 imap <C-D> <Esc>ddli
 imap <C-P> <Esc>pli
+
+xmap p "_dp
+xmap P "_dP
 """"""
 
 """Undo"""
@@ -65,6 +84,11 @@ map <C-w><C-h> :s/\v(.{80}[^ ]*)/\1\r--/g<CR>
 nmap <F3>      :w<CR>
 imap <F3> <Esc>:w<CR>li
 vmap <F3> :w<Del><CR>lv
+""""""
+
+"""git"""
+nmap <F4>      :Exec cd %:p:h; git gui &<CR>
+imap <F4> <Esc>:Exec cd %:p:h; git gui &<CR>
 """"""
 
 """RUN"""
@@ -105,6 +129,27 @@ imap <F12> <ESC>"rpi
 vmap <F12>      "rp
 """"""
 
+""":Exec cmd arg arg ..
+" run external commands quietly
+command -nargs=1 Exec
+\ execute 'silent ! ' . <q-args>
+\ | execute 'redraw! '
+
+""":Wc  msg => save, git ci FILENAME -m msg
+""":Wcq msg => save, git ci FILENAME -m msg, quit
+command -nargs=1 Wc  call Wc(<f-args>, "noquit")
+command -nargs=1 Wcq call Wc(<f-args>, "quit")
+cabbrev wc  <c-r>=(getcmdtype()==':' && getcmdpos()==1 ? 'Wc'  : 'wc' )<CR>
+cabbrev wcq <c-r>=(getcmdtype()==':' && getcmdpos()==1 ? 'Wcq' : 'wcq')<CR>
+function Wc(msg, maybeQuit)
+    w
+    let msg = "'" . substitute(a:msg, "'", "'\\\\''", "g") . "'"
+    let cmd = "! git ci % -m " . msg
+    execute cmd
+    if a:maybeQuit == "quit"
+      q
+    endif
+endfunction
 
 command -nargs=* RUN call RUN(<f-args>)
 function RUN(...)
