@@ -1,0 +1,11 @@
+#!/usr/bin/perl
+use strict;
+use warnings;
+
+if(@ARGV == 1 and $ARGV[0] eq 'backup'){
+  system "scp pi\@`raspi`:/home/pi/.cavestory-save backup/";
+}elsif(@ARGV == 1 and $ARGV[0] eq 'restore'){
+  system "scp backup/.cavestory-save pi\@`raspi`:/home/pi/";
+}else{
+  die "Usage: $0 [backup|restore]\n";
+}
