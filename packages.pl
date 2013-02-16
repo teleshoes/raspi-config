@@ -10,7 +10,7 @@ my %pkgGroups = (
     libterm-readkey-perl
   )],
   '3' => [qw(
-    x11vnc lsof
+    x11vnc lsof zip unzip
   )],
 );
 
