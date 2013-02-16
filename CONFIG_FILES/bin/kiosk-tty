@@ -1,0 +1,6 @@
+#!/bin/bash
+tty=5
+sudo initctl stop xbmc
+sudo chvt $tty
+sudo /bin/login -f pi tty$tty </dev/tty$tty >/dev/tty$tty 2>&1
+sudo initctl start xbmc
