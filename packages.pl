@@ -9,7 +9,7 @@ my %pkgGroups = (
   '2' => [qw(
     libterm-readkey-perl
   )],
-  '2' => [qw(
+  '3' => [qw(
     x11vnc lsof
   )],
 );
