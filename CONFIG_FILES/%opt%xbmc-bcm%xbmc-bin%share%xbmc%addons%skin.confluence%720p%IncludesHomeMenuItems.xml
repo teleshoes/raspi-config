@@ -399,6 +399,12 @@
 	</include>
 	<include name="HomeAddonItemsPrograms">
 		<item>
+			<label>tty</label>
+			<onclick>XBMC.RunScript(/usr/local/bin/daemon-run,/usr/local/bin/kiosk-tty)</onclick>
+			<icon>/usr/share/icons/term.png</icon>
+			<thumb>-</thumb>
+		</item>
+		<item>
 			<label>chromium</label>
 			<onclick>XBMC.RunScript(/usr/local/bin/daemon-run,/usr/local/bin/kiosk-xbmc,openbox-run,chromium)</onclick>
 			<icon>/usr/share/icons/chromium.png</icon>
