@@ -10,7 +10,7 @@ my %pkgGroups = (
     libterm-readkey-perl
   )],
   '3' => [qw(
-    x11vnc lsof zip unzip
+    x11vnc lsof psmisc zip unzip parted
   )],
   '4' => [qw(
     xinit openbox chromium-browser
