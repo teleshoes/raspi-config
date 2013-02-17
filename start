@@ -6,3 +6,5 @@ raspbmc-settings-addon; system; defaults; ok
 setup-twip
 fetch-cavestory restore
 openvpn-keys
+install-addons
+pi -b codec-keys
