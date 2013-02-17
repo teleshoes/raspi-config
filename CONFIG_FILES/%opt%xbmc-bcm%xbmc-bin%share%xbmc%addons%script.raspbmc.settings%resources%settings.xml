@@ -51,7 +51,7 @@
      <setting id="sys.upgrade" type="bool"  default="true" label="30203"/>
      <setting id="sys.xbmc.res" type="bool" default="false" label="30204"/>
      <setting id="sys.xbmc.ae" type="bool" default="false" label="30205"/>
-     <setting id="sys.xbmc.shut" type="bool" default="false" label="30206"/>
+     <setting id="sys.xbmc.shut" type="bool" default="true" label="30206"/>
      <setting label="31102" type="lsep" />
      <setting id="sys.config.decode.mpg2" type="text"  default="0xc3b3c81a"  label="30300" />
      <setting id="sys.config.decode.wvc1"  type="text"  default="0xd598d7a6" label="30301" />
