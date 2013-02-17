@@ -1,0 +1,8 @@
+#!/usr/bin/perl
+use strict;
+use warnings;
+
+my $host = `raspi`;
+chomp $host;
+
+system "rsync", "-avP", "addons/", "root\@$host:/home/pi/.xbmc/addons";
