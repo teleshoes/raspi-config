@@ -9,6 +9,8 @@ except ImportError:
 usage = ("""Usage: %s CMD VAL
   playpause|play|pause
     play/pause
+  stop
+    stop
 """)
 
 settings = {
@@ -36,6 +38,8 @@ def main():
   playerId=1
   if (cmd == "playpause" or cmd == "play" or cmd == "pause") and argc == 2:
     xbmc.Player.PlayPause(playerid=playerId)
+  elif cmd == "stop" and argc == 2:
+    xbmc.Player.Stop(playerid=playerId)
   else:
     print usage % (sys.argv[0])
 
