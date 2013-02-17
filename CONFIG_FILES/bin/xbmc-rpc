@@ -21,6 +21,8 @@ usage = ("""Usage: %s CMD VAL
       0:30    =>  seek exactly to 30s
       2:30    =>  seek exactly to 2m30s
       1:05:30 =>  seek exactly to 1h5m30s
+  fullscreen
+    fullscreen
 """)
 
 settings = {
@@ -65,6 +67,8 @@ def main():
     else:
       newPer = val / total * 100
       xbmc.Player.Seek(playerid=playerId, value=newPer)
+  elif cmd == "fullscreen" and argc == 2:
+    xbmc.Gui.SetFullscreen(fullscreen=True)
   else:
     print usage % (sys.argv[0])
 
