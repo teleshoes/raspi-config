@@ -74,7 +74,7 @@
      <setting id="sys.service.ssh" type="bool"  default="true"  label="30399"  />
      <setting id="sys.service.samba" type="bool"  default="true"  label="30400" />
      <setting id="sys.service.remote" type="bool"  default="true"  label="30403" />
-     <setting id="sys.service.cron" type="bool"  default="false"  label="30404" />
+     <setting id="sys.service.cron" type="bool"  default="true"  label="30404" />
      <setting id="sys.service.tvh" type="bool"  default="false"  label="30405" />
    </category>
    <!--Remotes-->
