@@ -21,7 +21,7 @@ sub installPackages();
 
 sub main(@){
   system "raspi", "-b", "apt-get update";
-  system "raspi", "-b", "apt-get upgrade";
+  system "raspi", "-b", "apt-get upgrade -y";
   installPackages();
 }
 
