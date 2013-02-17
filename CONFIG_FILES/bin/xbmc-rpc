@@ -11,6 +11,16 @@ usage = ("""Usage: %s CMD VAL
     play/pause
   stop
     stop
+  seek VAL
+    seek VAL, e.g.:
+      10      =>  seek forward 10s
+      +10     =>  seek forward 10s
+      -10     =>  seek backward 10s
+      10%%     =>  seek forward by 10%% of the total time
+      -10%%    =>  seek backward by 10%% of the total time
+      0:30    =>  seek exactly to 30s
+      2:30    =>  seek exactly to 2m30s
+      1:05:30 =>  seek exactly to 1h5m30s
 """)
 
 settings = {
@@ -40,8 +50,58 @@ def main():
     xbmc.Player.PlayPause(playerid=playerId)
   elif cmd == "stop" and argc == 2:
     xbmc.Player.Stop(playerid=playerId)
+  elif cmd == "seek" and argc == 3:
+    val = sys.argv[2]
+    pos = xbmc.Player.GetProperties(playerid=playerId,
+      properties=['time', 'totaltime'])
+    cur = timeToSex(pos['time'])
+    total = timeToSex(pos['totaltime'])
+    val = seekAbs(val)
+    if val == None:
+      val = cur + seekRel(val, total)
+
+    if val == None:
+      print usage % (sys.argv[0])
+    else:
+      newPer = val / total * 100
+      xbmc.Player.Seek(playerid=playerId, value=newPer)
   else:
     print usage % (sys.argv[0])
+
+def seekAbs(s):
+  m = re.match('^(?:([0-9]+):)?(?:([0-9]+):)(?:([0-9]+))$', s)
+  if m == None:
+    return None
+
+  hh = m.group(1)
+  if hh == None:
+    hh = "0"
+
+  mm = m.group(2)
+  ss = m.group(3)
+  return int(hh)*60*60 + int(mm)*60 + int(ss)
+
+def seekRel(s, total):
+  m = re.match('^(\\+|-)?([0-9]+)(%)?$', s)
+  if m == None:
+    return None
+  val = int(m.group(2))
+
+  if m.group(1) == "-":
+    val = 0 - val
+
+  if m.group(3) == "%":
+    val = float(val)/100 * total
+
+  return val
+
+
+def timeToSex(t):
+  return (
+    float(t['hours']*60*60) +
+    float(t['minutes']*60) +
+    float(t['seconds']) +
+    float(t['milliseconds']/1000))
 
 class XBMCJSON:
   def __init__(self, server):
