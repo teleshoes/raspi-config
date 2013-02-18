@@ -15,6 +15,9 @@ my %pkgGroups = (
   '4' => [qw(
     xinit openbox chromium-browser
   )],
+  '5' => [qw(
+    mplayer
+  )],
 );
 
 sub installPackages();
