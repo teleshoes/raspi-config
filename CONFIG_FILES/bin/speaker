@@ -1,0 +1,15 @@
+#!/usr/bin/perl
+use strict;
+use warnings;
+
+my $arg = shift;
+if($arg eq "xbmc"){
+  system "klomp-cmd", "stop";
+  system "sudo", "initctl", "stop", "pulseaudio";
+  system "sudo", "modprobe", "-r", "snd_bcm2835";
+}elsif($arg eq "klomp"){
+  system "sudo", "modprobe", "snd_bcm2835";
+  system "sudo", "initctl", "stop", "pulseaudio";
+  system "sudo", "initctl", "start", "pulseaudio";
+  system "klomp-cmd", "restart";
+}
