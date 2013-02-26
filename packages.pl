@@ -2,6 +2,10 @@
 use strict;
 use warnings;
 
+my @remove = qw(
+  network-manager
+);
+
 my %pkgGroups = (
   '1' => [qw(
     vim-gtk rsync wget git openvpn
@@ -23,6 +27,8 @@ my %pkgGroups = (
 sub installPackages();
 
 sub main(@){
+  system "raspi", "-b", "apt-get purge @remove";
+  system "raspi", "-b", "apt-get autoremove";
   system "raspi", "-b", "apt-get update";
   system "raspi", "-b", "apt-get upgrade -y";
   installPackages();
