@@ -1,6 +1,7 @@
 flashing
 keygen.pl
 packages.pl
+install-net
 config-files
 raspbmc-settings-addon; system; defaults; ok
 setup-twip
