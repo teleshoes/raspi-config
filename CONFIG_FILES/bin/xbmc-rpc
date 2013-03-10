@@ -53,14 +53,16 @@ def main():
   elif cmd == "stop" and argc == 2:
     xbmc.Player.Stop(playerid=playerId)
   elif cmd == "seek" and argc == 3:
-    val = sys.argv[2]
+    seekArg = sys.argv[2]
     pos = xbmc.Player.GetProperties(playerid=playerId,
       properties=['time', 'totaltime'])
     cur = timeToSex(pos['time'])
     total = timeToSex(pos['totaltime'])
-    val = seekAbs(val)
+    val = seekAbs(seekArg)
     if val == None:
-      val = cur + seekRel(val, total)
+      val = seekRel(seekArg, total)
+      if val != None:
+        val += cur
 
     if val == None:
       print usage % (sys.argv[0])
