@@ -30,7 +30,6 @@ sub runOrDie(@){
 
 sub main(@){
   runOrDie "raspi", "-b", "apt-get update";
-  runOrDie "raspi", "-b", "apt-get upgrade -y";
   installPackages();
 }
 
