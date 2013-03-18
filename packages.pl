@@ -22,9 +22,15 @@ my %pkgGroups = (
 
 sub installPackages();
 
+sub runOrDie(@){
+  print "@_\n";
+  system @_;
+  die "Error running '@_'\n" if $? != 0;
+}
+
 sub main(@){
-  system "raspi", "-b", "apt-get update";
-  system "raspi", "-b", "apt-get upgrade -y";
+  runOrDie "raspi", "-b", "apt-get update";
+  runOrDie "raspi", "-b", "apt-get upgrade -y";
   installPackages();
 }
 
@@ -33,7 +39,7 @@ sub installPackages(){
   for my $pkgGroup(sort keys %pkgGroups){
     my @packages = @{$pkgGroups{$pkgGroup}}; 
     print "Installing group[$pkgGroup]:\n----\n@packages\n----\n";
-    system "raspi", "-b", ''
+    runOrDie "raspi", "-b", ''
       . " apt-get install"
       . " -y --allow-unauthenticated"
       . " @packages";
