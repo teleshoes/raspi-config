@@ -2,8 +2,9 @@
 import os, sys
 
 buttons = {
-  'next'   : lambda: os.system("klomp-cmd next"),
   'prev'   : lambda: os.system("klomp-cmd prev"),
+  'next'   : lambda: os.system("klomp-cmd next"),
+
   'red'    : lambda: os.system("klomp-cmd prev"),
   'green'  : lambda: os.system("klomp-cmd next"),
   'blue'   : lambda: os.system("speaker xbmc"),
