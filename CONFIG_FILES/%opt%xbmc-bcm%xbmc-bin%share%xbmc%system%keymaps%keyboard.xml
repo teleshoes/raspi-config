@@ -117,10 +117,10 @@
       <volume_mute>Mute</volume_mute>
       <volume_down>VolumeDown</volume_down>
       <volume_up>VolumeUp</volume_up>
-      <next_track>XBMC.RunScript(/usr/local/bin/btn,next)</next_track>
-      <prev_track>XBMC.RunScript(/usr/local/bin/btn,prev)</prev_track>
+      <next_track>SkipNext</next_track>
+      <prev_track>SkipPrevious</prev_track>
       <stop>Stop</stop>
-      <play_pause>XBMC.RunScript(/usr/local/bin/btn,pause)</play_pause>
+      <play_pause>Pause</play_pause>
       <launch_mail></launch_mail>
       <launch_media_select>XBMC.ActivateWindow(MyMusic)</launch_media_select>
       <launch_app1_pc_icon>ActivateWindow(MyPrograms)</launch_app1_pc_icon>
@@ -162,6 +162,9 @@
   </LoginScreen>
   <Home>
     <keyboard>
+      <play_pause>XBMC.RunScript(/usr/local/bin/btn,pause)</play_pause>
+      <prev_track>XBMC.RunScript(/usr/local/bin/btn,prev)</prev_track>
+      <next_track>XBMC.RunScript(/usr/local/bin/btn,next)</next_track>
       <i>info</i>
       <end mod="ctrl">XBMC.ShutDown()</end>
     </keyboard>
