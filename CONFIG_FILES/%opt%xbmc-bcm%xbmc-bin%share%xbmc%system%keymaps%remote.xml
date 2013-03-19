@@ -90,6 +90,10 @@
   </global>
   <Home>
     <remote>
+      <play>XBMC.RunScript(/usr/local/bin/btn,pause)</play>
+      <pause>XBMC.RunScript(/usr/local/bin/btn,pause)</pause>
+      <skipplus>XBMC.RunScript(/usr/local/bin/btn,next)</skipplus>
+      <skipminus>XBMC.RunScript(/usr/local/bin/btn,prev)</skipminus>
       <info>XBMC.ActivateWindow(SystemInfo)</info>
       <clear>XBMC.ActivateWindow(Weather)</clear>
       <hash>XBMC.ActivateWindow(Settings)</hash>
