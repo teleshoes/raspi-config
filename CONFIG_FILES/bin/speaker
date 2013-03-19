@@ -11,5 +11,5 @@ if($arg eq "xbmc"){
   system "sudo", "modprobe", "snd_bcm2835";
   system "sudo", "initctl", "stop", "pulseaudio";
   system "sudo", "initctl", "start", "pulseaudio";
-  system "klomp-cmd", "restart";
+  system "klomp-cmd", "start";
 }
