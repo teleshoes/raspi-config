@@ -4,6 +4,7 @@ import os, sys
 buttons = {
   'prev'   : lambda: os.system("klomp-cmd prev"),
   'next'   : lambda: os.system("klomp-cmd next"),
+  'pause'  : lambda: os.system("klomp-cmd pause"),
 
   'red'    : lambda: os.system("klomp-cmd prev"),
   'green'  : lambda: os.system("klomp-cmd next"),
