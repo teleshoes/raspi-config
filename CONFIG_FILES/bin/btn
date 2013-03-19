@@ -3,7 +3,11 @@ import os, sys
 
 buttons = {
   'next'   : lambda: os.system("klomp-cmd next"),
-  'prev'   : lambda: os.system("klomp-cmd prev")
+  'prev'   : lambda: os.system("klomp-cmd prev"),
+  'red'    : lambda: os.system("klomp-cmd prev"),
+  'green'  : lambda: os.system("klomp-cmd next"),
+  'blue'   : lambda: os.system("speaker xbmc"),
+  'yellow' : lambda: os.system("speaker klomp")
 }
 
 usage = """Usage: %s %s""" % (sys.argv[0], '|'.join(buttons.keys()))
