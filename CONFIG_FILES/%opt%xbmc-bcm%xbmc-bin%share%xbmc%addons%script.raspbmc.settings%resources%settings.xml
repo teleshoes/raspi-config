@@ -68,7 +68,7 @@
      <setting id="sys.config.freq.overvolt" type="slider" default="0"  range="0,1,8" label="30315" option="int" enable="eq(-6,true)" />
      <setting type="lsep"/>
      <setting type="text" default="config.txt entries separated by ; , i.e.: hdmi_group=1;hdmi_mode=34    " enable="false" />
-     <setting id="sys.config.addition" type="text" default="gpu_mem_512=128" label="30350"/>
+     <setting id="sys.config.addition" type="text" default="gpu_mem_512=256" label="30350"/>
      <setting label="31103" type="lsep" />
      <setting id="sys.service.ftp" type="bool"  default="true"  label="30398"  />
      <setting id="sys.service.ssh" type="bool"  default="true"  label="30399"  />
