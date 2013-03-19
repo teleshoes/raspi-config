@@ -117,8 +117,8 @@
       <volume_mute>Mute</volume_mute>
       <volume_down>VolumeDown</volume_down>
       <volume_up>VolumeUp</volume_up>
-      <next_track>SkipNext</next_track>
-      <prev_track>SkipPrevious</prev_track>
+      <next_track>XBMC.RunScript(/usr/local/bin/btn,next)</next_track>
+      <prev_track>XBMC.RunScript(/usr/local/bin/btn,prev)</prev_track>
       <stop>Stop</stop>
       <play_pause>Pause</play_pause>
       <launch_mail></launch_mail>

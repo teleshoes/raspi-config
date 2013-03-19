@@ -2,6 +2,8 @@
 import os, sys
 
 buttons = {
+  'next' : lambda: os.system("klomp-cmd next"),
+  'prev' : lambda: os.system("klomp-cmd prev")
 }
 
 usage = """Usage: %s %s""" % (sys.argv[0], '|'.join(buttons.keys()))
