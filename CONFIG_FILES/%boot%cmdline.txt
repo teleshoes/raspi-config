@@ -1,1 +1,1 @@
-dwc_otg.lpm_enable=0 root=/dev/mmcblk0p2 rootfstype=ext4 persistent-logs noatime quiet rootwait loglevel=1 zram.num_devices=2
+dwc_otg.lpm_enable=0 root=/dev/mmcblk0p2 rootfstype=ext4 noatime quiet rootwait loglevel=1 zram.num_devices=2
