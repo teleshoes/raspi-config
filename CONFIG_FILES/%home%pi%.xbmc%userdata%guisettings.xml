@@ -305,7 +305,6 @@
     </cachevideo>
     <debug>
         <screenshotpath pathversion="1">select writable folder</screenshotpath>
-        <showloginfo>false</showloginfo>
     </debug>
     <dvds>
         <automenu>false</automenu>
