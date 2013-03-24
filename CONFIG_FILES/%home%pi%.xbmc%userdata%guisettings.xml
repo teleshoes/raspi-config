@@ -489,7 +489,7 @@
         <tvshowsdefault>metadata.tvdb.com</tvshowsdefault>
     </scrapers>
     <screensaver>
-        <mode>screensaver.xbmc.builtin.dim</mode>
+        <mode>screensaver.xbmc.builtin.black</mode>
         <preview></preview>
         <settings></settings>
         <time>3</time>
