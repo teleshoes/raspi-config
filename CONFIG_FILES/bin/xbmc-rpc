@@ -21,6 +21,8 @@ usage = ("""Usage: %s CMD VAL
       0:30    =>  seek exactly to 30s
       2:30    =>  seek exactly to 2m30s
       1:05:30 =>  seek exactly to 1h5m30s
+  addon ADDONID
+    execute ADDONID
   fullscreen
     fullscreen
 """)
@@ -71,6 +73,8 @@ def main():
       xbmc.Player.Seek(playerid=playerId, value=newPer)
   elif cmd == "fullscreen" and argc == 2:
     xbmc.Gui.SetFullscreen(fullscreen=True)
+  elif cmd == "addon" and argc == 3:
+    xbmc.Addons.ExecuteAddon(addonid=sys.argv[2])
   else:
     print usage % (sys.argv[0])
 
