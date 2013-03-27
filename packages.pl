@@ -16,7 +16,7 @@ my %pkgGroups = (
     xinit openbox chromium-browser
   )],
   '5' => [qw(
-    mplayer man
+    mplayer man python-pip
   )],
 );
 
