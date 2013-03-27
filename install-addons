@@ -5,4 +5,9 @@ use warnings;
 my $host = `raspi`;
 chomp $host;
 
-system "rsync", "-avP", "addons/", "root\@$host:/home/pi/.xbmc/addons";
+sub run(@){
+  print "@_\n";
+  system @_;
+}
+
+run "rsync", "-avP", "addons/", "root\@$host:/home/pi/.xbmc/addons";
