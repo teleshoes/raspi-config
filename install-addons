@@ -10,4 +10,5 @@ sub run(@){
   system @_;
 }
 
+run "raspi", "-s", "pip", "install", "xbmcswift2";
 run "rsync", "-avP", "addons/", "root\@$host:/home/pi/.xbmc/addons";
