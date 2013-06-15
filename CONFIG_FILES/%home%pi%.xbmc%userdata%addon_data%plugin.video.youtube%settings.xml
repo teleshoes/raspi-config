@@ -10,7 +10,7 @@
     <setting id="favorites" value="true" />
     <setting id="feeds" value="true" />
     <setting id="firstrun" value="1" />
-    <setting id="hd_videos" value="2" />
+    <setting id="hd_videos" value="0" />
     <setting id="hd_videos_download" value="0" />
     <setting id="history" value="true" />
     <setting id="lang_code" value="0" />
