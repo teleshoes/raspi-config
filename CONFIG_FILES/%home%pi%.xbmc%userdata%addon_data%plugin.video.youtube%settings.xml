@@ -1,0 +1,41 @@
+<settings>
+    <setting id="annotations" value="false" />
+    <setting id="categories" value="true" />
+    <setting id="contacts" value="true" />
+    <setting id="debug" value="false" />
+    <setting id="disco" value="true" />
+    <setting id="download_path" value="" />
+    <setting id="downloads" value="true" />
+    <setting id="explore" value="true" />
+    <setting id="favorites" value="true" />
+    <setting id="feeds" value="true" />
+    <setting id="firstrun" value="1" />
+    <setting id="hd_videos" value="2" />
+    <setting id="hd_videos_download" value="0" />
+    <setting id="history" value="true" />
+    <setting id="lang_code" value="0" />
+    <setting id="liked" value="true" />
+    <setting id="list_view" value="0" />
+    <setting id="live" value="true" />
+    <setting id="movies" value="true" />
+    <setting id="music" value="true" />
+    <setting id="notification_length" value="2" />
+    <setting id="perpage" value="6" />
+    <setting id="playlists" value="true" />
+    <setting id="preferred" value="true" />
+    <setting id="recommended" value="true" />
+    <setting id="region_id" value="0" />
+    <setting id="safe_search" value="0" />
+    <setting id="saved_searches" value="3" />
+    <setting id="search" value="true" />
+    <setting id="shows" value="true" />
+    <setting id="store_searches" value='[&quot;ender&apos;s game&quot;, &apos;like clockwork qotsa&apos;, &apos;star guitar&apos;, &apos;strangers like me&apos;, &apos;arthur what a wonderful kind of day&apos;, &apos;HOWARD STERN PAUL MCCARTNEY&apos;, &apos;PAUL MCCARTNEY HOWARD STORM&apos;, &apos;RINGO LARRY KING&apos;, &apos;nicole atkins promised land&apos;, &apos;danse macabre pbs&apos;, &apos;craig ferguson stephen fry&apos;, &apos;my baby taking me home&apos;, &apos;son of man&apos;, &apos;arthur mr. rogers&apos;, &apos;falafelosophy&apos;, &apos;ziggy marley believe in yourself&apos;, &apos;arthur theme song&apos;, &apos;family matters theme&apos;, &quot;Elton John I don&apos;t wanna go on with you like that&quot;, &apos;sad songs elton john&apos;]' />
+    <setting id="subscriptions" value="true" />
+    <setting id="timeout" value="3" />
+    <setting id="trailers" value="true" />
+    <setting id="transcode" value="false" />
+    <setting id="uploads" value="true" />
+    <setting id="user_password" value="" />
+    <setting id="username" value="" />
+    <setting id="watch_later" value="true" />
+</settings>
