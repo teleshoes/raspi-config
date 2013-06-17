@@ -33,12 +33,12 @@ my $debDestPrefix = '/opt';
 my $env = '';
 
 sub runRemote(@){
-  system $ipmagicCmd, "-s", @_;
-  die "error running '$ipmagicCmd -s @_'\n" if $? != 0;
+  system $ipmagicCmd, @_;
+  die "error running '$ipmagicCmd @_'\n" if $? != 0;
 }
 sub readProcRemote(@){
-  return `$ipmagicCmd -s @_`;
-  die "error running '$ipmagicCmd -s @_'\n" if $? != 0;
+  return `$ipmagicCmd @_`;
+  die "error running '$ipmagicCmd @_'\n" if $? != 0;
 }
 sub host(){
   my $host = `$ipmagicCmd`;
