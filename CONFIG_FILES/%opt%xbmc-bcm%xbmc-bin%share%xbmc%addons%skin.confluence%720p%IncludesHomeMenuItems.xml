@@ -405,6 +405,12 @@
 			<thumb>-</thumb>
 		</item>
 		<item>
+			<label>midori</label>
+			<onclick>XBMC.RunScript(/usr/local/bin/daemon-run,/usr/local/bin/kiosk-xbmc,openbox-run,midori)</onclick>
+			<icon>/usr/share/icons/midori.png</icon>
+			<thumb>-</thumb>
+		</item>
+		<item>
 			<label>chromium</label>
 			<onclick>XBMC.RunScript(/usr/local/bin/daemon-run,/usr/local/bin/kiosk-xbmc,openbox-run,chromium)</onclick>
 			<icon>/usr/share/icons/chromium.png</icon>
