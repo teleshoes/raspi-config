@@ -6,7 +6,10 @@ my $pkgConfig = '/etc/package-manager/config';
 my $ipmagicCmd = "raspi";
 
 my @jobs = qw();
-my @packagesToRemove = qw();
+my @packagesToRemove = qw(
+  libtag1-vanilla libtag1c2a
+  librcd0 librcc0 libtag1-rusxmms
+);
 
 my $normalPackages = {
   '1' => [qw(
@@ -19,7 +22,7 @@ my $normalPackages = {
     x11vnc lsof psmisc zip unzip parted
   )],
   '4' => [qw(
-    xinit openbox chromium-browser
+    xinit openbox chromium-browser midori
   )],
   '5' => [qw(
     mplayer man python-pip
