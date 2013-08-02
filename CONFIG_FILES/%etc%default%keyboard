@@ -3,7 +3,7 @@
 # Consult the keyboard(5) manual page.
 
 XKBMODEL="pc101"
-XKBLAYOUT="gb"
+XKBLAYOUT="us"
 XKBVARIANT=""
 XKBOPTIONS="terminate:ctrl_alt_bksp"
 
