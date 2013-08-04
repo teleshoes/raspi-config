@@ -25,7 +25,7 @@ my $normalPackages = {
     xinit openbox chromium-browser midori
   )],
   '5' => [qw(
-    mplayer man python-pip
+    mplayer man python-pip alsa-utils
   )],
 };
 my $extraPackages = {};
