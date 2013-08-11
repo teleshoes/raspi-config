@@ -1,0 +1,7 @@
+#!/usr/bin/perl
+use strict;
+use warnings;
+
+system "sudo /sbin/initctl stop xbmc";
+system "sudo -u pi startxfce4";
+system "sudo /sbin/initctl start xbmc";

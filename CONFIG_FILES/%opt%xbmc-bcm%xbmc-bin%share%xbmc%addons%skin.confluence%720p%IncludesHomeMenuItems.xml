@@ -417,6 +417,12 @@
 			<thumb>-</thumb>
 		</item>
 		<item>
+			<label>xfce</label>
+			<onclick>XBMC.RunScript(/usr/local/bin/daemon-run,/usr/local/bin/kiosk-xfce)</onclick>
+			<icon>/usr/share/icons/xfce.png</icon>
+			<thumb>-</thumb>
+		</item>
+		<item>
 			<label>$INFO[system.addontitle(script.raspbmc.settings)]</label>
 			<onclick>RunAddon(script.raspbmc.settings)</onclick>
 			<icon>$INFO[system.addonicon(script.raspbmc.settings)]</icon>
