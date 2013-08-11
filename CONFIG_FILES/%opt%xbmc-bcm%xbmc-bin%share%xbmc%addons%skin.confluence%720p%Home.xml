@@ -772,13 +772,6 @@
 					<visible>Container(9000).HasFocus(12)</visible>
 					<include>HomeSubMenuLiveTV</include> <!-- Buttons for the grouplist -->
 				</control>
-				<control type="grouplist" id="9015">
-					<include>HomeSubMenuCommonValues</include>
-					<onleft>9013</onleft>
-					<onright>9013</onright>
-					<visible>Container(9000).HasFocus(4)</visible>
-					<include>HomeSubMenuPictures</include> <!-- Buttons for the grouplist -->
-				</control>
 			</control>
 			<control type="image">
 				<posx>-100</posx>
@@ -877,13 +870,6 @@
 					</control>
 				</focusedlayout>
 				<content>
-					<item id="4">
-						<label>1</label>
-						<onclick>ActivateWindow(Pictures)</onclick>
-						<icon>-</icon>
-						<thumb>-</thumb>
-						<visible>!Skin.HasSetting(HomeMenuNoPicturesButton)</visible>
-					</item>
 					<item id="12">
 						<label>31502</label>
 						<onclick>ActivateWindow(PVR)</onclick>
@@ -964,18 +950,6 @@
 				<include>HomeAddonsCommonLayout</include>
 				<content>
 					<include>HomeAddonItemsVideos</include>
-				</content>
-			</control>
-			<control type="fixedlist" id="704">
-				<animation effect="slide" start="0,0" end="-91,0" time="0" condition="StringCompare(Container(704).NumItems,2) | StringCompare(Container(704).NumItems,4)">conditional</animation>
-				<visible>Container(9000).HasFocus(4)</visible>
-				<onleft>704</onleft>
-				<onright>704</onright>
-				<onup>9001</onup>
-				<ondown>20</ondown>
-				<include>HomeAddonsCommonLayout</include>
-				<content>
-					<include>HomeAddonItemsPictures</include>
 				</content>
 			</control>
 			<control type="fixedlist" id="705">
