@@ -28,6 +28,9 @@ my $normalPackages = {
   '5' => [qw(
     mplayer man python-pip alsa-utils
   )],
+  '6' => [qw(
+    xfce4
+  )],
 };
 my $extraPackages = {};
 
