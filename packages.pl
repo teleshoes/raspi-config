@@ -20,7 +20,7 @@ my $normalPackages = {
     libterm-readkey-perl libts-0.0
   )],
   '3' => [qw(
-    x11vnc lsof psmisc zip unzip parted
+    x11vnc lsof psmisc zip unzip parted nfs-kernel-server
   )],
   '4' => [qw(
     xinit openbox chromium-browser midori
