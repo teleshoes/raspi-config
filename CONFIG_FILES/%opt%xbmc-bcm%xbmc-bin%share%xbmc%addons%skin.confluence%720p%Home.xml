@@ -753,20 +753,6 @@
 					<include>HomeSubMenuLiveTV</include> <!-- Buttons for the grouplist -->
 				</control>
 			</control>
-			<control type="image">
-				<posx>-100</posx>
-				<posy>0</posy>
-				<width>1480</width>
-				<height>75</height>
-				<texture border="0,6,0,6">HomeBack.png</texture>
-			</control>
-			<control type="image">
-				<posx>0</posx>
-				<posy>5</posy>
-				<width>1280</width>
-				<height>6</height>
-				<texture>HomeOverlay1.png</texture>
-			</control>
 			<control type="fixedlist" id="9000">
 				<posx>-110</posx>
 				<posy>5</posy>
@@ -901,20 +887,6 @@
 						<thumb>-</thumb>
 					</item>
 				</content>
-			</control>
-			<control type="image">
-				<posx>0</posx>
-				<posy>6</posy>
-				<width>128</width>
-				<height>50</height>
-				<texture>SideFade.png</texture>
-			</control>
-			<control type="image">
-				<posx>128r</posx>
-				<posy>6</posy>
-				<width>128</width>
-				<height>60</height>
-				<texture flipx="true">SideFade.png</texture>
 			</control>
 		</control>
 		<control type="group" id="9002">
