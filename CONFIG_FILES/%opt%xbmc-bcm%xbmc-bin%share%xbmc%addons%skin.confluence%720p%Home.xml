@@ -434,7 +434,7 @@
 		<control type="group">
 			<description>Controls for currently playing media</description>
 			<posx>545r</posx>
-			<posy>370</posy>
+			<posy>440</posy>
 			<animation effect="slide" start="0,0" end="365,0" time="300" condition="!Player.HasMedia">conditional</animation>
 			<animation type="WindowOpen" reversible="false">
 				<effect type="zoom" start="80" end="100" center="640,360" easing="out" tween="back" time="300" />
@@ -696,7 +696,7 @@
 			</control>
 		</control>
 		<control type="group">
-			<posy>400</posy>
+			<posy>470</posy>
 			<animation type="WindowOpen" reversible="false">
 				<effect type="zoom" start="80" end="100" center="640,360" easing="out" tween="back" time="300" />
 				<effect type="fade" start="0" end="100" time="300" />
