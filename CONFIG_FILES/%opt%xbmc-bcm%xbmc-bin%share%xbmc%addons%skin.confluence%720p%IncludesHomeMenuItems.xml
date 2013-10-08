@@ -420,7 +420,7 @@
 		</item>
 		<item>
 			<onclick>RunAddon(script.raspbmc.settings)</onclick>
-			<icon>$INFO[system.addonicon(script.raspbmc.settings)]</icon>
+			<icon>/usr/share/icons/raspbmc-settings.png</icon>
 			<thumb>-</thumb>
 		</item>
 		<item>
