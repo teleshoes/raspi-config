@@ -1,0 +1,45 @@
+#!/usr/bin/perl
+use strict;
+use warnings;
+
+my $commands = {
+  on    => "on",
+  off   => "standby",
+  volup => "volup",
+  voldn => "voldown",
+};
+
+my $usage = "Usage: $0 [OPTS] [CMD]
+  OPTS:
+    --tv  use address 0 {default}
+    --av  use address 5
+
+  CMD:
+    " . (join "\n    ", map {"$_  => $$commands{$_}"} sort keys %$commands) . "
+";
+
+sub cec($$);
+
+sub main(@){
+  my $addr = 0;
+  while(@_ > 0 and $_[0] =~ /^(--tv|--av)$/){
+    my $opt = shift;
+    $addr = 0 if $opt =~ /^--tv$/;
+    $addr = 5 if $opt =~ /^--av$/;
+  }
+
+  my $cmd = shift() || '';
+  die $usage if @_ != 0 or not defined $$commands{$cmd};
+
+  cec $$commands{$cmd}, $addr;
+}
+
+sub cec($$){
+  my ($s, $addr) = @_;
+  open FH, "| cec-client -s >/dev/null 2>/dev/null";
+  print FH "$s $addr\n";
+  close FH;
+  die "Error running cec-client\n" if $? != 0;
+}
+
+&main(@ARGV);
