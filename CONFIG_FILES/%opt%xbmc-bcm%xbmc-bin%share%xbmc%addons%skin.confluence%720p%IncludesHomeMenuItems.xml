@@ -399,31 +399,26 @@
 	</include>
 	<include name="HomeAddonItemsPrograms">
 		<item>
-			<label>tty</label>
 			<onclick>XBMC.RunScript(/usr/local/bin/daemon-run,/usr/local/bin/kiosk-tty)</onclick>
 			<icon>/usr/share/icons/term.png</icon>
 			<thumb>-</thumb>
 		</item>
 		<item>
-			<label>midori</label>
 			<onclick>XBMC.RunScript(/usr/local/bin/daemon-run,/usr/local/bin/kiosk-xbmc,openbox-run,midori)</onclick>
 			<icon>/usr/share/icons/midori.png</icon>
 			<thumb>-</thumb>
 		</item>
 		<item>
-			<label>chromium</label>
 			<onclick>XBMC.RunScript(/usr/local/bin/daemon-run,/usr/local/bin/kiosk-xbmc,openbox-run,chromium)</onclick>
 			<icon>/usr/share/icons/chromium.png</icon>
 			<thumb>-</thumb>
 		</item>
 		<item>
-			<label>xfce</label>
 			<onclick>XBMC.RunScript(/usr/local/bin/daemon-run,/usr/local/bin/kiosk-xfce)</onclick>
 			<icon>/usr/share/icons/xfce.png</icon>
 			<thumb>-</thumb>
 		</item>
 		<item>
-			<label>$INFO[system.addontitle(script.raspbmc.settings)]</label>
 			<onclick>RunAddon(script.raspbmc.settings)</onclick>
 			<icon>$INFO[system.addonicon(script.raspbmc.settings)]</icon>
 			<thumb>-</thumb>
