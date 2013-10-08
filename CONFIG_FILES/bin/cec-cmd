@@ -36,8 +36,10 @@ sub main(@){
 
 sub cec($$){
   my ($s, $addr) = @_;
-  open FH, "| cec-client -s >/dev/null 2>/dev/null";
+  open FH, "| cec-client >/dev/null 2>/dev/null";
+  print FH "name $addr\n";
   print FH "$s $addr\n";
+  print FH "quit\n";
   close FH;
   die "Error running cec-client\n" if $? != 0;
 }
