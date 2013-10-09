@@ -1,0 +1,63 @@
+#!/usr/bin/perl
+use strict;
+use warnings;
+
+my $release = 'xbmc-rbp-20130930-speed';
+my $dir = "xbmc-releases";
+my $url = 'http://mirrors.arizona.edu/raspbmc/downloads/bin/xbmc/nightlies';
+my ($tar, $md5) = ("$release.tar.gz", "$release.md5");
+
+sub run(@);
+sub downloadRelease();
+sub verifyRelease();
+
+sub main(@){
+  print "installing release: $release\n";
+
+  run "mkdir", "-p", $dir;
+  chdir $dir;
+
+  if(verifyRelease()){
+    print "skipping download\n";
+  }else{
+    downloadRelease();
+  }
+  die "Could not verify release: $release\n" unless verifyRelease();
+
+  my $host = `pi`;
+  chomp $host;
+  run "rsync", "-avP", "./", "pi\@$host:/home/pi/.upgrade/";
+  run "pi", "-s", "
+    set -x
+    cd /home/pi/.upgrade/
+    rm -rf $release
+    mkdir $release
+    cd $release
+    tar -xf ../$tar
+    rm /home/pi/.xbmc-current
+    ln -s /home/pi/.upgrade/$release/xbmc-bcm /home/pi/.xbmc-current
+  ";
+}
+
+sub run(@){
+  print "@_\n";
+  system @_;
+  die "Error running @_\n" if $? != 0;
+}
+
+sub downloadRelease(){
+  run "wget", "$url/$tar", "$url/$md5";
+}
+
+sub verifyRelease(){
+  if(-f $tar and -f $md5){
+    my $md5Actual = `md5sum "$tar"`;
+    my $md5Expected = `cat "$md5"`;
+    if($md5Actual =~ /^[0-9a-f]+  $tar$/ and $md5Actual eq $md5Expected){
+      return 1;
+    }
+  }
+  return 0;
+}
+
+&main(@ARGV);
