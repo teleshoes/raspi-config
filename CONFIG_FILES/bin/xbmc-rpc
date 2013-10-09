@@ -21,10 +21,10 @@ usage = ("""Usage: %s CMD VAL
       0:30    =>  seek exactly to 30s
       2:30    =>  seek exactly to 2m30s
       1:05:30 =>  seek exactly to 1h5m30s
-  addon ADDONID
-    execute ADDONID
   fullscreen
     fullscreen
+  addon ADDONID
+    execute ADDONID
 """)
 
 settings = {
