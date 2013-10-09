@@ -25,7 +25,8 @@ usage = ("""Usage: %s CMD VAL
     fullscreen
   addon ADDONID
     execute ADDONID
-  notify TITLE MESSAGE
+  notify TITLE MESSAGE [TIMEOUT_SECONDS]
+    send gui notification, leaves after TIMEOUT_SECONDS {default is 5.0}
 """)
 
 settings = {
@@ -76,10 +77,14 @@ def main():
     xbmc.Gui.SetFullscreen(fullscreen=True)
   elif cmd == "addon" and argc == 3:
     xbmc.Addons.ExecuteAddon(addonid=sys.argv[2])
-  elif cmd == "notify" and argc == 4:
+  elif cmd == "notify" and (argc == 4 or argc == 5):
     title = sys.argv[2]
     msg = sys.argv[3]
-    xbmc.Gui.ShowNotification(title=title, message=msg)
+    timeout = 5.0
+    if argc == 5:
+      timeout = float(sys.argv[4])
+    millis = int(1000*timeout)
+    xbmc.Gui.ShowNotification(title=title, message=msg, displaytime=millis)
   else:
     print usage % (sys.argv[0])
 
