@@ -10,4 +10,5 @@ fetch-cavestory restore
 openvpn-keys
 install-klomp
 install-addons
+setup-xbmc-release
 pi -b codec-keys
