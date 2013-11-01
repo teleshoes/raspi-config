@@ -9,7 +9,10 @@ my $commands = {
   voldn => "voldown",
 };
 
-my $usage = "Usage: $0 [OPTS] [CMD]
+my $usage = "Usage:
+  $0 [OPTS] [CMD]
+     send \"CMD address\" using cec-client
+
   OPTS:
     --tv  use address 0 {default}
     --av  use address 5
@@ -28,10 +31,11 @@ sub main(@){
     $addr = 5 if $opt =~ /^--av$/;
   }
 
-  my $cmd = shift() || '';
-  die $usage if @_ != 0 or not defined $$commands{$cmd};
-
-  cec $addr, "$$commands{$cmd} $addr";
+  if(@_ == 1 and defined $$commands{$_[0]}){
+    cec $addr, "$$commands{$_[0]} $addr";
+  }else{
+    die $usage;
+  }
 }
 
 sub cec($@){
