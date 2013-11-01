@@ -12,6 +12,10 @@ my $commands = {
 my $usage = "Usage:
   $0 [OPTS] [CMD]
      send \"CMD address\" using cec-client
+  $0 [OPTS] vol +N
+     same as doing 'volup' N times, using only one cec-client session
+  $0 [OPTS] vol -N
+     same as doing 'voldn' N times, using only one cec-client session
 
   OPTS:
     --tv  use address 0 {default}
@@ -33,6 +37,10 @@ sub main(@){
 
   if(@_ == 1 and defined $$commands{$_[0]}){
     cec $addr, "$$commands{$_[0]} $addr";
+  }elsif(@_ == 2 and $_[0] =~ /^vol$/ and $_[1] =~ /^(\+|-)(\d+)$/){
+    my ($sign, $vol) = ($1, $2);
+    my $cmd = $sign eq "+" ? $$commands{volup} : $$commands{voldn};
+    cec $addr, ("$cmd $addr")x$vol;
   }else{
     die $usage;
   }
