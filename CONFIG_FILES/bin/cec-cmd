@@ -18,7 +18,7 @@ my $usage = "Usage: $0 [OPTS] [CMD]
     " . (join "\n    ", map {"$_  => $$commands{$_}"} sort keys %$commands) . "
 ";
 
-sub cec($$);
+sub cec($@);
 
 sub main(@){
   my $addr = 0;
@@ -31,14 +31,17 @@ sub main(@){
   my $cmd = shift() || '';
   die $usage if @_ != 0 or not defined $$commands{$cmd};
 
-  cec $$commands{$cmd}, $addr;
+  cec $addr, "$$commands{$cmd} $addr";
 }
 
-sub cec($$){
-  my ($s, $addr) = @_;
+sub cec($@){
+  my ($addr, @cmds) = @_;
   open FH, "| cec-client >/dev/null 2>/dev/null";
   print FH "name $addr\n";
-  print FH "$s $addr\n";
+  for my $cmd(@cmds){
+    chomp $cmd;
+    print FH "$cmd\n";
+  }
   print FH "quit\n";
   close FH;
   die "Error running cec-client\n" if $? != 0;
