@@ -1,6 +1,7 @@
 #!/usr/bin/perl
 use strict;
 use warnings;
+use Time::HiRes qw(sleep);
 use IPC::Open3;
 
 my $commands = {
@@ -27,7 +28,7 @@ my $usage = "Usage:
     " . (join "\n    ", map {"$_  => $$commands{$_}"} sort keys %$commands) . "
 ";
 
-sub cec($@);
+sub cec($$@);
 
 sub main(@){
   my $addr = 0;
@@ -38,23 +39,27 @@ sub main(@){
   }
 
   if(@_ == 1 and defined $$commands{$_[0]}){
-    cec $addr, "$$commands{$_[0]} $addr";
+    cec $addr, 0, "$$commands{$_[0]} $addr";
   }elsif(@_ == 2 and $_[0] =~ /^vol$/ and $_[1] =~ /^(\+|-)(\d+)$/){
     my ($sign, $vol) = ($1, $2);
     my $cmd = $sign eq "+" ? $$commands{volup} : $$commands{voldn};
-    cec $addr, ("$cmd $addr")x$vol;
+    cec $addr, 0, ("$cmd $addr")x$vol;
   }else{
     die $usage;
   }
 }
 
-sub cec($@){
-  my ($addr, @cmds) = @_;
+sub cec($$@){
+  my ($addr, $read, @cmds) = @_;
   my $pid = open3(\*CEC_IN, \*CEC_OUT, \*CEC_ERR, 'cec-client');
   print CEC_IN "name $addr\n";
   for my $cmd(@cmds){
     chomp $cmd;
     print CEC_IN "$cmd\n";
+  }
+  if($read){
+    print CEC_IN "name $addr\n";
+    sleep 0.5;
   }
   print CEC_IN "quit\n";
   my $out = '';
