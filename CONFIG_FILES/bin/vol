@@ -1,1 +1,5 @@
-cec-cmd --av vol $1
+until cec-cmd --av vol $1
+do
+  echo rerunning..
+  sleep 1
+done
