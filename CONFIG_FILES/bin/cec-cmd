@@ -8,6 +8,7 @@ my $commands = {
   off   => "standby",
   volup => "volup",
   voldn => "voldown",
+  mute  => "mute",
 };
 
 my $usage = "Usage:
