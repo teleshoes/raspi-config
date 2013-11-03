@@ -19,6 +19,8 @@ my $usage = "Usage:
      same as doing 'volup' N times, using only one cec-client session
   $0 [OPTS] vol -N
      same as doing 'voldn' N times, using only one cec-client session
+  $0 [OPTS] vol N
+     calculates the difference between 'getvol' and N, and runs vol +/- N
   $0 [OPTS] getvol
      send msg 71 to address, read audio status, and calculate the volume from it
      {the volume is apparently the floor of S-S/5, where S is the status}
@@ -48,8 +50,20 @@ sub main(@){
     my $vol = getVol $addr;
     die if not defined $vol;
     print "$vol\n";
-  }elsif(@_ == 2 and $_[0] =~ /^vol$/ and $_[1] =~ /^(\+|-)(\d+)$/){
+  }elsif(@_ == 2 and $_[0] =~ /^vol$/ and $_[1] =~ /^(\+|-)?(\d+)$/){
     my ($sign, $vol) = ($1, $2);
+    if(not defined $sign){
+      my $curVol = getVol $addr;
+      die if not defined $curVol;
+      $vol -= $curVol;
+      if($vol < 0){
+        $vol *= -1;
+        $sign = "-";
+      }else{
+        $sign = "+";
+      }
+      print "vol $sign$vol\n";
+    }
     my $cmd = $sign eq "+" ? $$commands{volup} : $$commands{voldn};
     cec $addr, 0, ("$cmd $addr")x$vol;
   }else{
