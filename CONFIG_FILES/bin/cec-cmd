@@ -1,6 +1,7 @@
 #!/usr/bin/perl
 use strict;
 use warnings;
+use IPC::Open3;
 
 my $commands = {
   on    => "on",
@@ -48,15 +49,25 @@ sub main(@){
 
 sub cec($@){
   my ($addr, @cmds) = @_;
-  open FH, "| cec-client >/dev/null 2>/dev/null";
-  print FH "name $addr\n";
+  my $pid = open3(\*CEC_IN, \*CEC_OUT, \*CEC_ERR, 'cec-client');
+  print CEC_IN "name $addr\n";
   for my $cmd(@cmds){
     chomp $cmd;
-    print FH "$cmd\n";
+    print CEC_IN "$cmd\n";
   }
-  print FH "quit\n";
-  close FH;
-  die "Error running cec-client\n" if $? != 0;
+  print CEC_IN "quit\n";
+  my $out = '';
+  my $err = '';
+  my $line;
+  while($line = <CEC_OUT>){
+    $out .= $line;
+  }
+  while($line = <CEC_ERR>){
+    $err .= $line;
+  }
+  waitpid $pid, 0;
+  print STDERR "Error running cec-client: $err\n" if $? != 0;
+  return ($out, $err);
 }
 
 &main(@ARGV);
