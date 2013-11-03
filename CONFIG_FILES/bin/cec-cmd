@@ -19,6 +19,9 @@ my $usage = "Usage:
      same as doing 'volup' N times, using only one cec-client session
   $0 [OPTS] vol -N
      same as doing 'voldn' N times, using only one cec-client session
+  $0 [OPTS] getvol
+     send msg 71 to address, read audio status, and calculate the volume from it
+     {the volume is apparently the floor of S-S/5, where S is the status}
 
   OPTS:
     --tv  use address 0 {default}
@@ -29,6 +32,7 @@ my $usage = "Usage:
 ";
 
 sub cec($$@);
+sub getVol($);
 
 sub main(@){
   my $addr = 0;
@@ -40,6 +44,10 @@ sub main(@){
 
   if(@_ == 1 and defined $$commands{$_[0]}){
     cec $addr, 0, "$$commands{$_[0]} $addr";
+  }elsif(@_ == 1 and $_[0] =~ /^getvol$/){
+    my $vol = getVol $addr;
+    die if not defined $vol;
+    print "$vol\n";
   }elsif(@_ == 2 and $_[0] =~ /^vol$/ and $_[1] =~ /^(\+|-)(\d+)$/){
     my ($sign, $vol) = ($1, $2);
     my $cmd = $sign eq "+" ? $$commands{volup} : $$commands{voldn};
@@ -74,6 +82,19 @@ sub cec($$@){
   waitpid $pid, 0;
   print STDERR "Error running cec-client: $err\n" if $? != 0;
   return ($out, $err);
+}
+
+sub getVol($){
+  my ($addr) = @_;
+  my ($out, $err) = cec $addr, 1, "tx 4$addr:71";
+  my $h = "[0-9a-f]";
+  if($out =~ /audio status changed from\s*$h+\s*to\s*($h+)/){
+    my $status = sprintf "%d", hex($1);
+    my $vol = $status - int($status / 5); #why? who knows?
+    return $vol;
+  }
+  print STDERR "Could not find volume\n";
+  return undef;
 }
 
 &main(@ARGV);
