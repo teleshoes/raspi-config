@@ -25,4 +25,6 @@ run "raspi", "-b", "
   echo running klomp install
   cd /opt/klomp
   ./install.pl /usr
+  echo installing dependencies for tagging/etc
+  ./dependency-install.pl
 ";
