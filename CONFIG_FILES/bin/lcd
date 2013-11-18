@@ -1,11 +1,13 @@
 #!/usr/bin/python
+#Copyright 2013 Elliot Wolk
+# based on:
 #
 # HD44780 LCD Test Script for
 # Raspberry Pi
 #
 # Author : Matt Hawkins
 # Site   : http://www.raspberrypi-spy.co.uk
-# 
+#
 # Date   : 03/08/2012
 #
 
