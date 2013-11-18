@@ -50,7 +50,7 @@ LCD_CHR = True
 LCD_CMD = False
 
 LCD_LINE_1 = 0x80 # LCD RAM address for the 1st line
-LCD_LINE_2 = 0xC0 # LCD RAM address for the 2nd line 
+LCD_LINE_2 = 0xC0 # LCD RAM address for the 2nd line
 
 # Timing constants
 E_PULSE = 0.001
@@ -87,9 +87,9 @@ def lcd_init():
   lcd_byte(0x33,LCD_CMD)
   lcd_byte(0x32,LCD_CMD)
   lcd_byte(0x28,LCD_CMD)
-  lcd_byte(0x0C,LCD_CMD)  
+  lcd_byte(0x0C,LCD_CMD)
   lcd_byte(0x06,LCD_CMD)
-  lcd_byte(0x01,LCD_CMD)  
+  lcd_byte(0x01,LCD_CMD)
 
 def lcd_string(message,style):
   # Send string to display
@@ -98,7 +98,7 @@ def lcd_string(message,style):
   # style=3 Right justified
 
   if style==1:
-    message = message.ljust(LCD_WIDTH," ")  
+    message = message.ljust(LCD_WIDTH," ")
   elif style==2:
     message = message.center(LCD_WIDTH," ")
   elif style==3:
