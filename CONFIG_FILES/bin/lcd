@@ -31,6 +31,7 @@
 
 #import
 import RPi.GPIO as GPIO
+import sys
 import time
 
 # Define GPIO to LCD mapping
@@ -55,9 +56,14 @@ LCD_LINE_2 = 0xC0 # LCD RAM address for the 2nd line
 E_PULSE = 0.00005
 E_DELAY = 0.00005
 
-def main():
-  # Main program block
 
+def main(args):
+  if len(args) != 2:
+    print "Usage: TOP BOTTOM\n"
+    sys.exit(1)
+  setText(args[0], args[1])
+
+def setText(top, bot):
   GPIO.setmode(GPIO.BCM)       # Use BCM GPIO numbers
   GPIO.setup(PINS['E'], GPIO.OUT)  # E
   GPIO.setup(PINS['RS'], GPIO.OUT) # RS
@@ -70,6 +76,10 @@ def main():
   # Initialise display
   lcd_init()
 
+  lcd_byte(LCD_LINE_1, LCD_CMD)
+  lcd_string(top,1)
+  lcd_byte(LCD_LINE_2, LCD_CMD)
+  lcd_string(bot,1)
 
 def lcd_init():
   # Initialise display
@@ -145,5 +155,5 @@ def toggleEnable():
 
 
 if __name__ == '__main__':
-  main()
+  main(sys.argv[1:])
 
