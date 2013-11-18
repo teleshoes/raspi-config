@@ -17,7 +17,7 @@ my $normalPackages = {
     vim-gtk rsync wget git openvpn
   )],
   '2' => [qw(
-    libterm-readkey-perl libts-0.0
+    libterm-readkey-perl libtext-csv-perl libts-0.0
   )],
   '3' => [qw(
     x11vnc lsof psmisc zip unzip parted nfs-kernel-server
