@@ -58,9 +58,11 @@ E_DELAY = 0.00005
 
 
 def main(args):
-  if len(args) != 2:
-    print "Usage: TOP BOTTOM\n"
+  if len(args) != 2 and len(args) != 3:
+    print "Usage: TOP BOTTOM [E-PIN]\n"
     sys.exit(1)
+  if len(args) == 3:
+    PINS['E'] = int(args[2])
   setText(args[0], args[1])
 
 def setText(top, bot):
