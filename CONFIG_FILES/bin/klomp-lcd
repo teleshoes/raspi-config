@@ -1,0 +1,73 @@
+#!/usr/bin/perl
+use strict;
+use warnings;
+use Text::CSV;
+use Time::HiRes qw(sleep);
+
+sub klompLCD();
+sub klompInfo(@);
+sub parseCol($$);
+sub run(@);
+
+sub main(@){
+  my $delay = shift if @_ == 1 and $_[0] =~ /^(\d+\.)?\d+$/;
+  die "Usage: $0 [DELAY]\n" if @_ != 0;
+
+  if(defined $delay){
+    while(1){
+      klompLCD();
+      sleep $delay;
+    }
+  }else{
+    klompLCD();
+  }
+}
+
+sub klompLCD(){
+  my $info = klompInfo(qw(pos len title artist));
+
+  run "sudo", "lcd", "  $$info{pos}  /  $$info{len}", "", 4;
+  run "sudo", "lcd", $$info{artist}, $$info{title}, 8;
+}
+
+sub klompInfo(@){
+  my @cols = @_;
+
+  my $csv = Text::CSV->new ( { binary => 1 } );
+  $csv->parse(`klomp-info -c @cols`);
+
+  my @vals = $csv->fields();
+  die "Error parsing klomp-info CSV\n" if @cols != @vals;
+
+  my $info = {};
+  for(my $i=0; $i<@cols; $i++){
+    my $col = $cols[$i];
+    my $val = $vals[$i];
+    $$info{$col} = parseCol $col, $val;
+  }
+  return $info;
+}
+
+sub parseCol($$){
+  my $field = shift;
+  my $s = shift;
+  $s =~ s/[\n\r\t]/ /g;
+  $s =~ s/^\s*(.*?)\s*$/$1/;
+
+  if($s =~ /[^\x00-\x7F]/){
+    print "non-ascii chars, guessing\n";
+    my $g = `klomp-tag --guess=$field "" "$s"`;
+    $g =~ s/[\n\r\t]/ /g;
+    $g =~ s/^\s*(.*?)\s*$/$1/;
+    $s = $g if length $g > 0;
+    $s =~ s/[^\x00-\x7F]/?/g;
+  }
+  return $s;
+}
+
+sub run(@){
+  print "@_\n";
+  system @_;
+}
+
+&main(@ARGV);
