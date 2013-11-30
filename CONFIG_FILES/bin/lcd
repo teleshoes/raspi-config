@@ -18,10 +18,10 @@
 # 4 : RS (Register Select)
 # 5 : R/W (Read Write)       - GROUND THIS PIN
 # 6 : Enable or Strobe
-# 7 : Data Bit 0             - NOT USED
-# 8 : Data Bit 1             - NOT USED
-# 9 : Data Bit 2             - NOT USED
-# 10: Data Bit 3             - NOT USED
+# 7 : Data Bit 0             - NOT USED IN 4 BIT
+# 8 : Data Bit 1             - NOT USED IN 4 BIT
+# 9 : Data Bit 2             - NOT USED IN 4 BIT
+# 10: Data Bit 3             - NOT USED IN 4 BIT
 # 11: Data Bit 4
 # 12: Data Bit 5
 # 13: Data Bit 6
@@ -29,16 +29,21 @@
 # 15: LCD Backlight +5V**
 # 16: LCD Backlight GND
 
-#import
 import RPi.GPIO as GPIO
 import sys
 import time
 import getpass
 from subprocess import call
 
+MODE_8BIT = True #4bit = false, 8bit = true
+
 # Define GPIO to LCD mapping
 PINS = { 'RS':  7
        , 'E':   8
+       , 'D0':  22 #not used in 4bit
+       , 'D1':  27 #not used in 4bit
+       , 'D2':  17 #not used in 4bit
+       , 'D3':  4  #not used in 4bit
        , 'D4':  25
        , 'D5':  24
        , 'D6':  23
@@ -101,7 +106,11 @@ def lcd_init():
   lcd_byte(0x33,LCD_CMD)
   lcd_byte(0x32,LCD_CMD)
 
-  lcd_byte(CMD_FCT_SET_4BIT_2LINE_5X7,LCD_CMD)
+  if MODE_8BIT:
+    lcd_byte(CMD_FCT_SET_8BIT_2LINE_5X7,LCD_CMD)
+  else:
+    lcd_byte(CMD_FCT_SET_4BIT_2LINE_5X7,LCD_CMD)
+
   lcd_byte(CMD_DISPLAY_ON_CURSOR_OFF,LCD_CMD)
   lcd_byte(CMD_ENTRY_MODE,LCD_CMD)
   lcd_byte(CMD_RESET,LCD_CMD)
@@ -112,7 +121,26 @@ def lcd_string(message):
 
 
 def lcd_byte(bits, mode):
+  if MODE_8BIT:
+    lcd_byte_8bit(bits, mode)
+  else:
+    lcd_byte_4bit(bits, mode)
 
+def lcd_byte_8bit(bits, mode):
+  GPIO.output(PINS['RS'], mode) # RS
+
+  GPIO.output(PINS['D0'], bits&0x01)
+  GPIO.output(PINS['D1'], bits&0x02)
+  GPIO.output(PINS['D2'], bits&0x04)
+  GPIO.output(PINS['D3'], bits&0x08)
+  GPIO.output(PINS['D4'], bits&0x10)
+  GPIO.output(PINS['D5'], bits&0x20)
+  GPIO.output(PINS['D6'], bits&0x40)
+  GPIO.output(PINS['D7'], bits&0x80)
+
+  toggleEnable()
+
+def lcd_byte_4bit(bits, mode):
   GPIO.output(PINS['RS'], mode) # RS
 
   # High bits
