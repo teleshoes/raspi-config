@@ -52,9 +52,7 @@ LCD_CMD = False
 LCD_LINE_1 = 0x80 # LCD RAM address for the 1st line
 LCD_LINE_2 = 0xC0 # LCD RAM address for the 2nd line
 
-# Timing constants
 E_PULSE = 0.001
-E_DELAY = 0.001
 
 def ensureRoot():
   if getpass.getuser() != 'root':
@@ -123,12 +121,9 @@ def lcd_byte(bits, mode):
   toggleEnable()
 
 def toggleEnable():
-  time.sleep(E_DELAY)
   GPIO.output(PINS['E'], True)
   time.sleep(E_PULSE)
   GPIO.output(PINS['E'], False)
-  time.sleep(E_DELAY)
-
 
 if __name__ == '__main__':
   main(sys.argv[1:])
