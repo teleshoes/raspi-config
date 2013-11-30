@@ -87,6 +87,8 @@ def main(args):
     ledToggle(False)
   elif len(args) == 1 and args[0] == 'on':
     ledToggle(True)
+  elif len(args) == 1 and args[0] == 'blink':
+    ledBlink(3, 0.1)
   elif len(args) == 2:
     setText(args[0], args[1])
   else:
@@ -98,6 +100,8 @@ def die():
     + "    set 2-row LCD text\n"
     + "  [on | off]\n"
     + "    turn LED backlight on/off\n"
+    + "  blink\n"
+    + "    blink LED backlight, preserving initial backlight\n"
     )
   sys.exit(1)
 
@@ -106,8 +110,19 @@ def initGPIO():
   for pin in PINS.values():
     GPIO.setup(pin, GPIO.OUT)
 
+def ledBlink(count, delay):
+  status = ledRead()
+  for i in range(count):
+    ledToggle(not status)
+    time.sleep(delay)
+    ledToggle(status)
+    time.sleep(delay)
+
 def ledToggle(on):
   GPIO.output(PINS['LED'], not on)
+
+def ledRead():
+  return not GPIO.input(PINS['LED'])
 
 def setText(top, bot):
   lcd_init()
