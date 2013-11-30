@@ -117,42 +117,22 @@ def lcd_string(message,style):
     lcd_byte(ord(message[i]),LCD_CHR)
 
 def lcd_byte(bits, mode):
-  # Send byte to data pins
-  # bits = data
-  # mode = True  for character
-  #        False for command
 
   GPIO.output(PINS['RS'], mode) # RS
 
   # High bits
-  GPIO.output(PINS['D4'], False)
-  GPIO.output(PINS['D5'], False)
-  GPIO.output(PINS['D6'], False)
-  GPIO.output(PINS['D7'], False)
-  if bits&0x10==0x10:
-    GPIO.output(PINS['D4'], True)
-  if bits&0x20==0x20:
-    GPIO.output(PINS['D5'], True)
-  if bits&0x40==0x40:
-    GPIO.output(PINS['D6'], True)
-  if bits&0x80==0x80:
-    GPIO.output(PINS['D7'], True)
+  GPIO.output(PINS['D4'], bits&0x10)
+  GPIO.output(PINS['D5'], bits&0x20)
+  GPIO.output(PINS['D6'], bits&0x40)
+  GPIO.output(PINS['D7'], bits&0x80)
 
   toggleEnable()
 
   # Low bits
-  GPIO.output(PINS['D4'], False)
-  GPIO.output(PINS['D5'], False)
-  GPIO.output(PINS['D6'], False)
-  GPIO.output(PINS['D7'], False)
-  if bits&0x01==0x01:
-    GPIO.output(PINS['D4'], True)
-  if bits&0x02==0x02:
-    GPIO.output(PINS['D5'], True)
-  if bits&0x04==0x04:
-    GPIO.output(PINS['D6'], True)
-  if bits&0x08==0x08:
-    GPIO.output(PINS['D7'], True)
+  GPIO.output(PINS['D4'], bits&0x01)
+  GPIO.output(PINS['D5'], bits&0x02)
+  GPIO.output(PINS['D6'], bits&0x04)
+  GPIO.output(PINS['D7'], bits&0x08)
 
   toggleEnable()
 
