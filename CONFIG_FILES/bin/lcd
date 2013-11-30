@@ -46,8 +46,6 @@ PINS = { 'RS':  7
        , 'LED': 15
        }
 
-# Define some device constants
-LCD_WIDTH = 16    # Maximum characters per line
 LCD_CHR = True
 LCD_CMD = False
 
@@ -87,9 +85,9 @@ def setText(top, bot):
   lcd_init()
 
   lcd_byte(LCD_LINE_1, LCD_CMD)
-  lcd_string(top,1)
+  lcd_string(top)
   lcd_byte(LCD_LINE_2, LCD_CMD)
-  lcd_string(bot,1)
+  lcd_string(bot)
 
 def lcd_init():
   # Initialise display
@@ -99,22 +97,10 @@ def lcd_init():
   lcd_byte(0x0C,LCD_CMD)
   lcd_byte(0x06,LCD_CMD)
   lcd_byte(0x01,LCD_CMD)
+def lcd_string(message):
+  for c in message:
+    lcd_byte(ord(c),LCD_CHR)
 
-def lcd_string(message,style):
-  # Send string to display
-  # style=1 Left justified
-  # style=2 Centred
-  # style=3 Right justified
-
-  if style==1:
-    message = message.ljust(LCD_WIDTH," ")
-  elif style==2:
-    message = message.center(LCD_WIDTH," ")
-  elif style==3:
-    message = message.rjust(LCD_WIDTH," ")
-
-  for i in range(LCD_WIDTH):
-    lcd_byte(ord(message[i]),LCD_CHR)
 
 def lcd_byte(bits, mode):
 
