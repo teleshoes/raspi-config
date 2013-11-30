@@ -26,7 +26,7 @@ sub main(@){
 sub klompLCD(){
   my $info = klompInfo(qw(pos len title artist));
 
-  run "sudo", "lcd", "  $$info{pos}  /  $$info{len}", "", 4;
+  run "sudo", "lcd", "  $$info{pos}  /  $$info{len}", "", 9;
   run "sudo", "lcd", $$info{artist}, $$info{title}, 8;
 }
 
