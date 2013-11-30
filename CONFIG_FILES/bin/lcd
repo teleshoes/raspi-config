@@ -67,19 +67,16 @@ def main(args):
     sys.exit(1)
   if len(args) == 3:
     PINS['E'] = int(args[2])
+
+  initGPIO()
   setText(args[0], args[1])
 
-def setText(top, bot):
+def initGPIO():
   GPIO.setmode(GPIO.BCM)       # Use BCM GPIO numbers
-  GPIO.setup(PINS['E'], GPIO.OUT)  # E
-  GPIO.setup(PINS['RS'], GPIO.OUT) # RS
-  GPIO.setup(PINS['D4'], GPIO.OUT) # DB4
-  GPIO.setup(PINS['D5'], GPIO.OUT) # DB5
-  GPIO.setup(PINS['D6'], GPIO.OUT) # DB6
-  GPIO.setup(PINS['D7'], GPIO.OUT) # DB7
-  GPIO.setup(PINS['LED'], GPIO.OUT) # Backlight enable
+  for pin in PINS.values():
+    GPIO.setup(pin, GPIO.OUT)
 
-  # Initialise display
+def setText(top, bot):
   lcd_init()
 
   lcd_byte(LCD_LINE_1, LCD_CMD)
