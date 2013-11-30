@@ -54,6 +54,12 @@ LCD_LINE_2 = 0xC0 # LCD RAM address for the 2nd line
 
 E_PULSE = 0.001
 
+CMD_FCT_SET_8BIT_2LINE_5X7 = 0x38
+CMD_FCT_SET_4BIT_2LINE_5X7 = 0x28
+CMD_RESET = 0x01
+CMD_ENTRY_MODE = 0x06
+CMD_DISPLAY_ON_CURSOR_OFF = 0x0C
+
 def ensureRoot():
   if getpass.getuser() != 'root':
     print "rerunning as root..\n"
@@ -91,13 +97,15 @@ def setText(top, bot):
   lcd_string(bot)
 
 def lcd_init():
-  # Initialise display
+  #magic commands
   lcd_byte(0x33,LCD_CMD)
   lcd_byte(0x32,LCD_CMD)
-  lcd_byte(0x28,LCD_CMD)
-  lcd_byte(0x0C,LCD_CMD)
-  lcd_byte(0x06,LCD_CMD)
-  lcd_byte(0x01,LCD_CMD)
+
+  lcd_byte(CMD_FCT_SET_4BIT_2LINE_5X7,LCD_CMD)
+  lcd_byte(CMD_DISPLAY_ON_CURSOR_OFF,LCD_CMD)
+  lcd_byte(CMD_ENTRY_MODE,LCD_CMD)
+  lcd_byte(CMD_RESET,LCD_CMD)
+
 def lcd_string(message):
   for c in message:
     lcd_byte(ord(c),LCD_CHR)
