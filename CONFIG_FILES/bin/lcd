@@ -62,8 +62,14 @@ def ensureRoot():
 
 def main(args):
   ensureRoot()
+
+  if len(args) == 1 and (args[0] == 'off' or args[0] == 'on'):
+    initGPIO()
+    GPIO.output(PINS['LED'], args[0] != 'on')
+    sys.exit(0)
+
   if len(args) != 2 and len(args) != 3:
-    print "Usage: TOP BOTTOM [E-PIN]\n"
+    print "Usage: TOP BOTTOM [E-PIN] | on | off\n"
     sys.exit(1)
   if len(args) == 3:
     PINS['E'] = int(args[2])
