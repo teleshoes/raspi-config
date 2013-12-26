@@ -137,6 +137,7 @@ def setText(*lines):
 
   for lineAddr in zip(lines, LCD_LINE_ADDRS):
     (line, addr) = lineAddr
+    line = line[0:LCD_CHAR_WIDTH]
     lcd_byte(addr, LCD_CMD)
     lcd_string(line)
 
