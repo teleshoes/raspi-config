@@ -54,8 +54,9 @@ PINS = { 'RS':  7
 LCD_CHR = True
 LCD_CMD = False
 
-LCD_LINE_1 = 0x80 # LCD RAM address for the 1st line
-LCD_LINE_2 = 0xC0 # LCD RAM address for the 2nd line
+LCD_LINE_ADDRS = [ 0x80
+                 , 0xC0
+                 ]
 
 E_PULSE = 0.001
 
@@ -124,13 +125,13 @@ def ledToggle(on):
 def ledRead():
   return not GPIO.input(PINS['LED'])
 
-def setText(top, bot):
+def setText(*lines):
   lcd_init()
 
-  lcd_byte(LCD_LINE_1, LCD_CMD)
-  lcd_string(top)
-  lcd_byte(LCD_LINE_2, LCD_CMD)
-  lcd_string(bot)
+  for lineAddr in zip(lines, LCD_LINE_ADDRS):
+    (line, addr) = lineAddr
+    lcd_byte(addr, LCD_CMD)
+    lcd_string(line)
 
 def lcd_init():
   #magic commands
