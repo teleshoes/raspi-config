@@ -82,6 +82,16 @@ def ensureRoot():
 def main(args):
   ensureRoot()
 
+  if len(args) >= 2 and args[0] == '--mode':
+    if args[1] == '8':
+      MODE_8BIT = True
+      args = args[2:]
+    elif args[1] == '4':
+      MODE_8BIT = False
+      args = args[2:]
+    else:
+      die()
+
   if len(args) >= 2 and args[0] == '-e':
     try:
       PINS['E'] = int(args[1])
@@ -104,13 +114,14 @@ def main(args):
 
 def die():
   print >> sys.stderr, ("Usage:\n"
-    + "  [-e E-PIN] LINE [LINE LINE LINE ..]\n"
+    + "  [--mode BITS] [-e E-PIN] LINE [LINE LINE LINE ..]\n"
     + "    set 2-row LCD text\n"
     + "  [--on | --off]\n"
     + "    turn LED backlight on/off\n"
     + "  --blink\n"
     + "    blink LED backlight, preserving initial backlight\n"
     + "\n"
+    + "  BITS:  either '4' or '8' for 4bit or 8bit mode\n"
     + "  E-PIN: GPIO pin for the LCD enable pin\n"
     )
   sys.exit(1)
