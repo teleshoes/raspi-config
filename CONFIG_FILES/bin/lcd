@@ -54,8 +54,15 @@ PINS = { 'RS':  7
 LCD_CHR = True
 LCD_CMD = False
 
-LCD_LINE_ADDRS = [ 0x80
-                 , 0xC0
+LCD_CHAR_WIDTH = 20
+
+LCD_LINE_ADDR_1 = 0x80
+LCD_LINE_ADDR_2 = 0xC0
+
+LCD_LINE_ADDRS = [ LCD_LINE_ADDR_1
+                 , LCD_LINE_ADDR_2
+                 , LCD_LINE_ADDR_1 + LCD_CHAR_WIDTH
+                 , LCD_LINE_ADDR_2 + LCD_CHAR_WIDTH
                  ]
 
 E_PULSE = 0.001
