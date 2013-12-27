@@ -140,7 +140,7 @@ def ledBlink(count, delay):
     time.sleep(delay)
 
 def ledToggle(on):
-  GPIO.output(PINS['LED'], not on)
+  GPIO.output(PINS['LED'], on)
 
 def ledRead():
   return not GPIO.input(PINS['LED'])
