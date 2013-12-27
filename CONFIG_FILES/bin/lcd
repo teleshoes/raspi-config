@@ -35,7 +35,18 @@ import time
 import getpass
 from subprocess import call
 
-MODE_8BIT = True #4bit = false, 8bit = true
+CONFIG = { 'MODE_8BIT': True         #4bit = false, 8bit = true
+         , 'LCD_CHAR_WIDTH': 20      #length of the lines
+         , 'LCD_LINE_ADDR_1': 0x80   #RAM address for line#1
+         , 'LCD_LINE_ADDR_2': 0xC0   #RAM address for line#2
+         }
+
+LCD_LINE_ADDRS = [ CONFIG['LCD_LINE_ADDR_1']
+                 , CONFIG['LCD_LINE_ADDR_2']
+                 , CONFIG['LCD_LINE_ADDR_1'] + CONFIG['LCD_CHAR_WIDTH']
+                 , CONFIG['LCD_LINE_ADDR_2'] + CONFIG['LCD_CHAR_WIDTH']
+                 ]
+
 
 # Define GPIO to LCD mapping
 PINS = { 'RS':  7
@@ -53,17 +64,6 @@ PINS = { 'RS':  7
 
 LCD_CHR = True
 LCD_CMD = False
-
-LCD_CHAR_WIDTH = 20
-
-LCD_LINE_ADDR_1 = 0x80
-LCD_LINE_ADDR_2 = 0xC0
-
-LCD_LINE_ADDRS = [ LCD_LINE_ADDR_1
-                 , LCD_LINE_ADDR_2
-                 , LCD_LINE_ADDR_1 + LCD_CHAR_WIDTH
-                 , LCD_LINE_ADDR_2 + LCD_CHAR_WIDTH
-                 ]
 
 E_PULSE = 0.001
 
@@ -84,10 +84,10 @@ def main(args):
 
   if len(args) >= 2 and args[0] == '--mode':
     if args[1] == '8':
-      MODE_8BIT = True
+      CONFIG['MODE_8BIT'] = True
       args = args[2:]
     elif args[1] == '4':
-      MODE_8BIT = False
+      CONFIG['MODE_8BIT'] = False
       args = args[2:]
     else:
       die()
@@ -150,7 +150,7 @@ def setText(lines):
 
   for lineAddr in zip(lines, LCD_LINE_ADDRS):
     (line, addr) = lineAddr
-    line = line[0:LCD_CHAR_WIDTH]
+    line = line[0 : CONFIG['LCD_CHAR_WIDTH']]
     lcd_byte(addr, LCD_CMD)
     lcd_string(line)
 
@@ -159,7 +159,7 @@ def lcd_init():
   lcd_byte(0x33,LCD_CMD)
   lcd_byte(0x32,LCD_CMD)
 
-  if MODE_8BIT:
+  if CONFIG['MODE_8BIT']:
     lcd_byte(CMD_FCT_SET_8BIT_2LINE_5X7,LCD_CMD)
   else:
     lcd_byte(CMD_FCT_SET_4BIT_2LINE_5X7,LCD_CMD)
@@ -174,7 +174,7 @@ def lcd_string(message):
 
 
 def lcd_byte(bits, mode):
-  if MODE_8BIT:
+  if CONFIG['MODE_8BIT']:
     lcd_byte_8bit(bits, mode)
   else:
     lcd_byte_4bit(bits, mode)
