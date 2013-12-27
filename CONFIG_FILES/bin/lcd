@@ -39,6 +39,7 @@ CONFIG = { 'MODE_8BIT': True         #4bit = false, 8bit = true
          , 'LCD_CHAR_WIDTH': 20      #length of the lines
          , 'LCD_LINE_ADDR_1': 0x80   #RAM address for line#1
          , 'LCD_LINE_ADDR_2': 0xC0   #RAM address for line#2
+         , 'PAGE' : None
          }
 
 LCD_LINE_ADDRS = [ CONFIG['LCD_LINE_ADDR_1']
@@ -102,6 +103,13 @@ def main(args):
     except:
       die()
 
+  if len(args) >= 2 and args[0] == '--page':
+    try:
+      CONFIG['PAGE'] = int(args[1])
+      args = args[2:]
+    except:
+      die()
+
   initGPIO()
 
   if len(args) == 1 and args[0] == '--off':
@@ -117,7 +125,7 @@ def main(args):
 
 def die():
   print >> sys.stderr, ("Usage:\n"
-    + "  [--mode BITS] [-e E-PIN] LINE [LINE LINE LINE ..]\n"
+    + "  [--mode BITS] [-e E-PIN] [--page PAGE] LINE [LINE LINE LINE ..]\n"
     + "    set 2-row LCD text\n"
     + "  [--on | --off]\n"
     + "    turn LED backlight on/off\n"
@@ -126,6 +134,17 @@ def die():
     + "\n"
     + "  BITS:  either '4' or '8' for 4bit or 8bit mode\n"
     + "  E-PIN: GPIO pin for the LCD enable pin\n"
+    + "  PAGE: split LINEs into pages and display the indicated page\n"
+    + "        the same page is displayed for each line:\n"
+    + "          if one line has fewer pages than another line,\n"
+    + "          and the selected page is after the last page,\n"
+    + "          the last page for that line is selected\n"
+    + "        pages are zero-indexed, and modular:\n"
+    + "          if there are 3 pages, p0 and p3 are both the first page,\n"
+    + "          and p2 and p5 are both the last page\n"
+    + "        if page is specified, ~ is prepended/appended to the page\n"
+    + "          if there are additional pages before/after it\n"
+    + "        the page width is " + str(CONFIG['LCD_CHAR_WIDTH']) + "\n"
     )
   sys.exit(1)
 
@@ -150,6 +169,9 @@ def ledRead():
 
 def setText(lines):
   lcd_init()
+
+  if CONFIG['PAGE'] != None:
+    lines = paginate(lines, CONFIG['PAGE'])
 
   for lineAddr in zip(lines, LCD_LINE_ADDRS):
     (line, addr) = lineAddr
@@ -219,6 +241,49 @@ def toggleEnable():
   GPIO.output(PINS['E'], True)
   time.sleep(E_PULSE)
   GPIO.output(PINS['E'], False)
+
+def getPages(line):
+  remLen = len(line)
+  pages = []
+  pos = 0
+
+  w = CONFIG['LCD_CHAR_WIDTH']
+
+  if 0 < remLen and remLen <= w:
+    pages.append(line[pos : pos+w])
+    pos += w
+    remLen -= w
+  elif remLen > w:
+    pages.append(line[pos : pos+w-1] + "~")
+    pos += w-1
+    remLen -= w-1
+
+  while remLen > 0:
+    if 0 < remLen and remLen <= w-1:
+      pages.append("~" + line[pos : pos+w-1])
+      pos += w-1
+      remLen -= w-1
+    elif remLen > w-1:
+      pages.append("~" + line[pos : pos+w-2] + "~")
+      pos += w-2
+      remLen -= w-2
+
+  return pages
+
+def paginate(lines, page):
+  linePages = map(getPages, lines)
+  maxPages = max(map(len, linePages))
+
+  page %= maxPages
+
+  selectedPages = []
+  for pages in linePages:
+    if page < len(pages):
+      selectedPages.append(pages[page])
+    else:
+      selectedPages.append(pages[-1])
+
+  return selectedPages
 
 if __name__ == '__main__':
   main(sys.argv[1:])
