@@ -138,7 +138,7 @@ def die():
     + "        the same page is displayed for each line:\n"
     + "          if one line has fewer pages than another line,\n"
     + "          and the selected page is after the last page,\n"
-    + "          the last page for that line is selected\n"
+    + "          the FIRST page for that line is selected\n"
     + "        pages are zero-indexed, and modular:\n"
     + "          if there are 3 pages, p0 and p3 are both the first page,\n"
     + "          and p2 and p5 are both the last page\n"
@@ -281,7 +281,7 @@ def paginate(lines, page):
     if page < len(pages):
       selectedPages.append(pages[page])
     else:
-      selectedPages.append(pages[-1])
+      selectedPages.append(pages[0])
 
   return selectedPages
 
