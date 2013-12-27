@@ -24,10 +24,14 @@ sub main(@){
 }
 
 sub klompLCD(){
-  my $info = klompInfo(qw(pos len title artist));
+  my $info = klompInfo(qw(pos len title artist album));
 
-  run "sudo", "lcd", "  $$info{pos}  /  $$info{len}", "", 9;
-  run "sudo", "lcd", $$info{artist}, $$info{title}, 8;
+  run "sudo", "lcd",
+    "$$info{pos}/$$info{len}",
+    $$info{album},
+    $$info{artist},
+    $$info{title},
+  ;
 }
 
 sub klompInfo(@){
