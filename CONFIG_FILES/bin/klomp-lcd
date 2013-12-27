@@ -6,8 +6,13 @@ use Time::HiRes qw(sleep);
 
 sub klompLCD();
 sub klompInfo(@);
+sub sameInfo($$);
 sub parseCol($$);
+sub offset($$$);
 sub run(@);
+
+my $lastInfo;
+my $count = 0;
 
 sub main(@){
   my $delay = shift if @_ == 1 and $_[0] =~ /^(\d+\.)?\d+$/;
@@ -25,13 +30,19 @@ sub main(@){
 
 sub klompLCD(){
   my $info = klompInfo(qw(pos len title artist album));
+  if(not sameInfo $info, $lastInfo){
+    $count = 0;
+  }
 
-  run "sudo", "lcd",
+  run "sudo", "lcd", "--page", $count,
     "$$info{pos} / $$info{len}",
     $$info{title},
     $$info{artist},
     $$info{album},
   ;
+
+  $lastInfo = $info;
+  $count++;
 }
 
 sub klompInfo(@){
@@ -50,6 +61,18 @@ sub klompInfo(@){
     $$info{$col} = parseCol $col, $val;
   }
   return $info;
+}
+
+sub sameInfo($$){
+  my ($info1, $info2) = @_;
+  return 0 if not defined $info1 or not defined $info2;
+  return 0 if length(keys %$info1) ne length(keys %$info2);
+  for my $key(keys %$info1){
+    next if $key eq 'pos';
+    return 0 if not defined $$info1{$key} or not defined $$info2{$key};
+    return 0 if $$info1{$key} ne $$info2{$key};
+  }
+  return 1;
 }
 
 sub parseCol($$){
