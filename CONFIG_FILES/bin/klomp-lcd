@@ -27,10 +27,10 @@ sub klompLCD(){
   my $info = klompInfo(qw(pos len title artist album));
 
   run "sudo", "lcd",
-    "$$info{pos}/$$info{len}",
-    $$info{album},
-    $$info{artist},
+    "$$info{pos} / $$info{len}",
     $$info{title},
+    $$info{artist},
+    $$info{album},
   ;
 }
 
