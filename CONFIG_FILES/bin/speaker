@@ -8,14 +8,14 @@ if($arg eq "xbmc"){
   system "sudo", "initctl", "stop", "pulseaudio";
   system "sudo", "pkill", "-f", "/usr/bin/pulseaudio";
   system "sudo", "modprobe", "-r", "snd_bcm2835";
-  system "sudo", "pkill", "-f", "klomp-lcd";
+  system "sudo", "pkill", "-9", "-f", "klomp-lcd";
   system "lcd --off";
 }elsif($arg eq "klomp"){
   system "sudo", "modprobe", "snd_bcm2835";
   system "sudo", "initctl", "stop", "pulseaudio";
   system "sudo", "pkill", "-f", "/usr/bin/pulseaudio";
   system "sudo", "initctl", "start", "pulseaudio";
-  system "sudo", "pkill", "-f", "klomp-lcd";
+  system "sudo", "pkill", "-9", "-f", "klomp-lcd";
   system "lcd --on";
   system "nohup klomp-lcd 0.1 >/dev/null 2>/dev/null &";
   system "klomp-cmd", "start";
