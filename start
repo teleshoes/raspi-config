@@ -5,6 +5,7 @@ packages.pl
 install-net
 config-files
 raspbmc-settings-addon; system; defaults; ok
+instal-openssh
 setup-twip
 fetch-cavestory restore
 openvpn-keys
