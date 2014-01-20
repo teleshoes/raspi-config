@@ -2,7 +2,7 @@
 use strict;
 use warnings;
 
-my $release = 'xbmc-rbp-20130930-speed';
+my $release = 'xbmc-rbp-20140104';
 my $dir = "xbmc-releases";
 my $mirror = 'http://mirrors.arizona.edu/raspbmc/downloads/bin/xbmc';
 my @urls = (
