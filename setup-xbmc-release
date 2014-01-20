@@ -4,10 +4,14 @@ use warnings;
 
 my $release = 'xbmc-rbp-20130930-speed';
 my $dir = "xbmc-releases";
-my $url = 'http://mirrors.arizona.edu/raspbmc/downloads/bin/xbmc/nightlies';
+my $mirror = 'http://mirrors.arizona.edu/raspbmc/downloads/bin/xbmc';
+my @urls = (
+  "$mirror/nightlies",
+);
 my ($tar, $md5) = ("$release.tar.gz", "$release.md5");
 
 sub run(@);
+sub tryrun(@);
 sub downloadRelease();
 sub verifyRelease();
 
@@ -44,9 +48,19 @@ sub run(@){
   system @_;
   die "Error running @_\n" if $? != 0;
 }
+sub tryrun(@){
+  print "@_\n";
+  system @_;
+  return $? == 0;
+}
 
 sub downloadRelease(){
-  run "wget", "$url/$tar", "$url/$md5";
+  for my $url(@urls){
+    if(tryrun "wget", "$url/$md5"){
+      run "wget", "$url/$tar";
+      last;
+    }
+  }
 }
 
 sub verifyRelease(){
