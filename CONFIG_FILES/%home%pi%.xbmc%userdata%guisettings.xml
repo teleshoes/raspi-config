@@ -139,7 +139,7 @@
     </defaultvideosettings>
     <audio>
         <mute>false</mute>
-        <fvolumelevel>0.093333</fvolumelevel>
+        <fvolumelevel>1.000000</fvolumelevel>
     </audio>
     <resolutions>
         <resolution>
@@ -277,8 +277,10 @@
     </audiocds>
     <audiooutput>
         <ac3passthrough>true</ac3passthrough>
+        <boostcentre>false</boostcentre>
         <channels>1</channels>
         <dtspassthrough>true</dtspassthrough>
+        <dualaudio>false</dualaudio>
         <mode>2</mode>
         <normalizelevels>true</normalizelevels>
         <stereoupmix>false</stereoupmix>
