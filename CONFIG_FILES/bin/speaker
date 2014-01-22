@@ -11,6 +11,7 @@ if($arg eq "xbmc"){
   system "sudo", "pkill", "-9", "-f", "klomp-lcd";
   system "lcd --off";
 }elsif($arg eq "klomp"){
+  system "fix-mount";
   system "sudo", "modprobe", "snd_bcm2835";
   system "sudo", "initctl", "stop", "pulseaudio";
   system "sudo", "pkill", "-f", "/usr/bin/pulseaudio";
