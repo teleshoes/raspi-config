@@ -59,13 +59,13 @@
      <setting id="sys.config.decode.ac3"   type="text" visible="false" default="" label="30303" />
      <setting id="sys.config.disable.overscan" type="bool" default="false" label="30310" />
      <setting id="sys.config.freq.profile" type="enum" lvalues="30500|30501|30502" default="0" label="30316" enable="eq(1,false)"/>
-     <setting id="sys.config.freq.manual" type="bool" default="false" label="30317" />
-     <setting id="sys.config.freq.arm" type="slider" default="800" label="30311" range="700,5,1500" option="int" enable="eq(-1,true)"/>
-     <setting id="sys.config.freq.core" type="slider" default="250" label="30312"  range="250,5,550" option="int"enable="eq(-2,true)"/>
+     <setting id="sys.config.freq.manual" type="bool" default="true" label="30317" />
+     <setting id="sys.config.freq.arm" type="slider" default="950" label="30311" range="700,5,1500" option="int" enable="eq(-1,true)"/>
+     <setting id="sys.config.freq.core" type="slider" default="400" label="30312"  range="250,5,550" option="int"enable="eq(-2,true)"/>
      <setting id="sys.config.freq.isp" type="slider" default="250" label="30318"  range="250,5,550" option="int"enable="eq(-3,true)"/>
      <setting id="sys.config.freq.gpu" type="slider" default="250"  range="250,5,550" label="30313" option="int" enable="eq(-4,true)"/>
      <setting id="sys.config.freq.sdram" type="slider" default="400"  range="400,5,600" label="30314" option="int" enable="eq(-5,true)" />
-     <setting id="sys.config.freq.overvolt" type="slider" default="0"  range="0,1,8" label="30315" option="int" enable="eq(-6,true)" />
+     <setting id="sys.config.freq.overvolt" type="slider" default="2"  range="0,1,8" label="30315" option="int" enable="eq(-6,true)" />
      <setting type="lsep"/>
      <setting type="text" default="config.txt entries separated by ; , i.e.: hdmi_group=1;hdmi_mode=34    " enable="false" />
      <setting id="sys.config.addition" type="text" default="gpu_mem_512=256" label="30350"/>
