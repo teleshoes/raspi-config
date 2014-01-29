@@ -268,6 +268,9 @@ def getPages(line):
       pos += w-2
       remLen -= w-2
 
+  if len(pages) == 0:
+    pages.append("")
+
   return pages
 
 def paginate(lines, page):
