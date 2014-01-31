@@ -1,0 +1,2 @@
+raspi apt-get remove nfs-common nfs-kernel-server rpcbind
+raspi apt-get install nfs-common nfs-kernel-server rpcbind
