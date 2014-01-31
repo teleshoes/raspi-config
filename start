@@ -4,8 +4,8 @@ pi -b sudo apt-get update
 packages.pl
 install-net
 install-nfs
-install-openssh
 config-files
+install-openssh #reboots
 raspbmc-settings-addon; system; defaults; ok
 setup-twip
 fetch-cavestory restore
