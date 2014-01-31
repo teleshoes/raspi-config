@@ -3,9 +3,9 @@ keygen.pl
 pi -b sudo apt-get update
 packages.pl
 install-net
+install-openssh
 config-files
 raspbmc-settings-addon; system; defaults; ok
-instal-openssh
 setup-twip
 fetch-cavestory restore
 openvpn-keys
