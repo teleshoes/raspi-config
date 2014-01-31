@@ -13,4 +13,5 @@ fetch-cavestory restore
 openvpn-keys
 install-klomp
 install-addons
+raspi reboot
 pi -b codec-keys
