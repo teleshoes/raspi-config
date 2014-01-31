@@ -265,6 +265,8 @@ sub installDebs(){
   }
   $cmd = "
     set -x;
+    mkdir -p /etc/package-manager
+    touch /etc/package-manager/config
     DR=`cat $pkgConfig | grep disableReboot | sed s/disableReboot=//`
     sed -i s/disableReboot=.*/disableReboot=1/ $pkgConfig
     $cmd
