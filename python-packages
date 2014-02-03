@@ -1,0 +1,25 @@
+#!/usr/bin/perl
+use strict;
+use warnings;
+
+sub run(@);
+
+my @pip = qw(
+  rpi.gpio
+);
+
+sub main(@){
+  run "raspi", "
+    set -x
+    apt-get install python-dev python-pip
+    easy_install -U distribute
+    pip install @pip
+  ";
+}
+
+sub run(@){
+  print "@_\n";
+  system @_;
+}
+
+&main(@ARGV);
