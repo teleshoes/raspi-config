@@ -2,6 +2,7 @@ flashing
 keygen.pl
 pi -b sudo apt-get update
 packages.pl
+python-packages
 install-net
 install-nfs
 setup-xbmc-release
