@@ -10,6 +10,7 @@ my @packagesToRemove = qw(
   libtag1-vanilla libtag1c2a
   librcd0 librcc0 libtag1-rusxmms
   gstreamer0.10-plugins-good
+  network-manager
 );
 
 my $normalPackages = {
