@@ -9,6 +9,7 @@ sub main(@){
     system "sudo rmdir /media/* 2>/dev/null";
     system "sudo mnt";
   }
+  system "sudo rmdir /media/* 2>/dev/null";
 }
 
 &main(@ARGV);
