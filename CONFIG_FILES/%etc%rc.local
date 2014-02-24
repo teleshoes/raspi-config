@@ -15,5 +15,6 @@ PATH="/usr/local/sbin:/usr/local/bin:/usr/sbin:/usr/bin:/sbin:/bin"
 
 wired &
 fix-mount &
+ntpd -gq &
 
 exit 0
