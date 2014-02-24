@@ -1,0 +1,42 @@
+#!/usr/bin/perl
+use strict;
+use warnings;
+use Time::HiRes qw(sleep);
+
+sub togglePin($);
+sub writePin($$);
+sub run(@);
+
+my $onPin = 1;
+my $offPin = 16;
+my $delay = 0.4;
+
+sub main(@){
+  if(@_ > 0 and $_[0] =~ /off/){
+    writePin $onPin, 0;
+    togglePin $offPin;
+  }else{
+    writePin $offPin, 0;
+    togglePin $onPin;
+  }
+}
+
+sub togglePin($){
+  my $pin = shift;
+  writePin $pin, 1;
+  sleep $delay;
+  writePin $pin, 0;
+}
+
+sub writePin($$){
+  my ($pin, $val) = @_;
+  run "gpio", "mode", $pin, "out";
+  run "gpio", "write", $pin, $val;
+}
+
+sub run(@){
+  print "@_\n";
+  system @_;
+}
+
+&main(@ARGV);
