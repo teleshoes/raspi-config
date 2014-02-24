@@ -1,0 +1,27 @@
+#!/usr/bin/perl
+use strict;
+use warnings;
+
+my $gitRepo = "git://git.drogon.net/wiringPi";
+my $gitDir = "/opt/wiringpi";
+
+sub run(@){
+  print "@_\n";
+  system @_;
+}
+
+run "raspi", "-b", "
+  if [ -d $gitDir ]; then
+    echo updating git repo
+    cd $gitDir
+    git pull
+  else
+    echo fetching git repo
+    mkdir -p $gitDir
+    cd $gitDir
+    git clone $gitRepo .
+  fi
+  echo running install
+  cd $gitDir
+  ./build
+";
