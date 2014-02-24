@@ -3,6 +3,10 @@ use strict;
 use warnings;
 use Time::HiRes qw(sleep);
 
+my $stateFile = "$ENV{HOME}/.outlet";
+
+sub readState();
+sub writeState($);
 sub togglePin($);
 sub writePin($$);
 sub run(@);
@@ -11,14 +15,54 @@ my $onPin = 1;
 my $offPin = 16;
 my $delay = 0.4;
 
+my $usage = " $0 [on|off|toggle]  {default is toggle}\n";
+
 sub main(@){
-  if(@_ > 0 and $_[0] =~ /off/){
+  my $cmd = shift;
+  $cmd = "toggle" if not defined $cmd;
+
+  die $usage if @_ > 0;
+
+  if($cmd =~ /^(toggle)$/){
+    my $state = readState();
+    if(defined $state and $state =~ /off/){
+      $cmd = "on";
+    }else{
+      $cmd = "off";
+    }
+  }
+
+  if($cmd =~ /^(on)$/){
     writePin $onPin, 0;
     togglePin $offPin;
-  }else{
+    writeState 'on';
+  }elsif($cmd =~ /^(off)$/){
     writePin $offPin, 0;
     togglePin $onPin;
+    writeState 'off';
+  }else{
+    die $usage;
   }
+}
+
+sub readState(){
+  return undef if not -f $stateFile;
+  open FH, "< $stateFile" or die "Could not read $stateFile\n";
+  my $state = <FH>;
+  close FH;
+  return 'on' if $state =~ /on/i;
+  return 'off' if $state =~ /off/i;
+  return undef;
+}
+sub writeState($){
+  my $state = shift;
+  open FH, "> $stateFile" or die "Could not write to stateFile\n";
+  if($state =~ /on/i){
+    print FH "on\n";
+  }elsif($state =~ /off/i){
+    print FH "off\n";
+  }
+  close FH;
 }
 
 sub togglePin($){
