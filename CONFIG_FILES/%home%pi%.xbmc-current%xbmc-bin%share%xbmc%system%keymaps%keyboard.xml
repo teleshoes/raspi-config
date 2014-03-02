@@ -236,6 +236,7 @@
       <t>ShowSubtitles</t>
       <t mod="ctrl">SubtitleAlign</t>
       <l>NextSubtitle</l>
+      <k>AudioNextLanguage</k>
       <left>StepBack</left>
       <right>StepForward</right>
       <up>BigStepForward</up>
