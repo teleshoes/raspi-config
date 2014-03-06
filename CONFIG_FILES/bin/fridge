@@ -2,6 +2,9 @@
 use strict;
 use warnings;
 
+$SIG{'INT'} = sub{system "outlet", 3, "on"; exit 1};
+$SIG{'HUP'} = sub{system "outlet", 3, "on"; exit 1};
+
 my $min = 120;
 
 sub main(@){
