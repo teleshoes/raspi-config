@@ -4,6 +4,7 @@ use warnings;
 use Time::HiRes qw(sleep);
 
 my $stateFilePrefix = "$ENV{HOME}/.outlet";
+my $logFile = "$ENV{HOME}/.outlet-log";
 
 sub readState($);
 sub writeState($$);
@@ -100,6 +101,12 @@ sub writeState($$){
   }elsif($state =~ /off/i){
     print FH "off\n";
   }
+  close FH;
+
+  my $d = `date`;
+  chomp $d;
+  open FH, ">> $logFile" or die "Could not write to $logFile\n";
+  print FH "$outlet => $state  $d\n";
   close FH;
 }
 
