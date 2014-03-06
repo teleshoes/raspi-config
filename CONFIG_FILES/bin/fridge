@@ -1,0 +1,23 @@
+#!/usr/bin/perl
+use strict;
+use warnings;
+
+my $min = 120;
+
+sub main(@){
+  system "outlet", 3, "off";
+  my $start = time;
+  my $target = $start + $min*60;
+  while(1){
+    my $now = time();
+    if($now >= $target){
+      last;
+    }else{
+      sleep 1;
+      print $target-$now . "s\n";
+    }
+  }
+  system "outlet", 3, "on";
+}
+
+&main(@ARGV);
