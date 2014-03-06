@@ -3,28 +3,50 @@ use strict;
 use warnings;
 use Time::HiRes qw(sleep);
 
-my $stateFile = "$ENV{HOME}/.outlet";
+my $stateFilePrefix = "$ENV{HOME}/.outlet";
 
-sub readState();
-sub writeState($);
+sub readState($);
+sub writeState($$);
 sub togglePin($);
 sub writePin($$);
 sub run(@);
 
-my $onPin = 1;
-my $offPin = 16;
+my $outletPins = {
+  1 => [15, 16],
+  3 => [8, 1],
+};
+
+my $okOutlets = join "|", sort keys %$outletPins;
+my $okCmds = join "|", qw(on off toggle);
+
 my $delay = 0.4;
 
-my $usage = " $0 [on|off|toggle]  {default is toggle}\n";
+my $usage = "Usage:
+  $0 [OUTLET] [CMD]
+     OUTLET is one of: [$okOutlets]   {default is 1}
+     CMD is one of: [$okCmds]   {default is toggle}
+";
 
 sub main(@){
-  my $cmd = shift;
-  $cmd = "toggle" if not defined $cmd;
+  my $outlet = 1;
+  if(@_ > 0 and $_[0] =~ /^($okOutlets)$/){
+    $outlet = shift;
+  }
+
+  my $cmd = "toggle";
+  if(@_ > 0 and $_[0] =~ /^($okCmds)$/){
+    $cmd = shift;
+  }
+
+  die $usage if @_ != 0;
+
+  my $onPin = $$outletPins{$outlet}[0];
+  my $offPin = $$outletPins{$outlet}[1];
 
   die $usage if @_ > 0;
 
   if($cmd =~ /^(toggle)$/){
-    my $state = readState();
+    my $state = readState($outlet);
     if(defined $state and $state =~ /off/){
       $cmd = "on";
     }else{
@@ -35,17 +57,19 @@ sub main(@){
   if($cmd =~ /^(on)$/){
     writePin $onPin, 0;
     togglePin $offPin;
-    writeState 'on';
+    writeState $outlet, 'on';
   }elsif($cmd =~ /^(off)$/){
     writePin $offPin, 0;
     togglePin $onPin;
-    writeState 'off';
+    writeState $outlet, 'off';
   }else{
     die $usage;
   }
 }
 
-sub readState(){
+sub readState($){
+  my ($outlet) = @_;
+  my $stateFile = "$stateFilePrefix-$outlet";
   return undef if not -f $stateFile;
   open FH, "< $stateFile" or die "Could not read $stateFile\n";
   my $state = <FH>;
@@ -54,8 +78,9 @@ sub readState(){
   return 'off' if $state =~ /off/i;
   return undef;
 }
-sub writeState($){
-  my $state = shift;
+sub writeState($$){
+  my ($outlet, $state) = @_;
+  my $stateFile = "$stateFilePrefix-$outlet";
   open FH, "> $stateFile" or die "Could not write to stateFile\n";
   if($state =~ /on/i){
     print FH "on\n";
