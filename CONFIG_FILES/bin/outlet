@@ -16,6 +16,10 @@ my $outletPins = {
   3 => [8, 1],
 };
 
+my @allPins = map {@$_} values $outletPins;
+my @onPins = map {$$_[1]} values $outletPins;
+my @offPins = map {$$_[0]} values $outletPins;
+
 my $okOutlets = join "|", sort keys %$outletPins;
 my $okCmds = join "|", qw(on off toggle);
 
@@ -25,9 +29,18 @@ my $usage = "Usage:
   $0 [OUTLET] [CMD]
      OUTLET is one of: [$okOutlets]   {default is 1}
      CMD is one of: [$okCmds]   {default is toggle}
+
+  $0 --clear
 ";
 
 sub main(@){
+  if(@_ == 1 and $_[0] =~ /^(--clear)$/){
+    writePin $_, 0 foreach @allPins;
+    togglePin $_ foreach @offPins;
+    writeState $_, 'off' foreach keys %$outletPins;
+    exit 0;
+  }
+
   my $outlet = 1;
   if(@_ > 0 and $_[0] =~ /^($okOutlets)$/){
     $outlet = shift;
