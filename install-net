@@ -9,6 +9,15 @@ sub run(@){
   system @_;
 }
 
+my $host = `raspi`;
+chomp $host;
+
+my $wifiConf = "/etc/wifi.conf";
+my $wifiAutoConf = "/etc/wifi-auto.conf";
+
+run "scp", "$ENV{HOME}/wifi.conf","root\@$host:$wifiConf";
+run "scp", "$ENV{HOME}/wifi-auto.conf", "root\@$host:$wifiAutoConf";
+
 run "raspi", "-b", "
   if [ -e /opt/net ]; then
     echo updating net git repo
@@ -22,4 +31,7 @@ run "raspi", "-b", "
   echo running net install
   cd /opt/net
   ./install.pl
+
+  echo removing driver line from $wifiConf
+  sed -i s/^driver=.*// $wifiConf
 ";
