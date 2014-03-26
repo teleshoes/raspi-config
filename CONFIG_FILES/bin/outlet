@@ -70,12 +70,12 @@ sub main(@){
   }
 
   if($cmd =~ /^(on)$/){
-    writePin $onPin, 0;
-    togglePin $offPin;
-    writeState $outlet, 'on';
-  }elsif($cmd =~ /^(off)$/){
     writePin $offPin, 0;
     togglePin $onPin;
+    writeState $outlet, 'on';
+  }elsif($cmd =~ /^(off)$/){
+    writePin $onPin, 0;
+    togglePin $offPin;
     writeState $outlet, 'off';
   }else{
     die $usage;
