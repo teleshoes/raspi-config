@@ -53,8 +53,8 @@
      <setting id="sys.xbmc.ae" type="bool" default="false" label="30205"/>
      <setting id="sys.xbmc.shut" type="bool" default="true" label="30206"/>
      <setting label="31102" type="lsep" />
-     <setting id="sys.config.decode.mpg2" type="text"  default="0x907befd1"  label="30300" />
-     <setting id="sys.config.decode.wvc1"  type="text"  default="0x848198f1" label="30301" />
+     <setting id="sys.config.decode.mpg2" type="text"  default="0x896dcfc0"  label="30300" />
+     <setting id="sys.config.decode.wvc1"  type="text"  default="0xa826ede4" label="30301" />
      <setting id="sys.config.decode.dts"   type="text" visible="false" default="" label="30302" />
      <setting id="sys.config.decode.ac3"   type="text" visible="false" default="" label="30303" />
      <setting id="sys.config.disable.overscan" type="bool" default="false" label="30310" />
