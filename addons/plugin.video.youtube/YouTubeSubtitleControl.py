@@ -100,35 +100,25 @@ class YouTubeSubtitleControl():
                 self.common.log(u"Code list and sublist length mismatch: " + repr(codelist) + " - " + repr(sublist))
                 return ""
 
-            if len(codelist) > 0:
-                # Fallback to first in list.
-                subtitle = sublist[0].replace(u" ", u"%20")
-                code = codelist[0]
-
             lang_code = ["off", "en", "es", "de", "fr", "it", "ja"][int(self.settings.getSetting("lang_code"))]
             self.common.log(u"selected language: " + repr(lang_code))
-            if True:
-                for i in range(0, len(codelist)):
-                    data = codelist[i].lower()
-                    if data.find("-") > -1:
-                        data = data[:data.find("-")]
 
-                    if codelist[i].find(lang_code) > -1:
-                        subtitle = sublist[i].replace(" ", "%20")
-                        code = codelist[i]
-                        self.common.log(u"found subtitle specified: " + subtitle + " - " + code)
-                        break
+            for i in range(0, len(codelist)):
+                if codelist[i].find(lang_code) > -1:
+                    subtitle = sublist[i].replace(u" ", u"%20")
+                    code = codelist[i]
+                    self.common.log(u"found subtitle specified: " + subtitle + " - " + code)
+                    break
 
-                    if codelist[i].find("en") > -1:
-                        subtitle = sublist[i].replace(" ", "%20")
-                        code = "en"
-                        self.common.log(u"found subtitle default: " + subtitle + " - " + code)
+                if codelist[i].find("en") > -1:
+                    subtitle = sublist[i].replace(u" ", u"%20")
+                    code = "en"
+                    self.common.log(u"found subtitle default: " + subtitle + " - " + code)
 
             if code:
                 url = self.urls["close_caption_url"] % (get("videoid"), code)
                 if len(subtitle) > 0:
                     url += "&name=" + subtitle
-
 
         self.common.log(u"found subtitle url: " + repr(url))
         return url
@@ -149,10 +139,14 @@ class YouTubeSubtitleControl():
         w = self.storage.openFile(path, "w")
         try:
             w.write(result.encode("utf-8")) # WTF, didn't have to do this before, did i?
-        except:
-            w.write(result)
-            self.common.log(u"NOT utf-8 WRITE!!!: " + path + " - " + repr(result))
-            time.sleep(20)
+        except Exception as e:
+            self.common.log("Exception: " + repr(e))
+            try:
+                w.write(result)
+                self.common.log(u"NOT utf-8 WRITE!!!: " + path + " - " + repr(result))
+            except Exception as de:
+                self.common.log("Exception2: " + repr(de))
+            time.sleep(5)
 
         w.close()
 

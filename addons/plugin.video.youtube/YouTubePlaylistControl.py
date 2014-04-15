@@ -50,10 +50,9 @@ class YouTubePlaylistControl():
             print repr(result)
         elif get("scraper") == "liked_videos":
             (result, status) = self.getLikedVideos(params)
-        elif get("scraper") == "music_top100":
-            result = self.getYouTubeTop100(params)
         elif get("playlist"):
             params["user_feed"] = "playlist"
+            params["login"] = "true"
             result = self.getUserFeed(params)
         elif get("user_feed") in ["recommended", "watch_later", "newsubscriptions", "favorites"]:
             params["login"] = "true"
@@ -84,7 +83,7 @@ class YouTubePlaylistControl():
         playlist = self.xbmc.PlayList(self.xbmc.PLAYLIST_VIDEO)
         playlist.clear()
 
-        video_url = "%s?path=/root&action=play_video&videoid=%s"
+        video_url = "%s?path=/root/video&action=play_video&videoid=%s"
         # queue all entries
         for entry in result:
             video = entry.get
@@ -148,14 +147,6 @@ class YouTubePlaylistControl():
                 return False
 
         return self.feeds.listAll(params)
-
-    def getYouTubeTop100(self, params={}):
-        (result, status) = self.scraper.scrapeYouTubeTop100(params)
-
-        if status == 200:
-            (result, status) = self.core.getBatchDetails(result, params)
-
-        return result
 
     def getLikedVideos(self, params={}):
         get = params.get
