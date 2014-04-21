@@ -52,14 +52,14 @@ LCD_LINE_ADDRS = [ CONFIG['LCD_LINE_ADDR_1']
 # Define GPIO to LCD mapping
 PINS = { 'RS':  7
        , 'E':   8
-       , 'D0':  11 #not used in 4bit
-       , 'D1':  9  #not used in 4bit
-       , 'D2':  10 #not used in 4bit
-       , 'D3':  22 #not used in 4bit
-       , 'D4':  27
-       , 'D5':  17
-       , 'D6':  4
-       , 'D7':  3
+       , 'D0':  3  #not used in 4bit
+       , 'D1':  4  #not used in 4bit
+       , 'D2':  17 #not used in 4bit
+       , 'D3':  27 #not used in 4bit
+       , 'D4':  22
+       , 'D5':  10
+       , 'D6':  9
+       , 'D7':  11
        , 'LED': 25
        }
 
