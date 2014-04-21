@@ -14,8 +14,8 @@ sub run(@);
 
 #[on, off]
 my $outletPins = {
-  1 => [15, 1],
-  3 => [16, 8],
+  1 => [15, 8],
+  3 => [1, 16],
 };
 
 my @allPins = map {@$_} values $outletPins;
@@ -25,7 +25,7 @@ my @offPins = map {$$_[0]} values $outletPins;
 my $okOutlets = join "|", sort keys %$outletPins;
 my $okCmds = join "|", qw(on off toggle);
 
-my $delay = 0.4;
+my $delay = 0.6;
 
 my $usage = "Usage:
   $0 [OUTLET] [CMD]
