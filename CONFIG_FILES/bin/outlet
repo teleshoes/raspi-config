@@ -14,8 +14,9 @@ sub run(@);
 
 #[on, off]
 my $outletPins = {
-  1 => [15, 8],
-  3 => [1, 16],
+  1 => [0, 12],
+  2 => [2, 13],
+  3 => [3, 14],
 };
 
 my @allPins = map {@$_} values $outletPins;
