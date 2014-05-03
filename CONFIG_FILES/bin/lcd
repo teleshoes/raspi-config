@@ -172,7 +172,10 @@ def die():
 
 def parseInputLine(inputLine):
   f = StringIO.StringIO(inputLine)
-  rows = list(csv.reader(f, delimiter=','))
+  try:
+    rows = list(csv.reader(f, delimiter=','))
+  except:
+    return (None, None)
   if len(rows) != 1:
     return (None, None)
 
