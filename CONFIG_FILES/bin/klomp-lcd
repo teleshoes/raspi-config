@@ -16,10 +16,14 @@ my $lastInfo;
 my $count = 0;
 
 sub main(@){
-  my $delay = shift if @_ == 1 and $_[0] =~ /^(\d+\.)?\d+$/;
-  die "Usage: $0 [DELAY]\n" if @_ != 0;
+  my $pi = shift if @_ > 0 and $_[0] =~ /^--pi$/;
+  my $delay = shift if @_ > 0 and $_[0] =~ /^(\d+\.)?\d+$/;
+  die "Usage: $0 [--pi] [DELAY]\n" if @_ != 0;
 
-  open FH, "|-", "sudo lcd --stdin" or die "Could not run lcd --stdin\n";
+  my $cmd = "sudo lcd --stdin";
+  $cmd = "pi $cmd" if defined $pi;
+
+  open FH, "|-", $cmd or die "Could not run lcd --stdin\n";
 
   if(defined $delay){
     while(1){
