@@ -4,7 +4,8 @@ use warnings;
 use Text::CSV;
 use Time::HiRes qw(sleep);
 
-sub klompLCD();
+sub getKlompCsvRow();
+sub parseCsv($);
 sub klompInfo(@);
 sub sameInfo($$);
 sub parseCol($$);
@@ -18,31 +19,52 @@ sub main(@){
   my $delay = shift if @_ == 1 and $_[0] =~ /^(\d+\.)?\d+$/;
   die "Usage: $0 [DELAY]\n" if @_ != 0;
 
+  open FH, "|-", "sudo lcd --stdin" or die "Could not run lcd --stdin\n";
+
   if(defined $delay){
     while(1){
-      klompLCD();
+      print FH getKlompCsvRow();
       sleep $delay;
     }
   }else{
-    klompLCD();
+    print FH getKlompCsvRow();
   }
+
+  close FH;
 }
 
-sub klompLCD(){
+sub getKlompCsvRow(){
   my $info = klompInfo(qw(pos len title artist album));
   if(not sameInfo $info, $lastInfo){
     $count = 0;
   }
 
-  run "sudo", "lcd", "--page", $count,
+  my $csvRow = [$count,
     "$$info{pos} / $$info{len}",
     $$info{title},
     $$info{artist},
     $$info{album},
-  ;
+  ];
 
   $lastInfo = $info;
   $count++;
+
+  return parseCsv [$csvRow];
+}
+
+sub parseCsv($){
+  my $rows = shift;
+  my $s = '';
+  for my $row(@$rows){
+    for my $col(@$row){
+      $col =~ s/"/""/g;
+      $col =~ s/^/"/;
+      $col =~ s/$/"/;
+    }
+    $s .= join ",", @$row;
+    $s .= "\n";
+  }
+  return $s;
 }
 
 sub klompInfo(@){
