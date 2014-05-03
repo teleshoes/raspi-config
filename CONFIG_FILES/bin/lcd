@@ -142,7 +142,7 @@ def main(args):
 def die():
   print >> sys.stderr, ("Usage:\n"
     + "  [--mode BITS] [-e E-PIN] [--page PAGE] LINE [LINE LINE LINE ..]\n"
-    + "    set 2-row LCD text\n"
+    + "    set LCD text\n"
     + "  [--mode BITS] [-e E-PIN] --stdin\n"
     + "    read from stdin. each line must be formatted like this:\n"
     + "        PAGE,\"LINE\",\"LINE\",...\"LINE\"\n"
