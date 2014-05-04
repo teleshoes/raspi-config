@@ -5,7 +5,7 @@ use warnings;
 sub run(@);
 
 my @pip = qw(
-  rpi.gpio
+  rpi.gpio RPLCD
 );
 
 sub main(@){
