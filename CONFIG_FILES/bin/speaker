@@ -17,6 +17,6 @@ if($arg eq "xbmc"){
   system "sudo", "pkill", "-f", "/usr/bin/pulseaudio";
   system "sudo", "pkill", "-9", "-f", "klomp-lcd";
   system "lcd --on";
-  system "nohup klomp-lcd 0.1 >/dev/null 2>/dev/null &";
+  system "nohup klomp-lcd 1 >/dev/null 2>/dev/null &";
   system "klomp-cmd", "start";
 }
