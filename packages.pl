@@ -21,6 +21,9 @@ my $normalPackages = {
   )],
   '3' => [qw(
     x11vnc lsof psmisc zip unzip parted
+    fonts-droid fonts-vlgothic
+    fonts-opensymbol fonts-liberation fonts-linuxlibertine
+    fonts-sil-gentium fonts-sil-gentium-basic
   )],
   '4' => [qw(
     xinit openbox chromium-browser midori
