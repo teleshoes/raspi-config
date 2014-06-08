@@ -1,0 +1,6 @@
+#GPIO 21/27 => wiringpi 2
+pin=2
+gpio mode $pin out
+gpio write $pin 1
+sleep 3
+gpio write $pin 0
