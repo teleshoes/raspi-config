@@ -6,17 +6,9 @@ pi sudo reboot
 
 pi -b sudo apt-get update
 packages.pl
-python-packages
 install-net
 install-nfs
-setup-xbmc-release
 config-files
-install-openssh #reboots
-raspbmc-settings-addon; system; defaults; ok
-setup-twip
 fetch-cavestory restore
-openvpn-keys
 install-klomp
-install-addons
 raspi reboot
-pi -b codec-keys
