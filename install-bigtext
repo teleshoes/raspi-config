@@ -1,0 +1,18 @@
+#!/usr/bin/perl
+use strict;
+use warnings;
+
+my $gitRepo = "git://github.com/teleshoes/qtbigtext.git";
+my $dir = "/tmp/qtbigtext";
+
+sub run(@){
+  print "@_\n";
+  system @_;
+}
+
+run "raspi", "-b", "
+  rm -rf $dir
+  git clone $gitRepo $dir
+  cd $dir
+  ./install.pl
+";
