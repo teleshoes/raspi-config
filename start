@@ -1,5 +1,9 @@
 flashing
 keygen.pl
+expand-rootfs
+setup-lightdm
+pi sudo reboot
+
 pi -b sudo apt-get update
 packages.pl
 python-packages
