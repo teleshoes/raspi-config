@@ -26,13 +26,10 @@ my $normalPackages = {
     fonts-sil-gentium fonts-sil-gentium-basic
   )],
   '4' => [qw(
-    xinit openbox chromium-browser midori
+    xinit chromium-browser midori
   )],
   '5' => [qw(
     mplayer man python-pip alsa-utils ffmpeg
-  )],
-  '6' => [qw(
-    xfce4
   )],
 };
 my $extraPackages = {};
