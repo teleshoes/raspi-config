@@ -28,7 +28,7 @@ my $normalPackages = {
     xinit chromium-browser midori
   )],
   '5' => [qw(
-    mplayer man python-pip alsa-utils ffmpeg
+    mplayer man python-pip alsa-utils ffmpeg unclutter
   )],
 };
 my $extraPackages = {};
