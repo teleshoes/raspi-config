@@ -230,7 +230,7 @@ sub isAlreadyInstalled($$){
 sub installDebs(){
   my @debs = `cd $debDir; ls */*.deb`;
   chomp foreach @debs;
-  
+
   print "\n\nSyncing $debDestPrefix/$debDir to $debDestPrefix on dest:\n";
   my $host = host();
   system "rsync $debDir root\@$host:$debDestPrefix -av --progress --delete";
@@ -247,14 +247,11 @@ sub installDebs(){
   }
   for my $deb(@debs){
     my $localDebFile = "$debDir/$deb";
-    my $remoteDebFile = "$debDestPrefix/$debDir/$deb\n";
+    my $remoteDebFile = "$debDestPrefix/$debDir/$deb";
     if(not isAlreadyInstalled($localDebFile, \%virtualPackages)){
       $count++;
       print "...adding $localDebFile\n";
-      $cmd .= "$env dpkg -i $remoteDebFile\n";
-      $cmd .= "if [ \$? != 0 ]; then "
-              . "$env apt-get -f install -y --allow-unauthenticated; "
-              . "fi\n";
+      $cmd .= "$env dpkg -i $remoteDebFile || apt-get -f install -y\n";
     }else{
       print "Skipping already installed $deb\n";
     }
@@ -262,15 +259,6 @@ sub installDebs(){
   for my $job(@jobs){
     $cmd .= "start $job\n";
   }
-  $cmd = "
-    set -x;
-    mkdir -p /etc/package-manager
-    touch /etc/package-manager/config
-    DR=`cat $pkgConfig | grep disableReboot | sed s/disableReboot=//`
-    sed -i s/disableReboot=.*/disableReboot=1/ $pkgConfig
-    $cmd
-    sed -i s/disableReboot=.*/disableReboot=\$DR/ $pkgConfig
-  ";
 
   print "\n\nInstalling debs\n";
   if($count > 0){
