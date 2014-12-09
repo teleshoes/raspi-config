@@ -2,7 +2,7 @@
 use strict;
 use warnings;
 
-my $hostName = "raspbmc";
+my $hostName = "raspberrypi";
 
 my $DIR = '/opt/CONFIG_FILES';
 my $user = 'pi';
