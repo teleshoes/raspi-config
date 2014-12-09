@@ -1,0 +1,2 @@
+#!/bin/bash
+pi -s sudo update-rc.d lightdm enable 2
