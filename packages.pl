@@ -22,6 +22,7 @@ my $normalPackages = {
     fonts-droid fonts-vlgothic
     fonts-opensymbol fonts-liberation fonts-linuxlibertine
     fonts-sil-gentium fonts-sil-gentium-basic
+    fonts-inconsolata ttf-inconsolata
   )],
   '4' => [qw(
     xinit chromium-browser midori
