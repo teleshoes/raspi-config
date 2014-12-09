@@ -1,5 +1,5 @@
 !) sd card insert
 2) run this to copy it, assuming mmcblk0 is the sd card
-gunzip -c `readlink image` | sudo dd bs=1M of=/dev/mmcblk0
+gunzip -c `readlink image` | sudo dcfldd bs=1M of=/dev/mmcblk0
 3) insert sd card and ethernet cable
 4) ssh pi@raspberrypi #pw=raspberry
