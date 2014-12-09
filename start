@@ -4,8 +4,9 @@ expand-rootfs
 setup-lightdm
 pi sudo reboot
 
-pi -b sudo apt-get update
+pi sudo apt-get update
 packages.pl
+pi sudo apt-get upgrade
 install-net
 install-nfs
 config-files
