@@ -1,0 +1,139 @@
+#!/usr/bin/perl
+use strict;
+use warnings;
+use Text::CSV;
+use Time::HiRes qw(sleep time);
+use utf8;
+
+sub formatKlompInfoLine($$);
+sub getIpmagicCommand($$@);
+sub klompInfo(@);
+sub offset($$$);
+sub run(@);
+
+my $height=480;
+my $width=644;
+
+my @extraCmd = qw(xscreensaver-command -deactivate);
+my $defaultDelayMillis = 1000;
+
+my $usage = "Usage:
+  $0 [OPTS]
+    run bigtext with info from klomp-info
+    also runs \"@extraCmd\"
+
+    OPTS
+       --ipmagic=CONFNAME
+         runs \"ipmagic CONFNAME bigtext\"
+
+       --ipmagic-user=USERNAME
+         runs \"ipmagic CONFNAME -u USERNAME bigtext\"
+
+       --delay=MILLIS
+         time to sleep in milliseconds after subsequent klomp displays
+         default is $defaultDelayMillis
+
+       --once
+         run once and quit
+";
+
+sub main(@){
+  my $ipmagic;
+  my $ipmagicUser;
+  my $delay = $defaultDelayMillis;
+  my $once = 0;
+  while(@_ > 0){
+    my $arg=shift;
+    if($arg =~ /^--ipmagic=(.*)$/){
+      $ipmagic = $1;
+    }elsif($arg =~ /^--ipmagic-user=(.*)$/){
+      $ipmagicUser = $1;
+    }elsif($arg =~ /^--delay=(\d+)$/){
+      $delay = $1;
+    }elsif($arg =~ /^--once$/){
+      $once = 1;
+    }else{
+      die $usage;
+    }
+  }
+
+  open FH, "|-", getIpmagicCommand($ipmagic, $ipmagicUser,
+    "bigtext",
+      "--lineSeparator=true",
+      "--forceHeight=$height", "--forceWidth=644",
+      "--stdin");
+
+  while(1){
+    my $now = time;
+
+    run getIpmagicCommand($ipmagic, $ipmagicUser, @extraCmd);
+    print FH formatKlompInfoLine($ipmagic, $ipmagicUser);
+    last if $once;
+
+    my $toWait = ($delay/1000) - (time - $now);
+    sleep $toWait if $toWait > 0;
+  }
+
+  close FH;
+}
+
+sub formatKlompInfoLine($$){
+  my $ipmagic = shift;
+  my $ipmagicUser = shift;
+  my $info = klompInfo(qw(pos len title artist album));
+
+  my $fmt = ''
+    . "$$info{pos} / $$info{len}\n"
+    . "$$info{artist}\n"
+    . "$$info{album}\n"
+    . "$$info{title}\n"
+    ;
+  $fmt =~ s/\\/\\\\/g;
+  $fmt =~ s/\n/\\n/g;
+  $fmt =~ s/\t/\\t/g;
+  $fmt =~ s/\r//g;
+  $fmt .= "\n";
+  utf8::encode($fmt);
+  print $fmt;
+  return $fmt;
+}
+
+sub getIpmagicCommand($$@){
+  my $ipmagic = shift;
+  my $ipmagicUser = shift;
+  my @cmd = @_;
+  if(defined $ipmagic){
+    @cmd = map {$_ =~ s/'/'\\''/g; "'$_'"} @cmd;
+    if(defined $ipmagicUser){
+      @cmd = ("ipmagic", $ipmagic, "-u", $ipmagicUser, @cmd);
+    }else{
+      @cmd = ("ipmagic", $ipmagic, @cmd);
+    }
+  }
+  return @cmd;
+}
+
+sub klompInfo(@){
+  my @cols = @_;
+
+  my $csv = Text::CSV->new ( { binary => 1 } );
+  $csv->parse(`klomp-info -c @cols`);
+
+  my @vals = $csv->fields();
+  die "Error parsing klomp-info CSV\n" if @cols != @vals;
+
+  my $info = {};
+  for(my $i=0; $i<@cols; $i++){
+    my $col = $cols[$i];
+    my $val = $vals[$i];
+    $$info{$col} = $val;
+  }
+  return $info;
+}
+
+sub run(@){
+  print "@_\n";
+  system @_;
+}
+
+&main(@ARGV);
