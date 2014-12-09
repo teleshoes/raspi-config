@@ -8,6 +8,7 @@ pi sudo apt-get update
 packages.pl
 pi sudo apt-get upgrade
 install-wiringpi
+install-bigtext
 install-net
 install-nfs
 config-files
