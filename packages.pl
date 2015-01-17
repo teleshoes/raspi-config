@@ -25,7 +25,7 @@ my $normalPackages = {
     fonts-inconsolata ttf-inconsolata
   )],
   '4' => [qw(
-    xinit chromium-browser midori
+    xinit chromium-browser midori time
   )],
   '5' => [qw(
     mplayer man python-pip alsa-utils ffmpeg xdotool unclutter xscreensaver
