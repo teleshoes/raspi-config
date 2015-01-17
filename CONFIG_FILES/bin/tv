@@ -1,6 +1,88 @@
-#GPIO 21/27 => wiringpi 2
-pin=2
-gpio mode $pin out
-gpio write $pin 1
-sleep 3
-gpio write $pin 0
+#!/usr/bin/perl
+use strict;
+use warnings;
+use Time::HiRes qw(sleep);
+
+my $readPin = 0; #BCM 17 => GPIO0 => wiringpi 0
+my $writePin = 2; #BCM 21/27 => GPIO2 => wiringpi 2
+
+my $delayMs = 3000;
+
+my $okCmd = join "|", qw(push|toggle|get|on|off);
+
+my $usage = "Usage:
+  $0 [push|toggle]   {default command}
+    write 1 to wiringpi#$writePin
+    sleep $delayMs ms
+    write 0 to wiringpi#$writePin
+
+  $0 get
+    read wiringpi#$readPin and print 'on' for 1 and 'off' for 0
+
+  $0 on
+    do 'get': if pin is 1, do nothing, else do 'push'
+
+  $0 off
+    do 'get': if pin is 0, do nothing, else do 'push'
+";
+
+sub get();
+sub pushButton();
+sub run(@);
+sub readProc(@);
+
+sub main(@){
+  my $arg = shift;
+  $arg = 'push' if not defined $arg;
+  die $usage if @_ > 0 or $arg !~ /^($okCmd)$/;
+
+  if($arg =~ /^(push|toggle)$/){
+    pushButton();
+  }else{
+    my $isOn = get();
+    if($arg =~ /^(on)$/){
+      if(not $isOn){
+        pushButton();
+      }else{
+        print "skipping\n";
+      }
+    }elsif($arg =~ /^(off)$/ and $isOn){
+      if($isOn){
+        pushButton();
+      }else{
+        print "skipping\n";
+      }
+    }elsif($arg =~ /^(get)$/){
+      print $isOn ? 'on' : 'off';
+      print "\n";
+    }
+  }
+}
+
+sub get(){
+  run "gpio", "mode", $readPin, "in";
+  my $status = readProc "gpio", "read", $readPin;
+  chomp $status;
+  die "ERROR: gpio read fail\n" if $status !~ /^(0|1)$/;
+  return $status;
+}
+
+sub pushButton(){
+  run "gpio", "mode", $writePin, "out";
+  run "gpio", "write", $writePin, "1";
+  print "sleeping for $delayMs ms\n";
+  sleep $delayMs/1000.0;
+  run "gpio", "write", $writePin, "0";
+}
+
+sub run(@){
+  print "@_\n";
+  system @_;
+}
+
+sub readProc(@){
+  print "@_\n";
+  return `@_`;
+}
+
+&main(@ARGV);
