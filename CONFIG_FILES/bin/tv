@@ -3,6 +3,7 @@ use strict;
 use warnings;
 use Time::HiRes qw(sleep);
 
+my $stateFile = "/tmp/tv-last-state";
 my $readPin = 0; #BCM 17 => GPIO0 => wiringpi 0
 my $writePin = 2; #BCM 21/27 => GPIO2 => wiringpi 2
 
@@ -31,6 +32,8 @@ sub get();
 sub pushButton();
 sub run(@);
 sub readProc(@);
+sub readLastState();
+sub writeLastState($);
 
 sub main(@){
   my $arg = shift;
@@ -38,6 +41,7 @@ sub main(@){
   die $usage if @_ > 0 or $arg !~ /^($okCmd)$/;
 
   if($arg =~ /^(push|toggle)$/){
+    writeLastState(not readLastState());
     pushButton();
   }else{
     my $isOn = get();
@@ -47,12 +51,14 @@ sub main(@){
       }else{
         print "skipping\n";
       }
+      writeLastState(1);
     }elsif($arg =~ /^(off)$/){
       if($isOn){
         pushButton();
       }else{
         print "skipping\n";
       }
+      writeLastState(0);
     }elsif($arg =~ /^(get)$/){
       print $isOn ? 'on' : 'off';
       print "\n";
@@ -87,4 +93,17 @@ sub readProc(@){
   return `@_`;
 }
 
+sub readLastState(){
+  return 0 if not -f $stateFile;
+  open FH, "< $stateFile" or die "Could not read $stateFile\n";
+  my $state = <FH>;
+  close FH;
+  return $state =~ /^on/ ? 1 : 0;
+}
+sub writeLastState($){
+  my $state = shift;
+  open FH, "> $stateFile" or die "Could not write to $stateFile\n";
+  print FH $state ? "on\n" : "off\n";
+  close FH;
+}
 &main(@ARGV);
