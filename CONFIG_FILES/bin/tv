@@ -7,7 +7,7 @@ my $stateFile = "/tmp/tv-last-state";
 my $readPin = 0; #BCM 17 => GPIO0 => wiringpi 0
 my $writePin = 2; #BCM 21/27 => GPIO2 => wiringpi 2
 
-my $delayMs = 3000;
+my $delayMs = 500;
 my $stateMismatchDelayMs = 3000;
 
 my $okCmd = join "|", qw(push|toggle|get|on|off);
