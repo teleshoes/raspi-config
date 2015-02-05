@@ -17,6 +17,7 @@ my $usage = "Usage:
     write 1 to wiringpi#$writePin
     sleep $delayMs ms
     write 0 to wiringpi#$writePin
+    toggles 'on' <=> 'off' for last intended state in $stateFile
 
   $0 get
     read wiringpi#$readPin and print 'on' for 1 and 'off' for 0
@@ -24,9 +25,15 @@ my $usage = "Usage:
 
   $0 on
     do 'get': if pin is 1, do nothing, else do 'push'
+      check to make sure 'get' matches $stateFile
+      if it does not, merely wait and do 'get' again
+    stores 'on' for last intended state in $stateFile
 
   $0 off
     do 'get': if pin is 0, do nothing, else do 'push'
+      check to make sure 'get' matches $stateFile
+      if it does not, merely wait and do 'get' again
+    stores 'off' for last intended state in $stateFile
 ";
 
 sub get();
