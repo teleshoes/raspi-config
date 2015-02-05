@@ -47,7 +47,7 @@ sub main(@){
       }else{
         print "skipping\n";
       }
-    }elsif($arg =~ /^(off)$/ and $isOn){
+    }elsif($arg =~ /^(off)$/){
       if($isOn){
         pushButton();
       }else{
