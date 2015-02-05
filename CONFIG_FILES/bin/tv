@@ -3,7 +3,7 @@ use strict;
 use warnings;
 use Time::HiRes qw(sleep);
 
-my $stateFile = "/tmp/tv-last-state";
+my $stateFile = "$ENV{HOME}/tv-last-state";
 my $readPin = 0; #BCM 17 => GPIO0 => wiringpi 0
 my $writePin = 2; #BCM 21/27 => GPIO2 => wiringpi 2
 
