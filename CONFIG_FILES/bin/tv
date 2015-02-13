@@ -54,7 +54,7 @@ sub main(@){
   }else{
     my $isOn = get();
     my $wasOn = readLastState();
-    if((not $isOn and $wasOn) or ($isOn and not $wasOn)){
+    if($arg =~ /^(on|off)$/ and ((not $isOn and $wasOn) or ($isOn and not $wasOn))){
       print "state/pin mismatch: wait ${stateMismatchDelayMs}ms and recheck\n";
       sleep $stateMismatchDelayMs/1000.0;
       $isOn = get();
