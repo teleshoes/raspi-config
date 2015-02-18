@@ -8,6 +8,7 @@ my $ipmagicCmd = "raspi";
 my @jobs = qw();
 my @packagesToRemove = qw(
   libtag1-rusxmms
+  wolfram-engine
 );
 
 my $normalPackages = {
