@@ -54,6 +54,10 @@ sub main(@){
   ";
 
 
+  print "\n\nrestarting ssh\n";
+  run 'ssh', "pi\@$host", "sudo service ssh restart &";
+
+  my $ok = 0;
   keygen 'root';
   keygen 'pi';
   keyCopy 'root';
