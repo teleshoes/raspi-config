@@ -58,6 +58,25 @@ sub main(@){
   run 'ssh', "pi\@$host", "sudo service ssh restart &";
 
   my $ok = 0;
+  my $delay = 3;
+  my $attempts = 5;
+  while(not $ok){
+    my $sshIsUp = `ssh pi\@$host echo ssh-is-up`;
+    $attempts--;
+    chomp $sshIsUp;
+    if($sshIsUp eq "ssh-is-up"){
+      print "ssh is up!\n";
+      $ok = 1;
+    }else{
+      if($attempts <= 0){
+        die "max SSH attempts exceeded\n";
+      }
+      print "waiting ${delay}s to try again ($attempts attempts left)...\n";
+      sleep $delay;
+    }
+  }
+
+
   keygen 'root';
   keygen 'pi';
   keyCopy 'root';
