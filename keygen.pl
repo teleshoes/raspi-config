@@ -43,6 +43,17 @@ sub main(@){
   run 'ssh', "pi\@$host", 'sudo passwd pi';
   run 'ssh', "pi\@$host", 'sudo passwd root';
 
+  print "permit root login on ssh\n";
+  run 'ssh', "pi\@$host", "
+    echo -ne '\\nchanging PermitRootLogin in sshd_config\\n\\n'
+    echo -ne 'OLD: '
+    grep '^PermitRootLogin ' /etc/ssh/sshd_config
+    sudo sed -i 's/^PermitRootLogin .*/PermitRootLogin yes/' /etc/ssh/sshd_config
+    echo -ne 'NEW: '
+    grep '^PermitRootLogin ' /etc/ssh/sshd_config
+  ";
+
+
   keygen 'root';
   keygen 'pi';
   keyCopy 'root';
