@@ -38,7 +38,7 @@ sub keyCopy($){
 sub main(@){
   die "Usage: $0\n" if @_ > 0;
 
-  run 'rm', "$sshDir/$host.pub";
+  run 'rm', "-f", "$sshDir/$host.pub";
   print "default password is raspberry\n";
   run 'ssh', "pi\@$host", 'sudo passwd pi';
   run 'ssh', "pi\@$host", 'sudo passwd root';
