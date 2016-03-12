@@ -9,6 +9,7 @@ chomp $host;
 sub run(@){
   print "@_\n";
   system @_;
+  die "Error running \"@_\"\n" if $? != 0;
 }
 
 #makes the keys on the host, and appends to local .pub {local=>remote}
