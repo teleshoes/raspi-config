@@ -29,7 +29,7 @@ my $normalPackages = {
     xinit chromium-browser midori time
   )],
   '5' => [qw(
-    mplayer man python-pip alsa-utils ffmpeg xdotool unclutter xscreensaver
+    mplayer man python-pip alsa-utils xdotool unclutter xscreensaver
   )],
 };
 my $extraPackages = {};
