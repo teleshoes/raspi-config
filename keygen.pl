@@ -40,7 +40,9 @@ sub main(@){
 
   run 'rm', "-f", "$sshDir/$host.pub";
   print "default password is raspberry\n";
+  print "\n\npasswd pi\n";
   run 'ssh', "pi\@$host", 'sudo passwd pi';
+  print "\n\npasswd root\n";
   run 'ssh', "pi\@$host", 'sudo passwd root';
 
   print "permit root login on ssh\n";
