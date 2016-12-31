@@ -19,9 +19,9 @@ my $outletPins = {
   3 => [11, 5],
 };
 
-my @allPins = map {@$_} values $outletPins;
-my @onPins = map {$$_[1]} values $outletPins;
-my @offPins = map {$$_[0]} values $outletPins;
+my @allPins = map {@$_} values %$outletPins;
+my @onPins = map {$$_[1]} values %$outletPins;
+my @offPins = map {$$_[0]} values %$outletPins;
 
 my $okOutlets = join "|", sort keys %$outletPins;
 my $okCmds = join "|", qw(on off toggle);
