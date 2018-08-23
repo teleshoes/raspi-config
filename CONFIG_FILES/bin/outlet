@@ -8,7 +8,7 @@ my $logFile = "$ENV{HOME}/.outlet-log";
 
 sub readState($);
 sub writeState($$);
-sub togglePin($);
+sub togglePin($$);
 sub writePin($$);
 sub run(@);
 
@@ -29,17 +29,30 @@ my $okCmds = join "|", qw(on off toggle);
 my $delay = 0.3;
 
 my $usage = "Usage:
-  $0 [OUTLET] [CMD]
+  $0 [OPTS] [OUTLET] [CMD]
+     turn off one pin, and briefly turn on and then turn off the other
+     wait $delay seconds between turning the pin on and off
+
      OUTLET is one of: [$okOutlets]   {default is 1}
      CMD is one of: [$okCmds]   {default is toggle}
 
+     OPTS:
+       --wait
+         instead of sleeping for $delay seconds, wait until user presses enter
   $0 --clear
 ";
 
 sub main(@){
+  my $waitForStdin = 0;
+
+  if(@_ > 0 and $_[0] =~ /^(--wait)$/){
+    shift;
+    $waitForStdin = 1;
+  }
+
   if(@_ == 1 and $_[0] =~ /^(--clear)$/){
     writePin $_, 0 foreach @allPins;
-    togglePin $_ foreach @offPins;
+    togglePin $_, $waitForStdin foreach @offPins;
     writeState $_, 'off' foreach keys %$outletPins;
     exit 0;
   }
@@ -72,11 +85,11 @@ sub main(@){
 
   if($cmd =~ /^(on)$/){
     writePin $offPin, 0;
-    togglePin $onPin;
+    togglePin $onPin, $waitForStdin;
     writeState $outlet, 'on';
   }elsif($cmd =~ /^(off)$/){
     writePin $onPin, 0;
-    togglePin $offPin;
+    togglePin $offPin, $waitForStdin;
     writeState $outlet, 'off';
   }else{
     die $usage;
@@ -112,10 +125,15 @@ sub writeState($$){
   close FH;
 }
 
-sub togglePin($){
-  my $pin = shift;
+sub togglePin($$){
+  my ($pin, $waitForStdin) = @_;
   writePin $pin, 1;
-  sleep $delay;
+  if($waitForStdin){
+    print "press enter to continue";
+    <STDIN>;
+  }else{
+    sleep $delay;
+  }
   writePin $pin, 0;
 }
 
