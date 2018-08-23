@@ -129,6 +129,7 @@ sub togglePin($$){
   my ($pin, $waitForStdin) = @_;
   writePin $pin, 1;
   if($waitForStdin){
+    $| = 1;
     print "press enter to continue";
     <STDIN>;
   }else{
