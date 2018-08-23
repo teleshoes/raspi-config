@@ -81,6 +81,7 @@ sub main(@){
     }else{
       $cmd = "off";
     }
+    print "outlet $outlet => $cmd\n";
   }
 
   if($cmd =~ /^(on)$/){
