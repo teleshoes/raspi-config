@@ -2,13 +2,22 @@
 [ -n "$PS1" ] && [ -f /etc/bash_completion ] && . /etc/bash_completion
 
 shopt -s dotglob
+shopt -s extglob
+
+# allow <C-S> in vim
+stty stop undef 2>/dev/null
 
 ssh-add ~/.ssh/id_rsa 2> /dev/null
 
+export QUOTING_STYLE=literal #the fuck? fucken coreutils man
+export HISTTIMEFORMAT="%F %T "
 export HISTSIZE=1000000
-export HISTCONTROL=ignoredups # don't put duplicate lines in the history
-export HISTCONTROL=ignoreboth # ... and ignore same sucessive entries.
-export JAVA_HOME=/usr/lib/jvm/java-7-openjdk-amd64/
+# ignoredups: do not add duplicate history entries
+# ignoredspace: do not add history entries that start with space
+export HISTCONTROL=ignoredups:ignorespace
+export JAVA_HOME=/usr/lib/jvm/java-8-openjdk-amd64/
+
+export GTK_OVERLAY_SCROLLING=0
 
 shopt -s checkwinsize # update LINES and COLUMNS based on window size
 [ -x /usr/bin/lesspipe ] && eval "$(lesspipe)" #less on binary files, e.g. tars
@@ -23,6 +32,18 @@ if [ "$TERM" == "rxvt" ]; then
   p2='echo -ne "\033]0;Terminal: ${PWD/$HOME/~}\007"'
   PROMPT_COMMAND='if [ "$WINDOW_TITLE" ]; then '$p1'; else '$p2'; fi'
 fi
+
+rm -f .viminf*.tmp .recently-used #clean home
+
+###horrible fucking oracle variables
+if [[ -z "$ORACLE_HOME" ]] && [[ -f /etc/ld.so.conf.d/oracle.conf ]]; then
+  oralibdir=`cat /etc/ld.so.conf.d/oracle.conf`
+  export ORACLE_HOME=`dirname "$oralibdir"`
+fi
+if [[ -z "$SQLPATH" ]] && [[ -n "$ORACLE_HOME" ]]; then
+  export SQLPATH=$ORACLE_HOME/lib
+fi
+###
 
 pathAppend ()  { for x in $@; do pathRemove $x; export PATH="$PATH:$x"; done }
 pathPrepend () { for x in $@; do pathRemove $x; export PATH="$x:$PATH"; done }
@@ -47,57 +68,39 @@ pathAppend          \
   /usr/games        \
 ;
 
-meego_gnu=/opt/gnu-utils
-if [ -d $meego_gnu ]; then
-  pathPrepend              \
-    /usr/libexec/git-core  \
-    $meego_gnu/bin         \
-    $meego_gnu/usr/bin     \
-    $meego_gnu/usr/sbin    \
-  ;
-fi
+hostname=`hostname -f | cut -f 1,2 -d '.'`
 
-if [ `hostname -s` == "wolke-n9" ]; then
-  alias apt-get="AEGIS_FIXED_ORIGIN=com.nokia.maemo apt-get"
-  alias dpkg="AEGIS_FIXED_ORIGIN=com.nokia.maemo dpkg"
-fi
-
-#command prompt
+########################################
+# command prompt
 if [[ -z "$DISPLAY" ]]; then
   #host abbrevs
-  case `hostname` in
-    "wolke-w520"              ) h='@w520' ;;
-    "wolk-desktop"            ) h='@desk' ;;
-    "wolke-n9"                ) h='@n9' ;;
-    "wolke-n900"              ) h='@n900' ;;
+  case "$hostname" in
+    "wolke-main"              ) h='@main' ;;
+    "wolke-aux"               ) h='@aux' ;;
+    "wolke-bed"               ) h='@bed' ;;
+    "wolke-nuc"               ) h='@nuc' ;;
+    "wolke-sx"                ) h='@sx' ;;
     "raspberrypi"             ) h='@raspi' ;;
-    "Benjamins-MacBook-Pro"   ) h='@bensmac' ;;
-    ci-*.dev.*                ) h='@ci.dev' ;;
-    ci-*.stage.*              ) h='@ci.stage' ;;
-    *                         ) h='@\h' ;;
+    *                         ) h="@$hostname" ;;
   esac
+
+  #set DISPLAY using who (probably ":0")
+  export DISPLAY=`display-guess`
 else
-  #if display is set, you probably know where you are
+  #if display was set, you probably know where you are
   h=""
 fi
 
-#make a wild guess at the DISPLAY you might want
-if [[ -z "$DISPLAY" ]]; then
-  export DISPLAY=`ps -ef | grep /usr/bin/X | grep ' :[0-9] ' -o | grep :[0-9] -o`
-fi
-
 u="\u"
-if [ "$USER" == "BenjaminAguayza" ]; then u=ben; fi
-colon=":"
 c1='\[\033[01;32m\]'
 c2='\[\033[01;34m\]'
 cEnd='\[\033[00m\]'
-#if you have 'PS1={stuff}' then a literal colon character
-#the n9 fucks with that line on reboot
 if [ -n "PS1" ]; then
-  PS1="$c1$u$h$cEnd$colon$c2\w$cEnd\$ "
+  PS1="$c1$u$h$cEnd:$c2\w$cEnd\$ "
 fi
 
+########################################
+# aliases
 for cmd in wconnect wauto tether resolv \
            mnt optimus xorg-conf bluetooth fan intel-pstate flasher \
            tpacpi-bat sbox-umount
@@ -113,17 +116,34 @@ alias time="command time"
 alias mkdir="mkdir -p"
 alias :q='exit'
 alias :r='. /etc/profile; . ~/.bashrc;'
+alias r='stty sane'
 
+IPMAGIC_DIR="$HOME/.config/ipmagic"
+IPMAGIC_CONF_FILES=$(ls $IPMAGIC_DIR/*.conf 2>/dev/null)
+IPMAGIC_NAMES=$(basename --suffix=.conf -a $IPMAGIC_CONF_FILES 2>/dev/null)
+
+alias ipm=ipmagic
+for ipmagicName in $IPMAGIC_NAMES
+do
+  alias ipm$ipmagicName="ipmagic $ipmagicName";
+  alias $ipmagicName="ipmagic $ipmagicName";
+done
+
+function e            { email-summary "$@" 2>&1 | less -S; }
+function eu           { email.pl --update "$@"; }
 function vol          { pulse-vol "$@"; }
 function j            { fcron-job-toggle "$@"; }
+function f            { feh "$@"; }
 function snapshot     { backup --snapshot "$@"; }
 function qgroups-info { backup --info --quick --sort-by=size "$@"; }
 function dus          { du -s * | sort -g "$@"; }
+function dfa          { df --output=avail "$@" | grep -v '^\s*Avail$'; }
 function killjobs     { kill -9 `jobs -p` 2>/dev/null; sleep 0.1; echo; }
 function gvim         { term vim "$@"; }
 function cx           { chmod +x "$@"; }
 function shutdown     { poweroff "$@"; }
 function xmb          { xmonad-bindings "$@"; }
+function ls           { command ls --color=auto "$@"; }
 function l            { ls -Al --color=auto "$@"; }
 function ll           { ls -Al --color=auto "$@"; }
 function ld           { ls -dAl --color=auto "$@"; }
@@ -135,24 +155,64 @@ function escape-pod   { ~/Code/escapepod/escape-pod-tool --escapepod "$@"; }
 function podcastle    { ~/Code/escapepod/escape-pod-tool --podcastle "$@"; }
 function pseudopod    { ~/Code/escapepod/escape-pod-tool --pseudopod "$@"; }
 function g            { git "$@"; }
-function mp           { mplayer "$@"; }
+function gs           { g s "$@"; }
+function mp           { mpv "$@"; }
+function mpu          {
+  if [ -z $2 ] ; then local default_quality='best' ; fi
+  livestreamer "$@" $default_quality
+}
+function rename       {
+  pastOptArgs=0
+  ok=1
+  for arg in "$@"
+  do
+    if [[ $pastOptArgs == 1 && $arg == -* ]]; then
+      echo "NOT RUNNING RENAME, $arg MUST BE BEFORE PATTERN"
+      ok=0
+    fi
+    if [[ $arg != -* ]]; then
+      pastOptArgs=1
+    fi
+  done
+  if [[ $ok == 1 ]]; then
+    command rename "$@"
+  fi
+}
+
+function sb           { seedbox "$@"; }
+function sbr          { seedbox -r "$@"; }
+function sbw          { seedbox -r ssh wolke@192.168.11.50 "$@"; }
+function sbrsync      { seedbox --rsync-revtun "$@"; }
+function sbs          { sb-rt-status "$@"; }
+function sbd          { screen-daemon sb-daemon "$@"; }
+function sb-daemon    { screen-daemon sb-daemon "$@"; }
 
 function s            { "$@" & disown; }
-function sx           { "$@" & disown && exit 0; }
 function spawn        { "$@" & disown; }
 function spawnex      { "$@" & disown && exit 0; }
 function spawnexsudo  { gksudo "$@" & disown && exit 0; }
 
 function m            { maven -Psdm -Pdev -Pfast-tests -Dgwt.compiler.skip=true install "$@"; }
-function mtest        { maven -Psdm -Pdev test "$@"; }
+function mdebug       { mavenDebug -Psdm -Pdev -Dgwt.compiler.skip=true "$@"; }
 function mc           { maven -Psdm -Pdev -Pfast-tests -Dgwt.draftCompile=true clean install "$@"; }
 function mck          { maven checkstyle:check "$@"; }
-function findmvn      { command find "$@" -not -regex '\(^\|.*/\)\(target\|gen\)\($\|/.*\)'; }
-function grepmvn      { command grep "$@" --exclude-dir=target --exclude-dir=gen; }
+function findesh      { command find "$@" -not -regex '\(^\|.*/\)\(target\|gen\)\($\|/.*\)'; }
+function grepesh      { command grep "$@" \
+                            --exclude-dir=.git \
+                            --exclude-dir=target \
+                            --exclude-dir=gen \
+                            --exclude pdf.worker.js.map \
+                            --exclude Words.java \
+                            ;
+                      }
 
-function genservices  { ~/workspace/old-escribe/tools/genservices.pl "$@"; }
-function genibatis    { ~/workspace/old-escribe/tools/genibatis.pl "$@"; }
-function migl         { gvim `~/migs/latest-script` "$@"; }
+function genservices  { ~/workspace/escribehost/legacy-tools/genservices.pl "$@"; }
+function genibatis    { ~/workspace/escribehost/legacy-tools/genibatis.pl "$@"; }
+function migl         { vim `~/migs/latest-script` "$@"; }
+
+function first        { ls "$@" | head -1; }
+function last         { ls "$@" | tail -1; }
+function apN          { let n=${#@}; "$2" "${@:3:$1-1}" "${!n}" "${@:$1+2:$n-$1-2}"; }
 
 # common typos
 function mkdit        { mkdir "$@"; }
@@ -167,12 +227,27 @@ function maven() {
   if ! [[ "$@" =~ (^| )checkstyle:check($| ) ]]; then
     args="$args -Dcheckstyle.skip=true"
   fi
+  echo mvn $args $@
   execAlarm mvn $args $@;
 }
+function mavenDebug() {
+  port="8000"
+  debugOpts="-Xdebug -Xrunjdwp:transport=dt_socket,server=y,suspend=y,address=$port -Xnoagent -Djava.compiler=NONE"
+  args=""
+  if ! [[ "$@" =~ (^| )test($| ) ]]; then
+    args="$args -DskipTests"
+  fi
+  if ! [[ "$@" =~ (^| )checkstyle:check($| ) ]]; then
+    args="$args -Dcheckstyle.skip=true"
+  fi
+  echo mvn -Dmaven.surefire.debug=\'$debugOpts\' $args $@
+  execAlarm mvn -Dmaven.surefire.debug="$debugOpts" $args $@;
+}
+
 
 function find() {
   if [[ "$PWD" =~ "escribe" ]]; then
-    findmvn "$@"
+    findesh "$@"
   else
     command find "$@"
   fi
@@ -180,9 +255,9 @@ function find() {
 
 function grep() {
   if [[ "$PWD" =~ "escribe" ]]; then
-    grepmvn "$@"
+    grepesh -s "$@"
   else
-    command grep "$@"
+    command grep -s "$@"
   fi
 }
 
@@ -198,10 +273,13 @@ function execAlarm() {
 }
 
 function update-repo {
+  repo="$1"
+  shift
   sudo apt-get update \
-    -o Dir::Etc::sourcelist="sources.list.d/$1" \
+    -o Dir::Etc::sourcelist="sources.list.d/$repo" \
     -o Dir::Etc::sourceparts="-" \
-    -o APT::Get::List-Cleanup="0"
+    -o APT::Get::List-Cleanup="0" \
+    "$@"
 }
 
 
