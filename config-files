@@ -9,7 +9,7 @@ die "Usage: $0 [$okTypes]\n" if @_ > 0 or $type !~ /^($okTypes)$/;
 
 my $src = 'CONFIG_FILES';
 my $dest = '/opt/CONFIG_FILES';
-my $host = `raspi`;
+my $host = `ipmagic raspi`;
 chomp $host;
 
 system 'rsync',
