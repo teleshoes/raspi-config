@@ -6,6 +6,8 @@ use Time::HiRes qw(sleep);
 my $stateFilePrefix = "$ENV{HOME}/.outlet";
 my $logFile = "$ENV{HOME}/.outlet-log";
 
+my $DEFAULT_OUTLET = 1;
+
 sub readState($);
 sub writeState($$);
 sub togglePin($$);
@@ -33,7 +35,7 @@ my $usage = "Usage:
      turn off one pin, and briefly turn on and then turn off the other
      wait $delay seconds between turning the pin on and off
 
-     OUTLET is one of: [$okOutlets]   {default is 1}
+     OUTLET is one of: [$okOutlets]   {default is $DEFAULT_OUTLET}
      CMD is one of: [$okCmds]   {default is toggle}
 
      OPTS:
@@ -57,7 +59,7 @@ sub main(@){
     exit 0;
   }
 
-  my $outlet = 1;
+  my $outlet = $DEFAULT_OUTLET;
   if(@_ > 0 and $_[0] =~ /^($okOutlets)$/){
     $outlet = shift;
   }
