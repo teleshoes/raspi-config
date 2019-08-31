@@ -6,7 +6,7 @@ use Time::HiRes qw(sleep);
 my $stateFilePrefix = "$ENV{HOME}/.outlet";
 my $logFile = "$ENV{HOME}/.outlet-log";
 
-my $DEFAULT_OUTLET = 1;
+my $DEFAULT_OUTLET = 2;
 
 sub readState($);
 sub writeState($$);
