@@ -17,6 +17,7 @@ PATH="/usr/local/sbin:/usr/local/bin:/usr/sbin:/usr/bin:/sbin:/bin"
 fix-mount &
 ntpd -gq &
 ( outlet --clear; outlet 3 on ) &
+igstart &
 tv on &
 
 exit 0
