@@ -18,6 +18,6 @@ fix-mount &
 ntpd -gq &
 ( outlet --clear; outlet 3 on ) &
 igstart &
-tv on &
+tv-gpio on &
 
 exit 0
