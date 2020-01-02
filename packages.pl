@@ -119,7 +119,7 @@ sub installPackages($){
   print "\n\n";
   for my $pkgGroup(sort keys %$pkgGroups){
     my @packages = @{$$pkgGroups{$pkgGroup}};
-    print "Installing group[$pkgGroup]:\n----\n@packages\n----\n";
+    print "\n\nInstalling group[$pkgGroup]:\n----\n@packages\n----\n";
     runRemote ''
       . "yes |"
       . " $env apt-get install"
@@ -171,8 +171,9 @@ sub removePackages(){
   }
   print "\n\nInstalling the deps for removed packages to unmarkauto\n";
   my %deps;
-  for my $line(readProcRemote "apt-cache depends @packagesToRemove"){
-    if($line =~ /  Depends: ([^<>]*)/){
+  my $dependsOut = readProcRemote "apt-cache depends @packagesToRemove";
+  for my $line(split /[\r\n]+/, $dependsOut){
+    if($line =~ /^\s*Depends: ([^<>]*)/){
       my $pkg = $1;
       chomp $pkg;
       $deps{$pkg} = 1;
