@@ -2,6 +2,7 @@
 use strict;
 use warnings;
 
+my $IPMAGIC_NAME = "raspi";
 my $gitRepo = "git://github.com/teleshoes/qtbigtext.git";
 my $dir = "/tmp/qtbigtext";
 
@@ -10,7 +11,7 @@ sub run(@){
   system @_;
 }
 
-run "raspi", "-b", "
+run "ipmagic", $IPMAGIC_NAME, "-u", "root", "-b", "
   rm -rf $dir
   git clone $gitRepo $dir
   cd $dir
