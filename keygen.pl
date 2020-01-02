@@ -51,10 +51,10 @@ sub main(@){
   run 'ssh', "pi\@$host", "
     echo -ne '\\nchanging PermitRootLogin in sshd_config\\n\\n'
     echo -ne 'OLD: '
-    grep '^PermitRootLogin ' /etc/ssh/sshd_config
-    sudo sed -i 's/^PermitRootLogin .*/PermitRootLogin yes/' /etc/ssh/sshd_config
+    grep '^#\\?PermitRootLogin ' /etc/ssh/sshd_config
+    sudo sed -i 's/^#\\?PermitRootLogin .*/PermitRootLogin yes/' /etc/ssh/sshd_config
     echo -ne 'NEW: '
-    grep '^PermitRootLogin ' /etc/ssh/sshd_config
+    grep '^#\\?PermitRootLogin ' /etc/ssh/sshd_config
   ";
 
 
