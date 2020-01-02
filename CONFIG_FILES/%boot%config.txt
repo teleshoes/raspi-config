@@ -1,5 +1,5 @@
-# For more options and information see 
-# http://www.raspberrypi.org/documentation/configuration/config-txt.md
+# For more options and information see
+# http://rpf.io/configtxt
 # Some settings may impact device functionality. See link above for details
 
 # uncomment if you get no picture on HDMI for a default "safe" mode
@@ -7,7 +7,7 @@
 
 # uncomment this if your display has a black border of unused pixels visible
 # and your display can output without overscan
-disable_overscan=1
+#disable_overscan=1
 
 # uncomment the following to adjust overscan. Use positive numbers if console
 # goes off screen, and negative if there is too much border
@@ -42,3 +42,24 @@ disable_overscan=1
 #uncomment to overclock the arm. 700 MHz is the default.
 #arm_freq=800
 
+# Uncomment some or all of these to enable the optional hardware interfaces
+#dtparam=i2c_arm=on
+#dtparam=i2s=on
+#dtparam=spi=on
+
+# Uncomment this to enable infrared communication.
+#dtoverlay=gpio-ir,gpio_pin=17
+#dtoverlay=gpio-ir-tx,gpio_pin=18
+
+# Additional overlays and parameters are documented /boot/overlays/README
+
+# Enable audio (loads snd_bcm2835)
+dtparam=audio=on
+
+[pi4]
+# Enable DRM VC4 V3D driver on top of the dispmanx display stack
+dtoverlay=vc4-fkms-v3d
+max_framebuffers=2
+
+[all]
+#dtoverlay=vc4-fkms-v3d
