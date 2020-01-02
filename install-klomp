@@ -2,6 +2,7 @@
 use strict;
 use warnings;
 
+my $IPMAGIC_NAME = "raspi";
 my $depsDir = "$ENV{HOME}/Code/raspi/klomp";
 my $gitRepo = "git://github.com/teleshoes/klomp.git";
 
@@ -10,9 +11,13 @@ sub run(@){
   system @_;
 }
 
-run "scp $depsDir/.klomplib pi\@`raspi`:/home/pi";
+my $host = `ipmagic $IPMAGIC_NAME --host`;
+chomp $host;
 
-run "raspi", "-b", "
+run "ipmagic", $IPMAGIC_NAME, "mkdir -p /home/pi/.klomp";
+run "scp $depsDir/.klomp/lib pi\@$host:/home/pi/.klomp/lib";
+
+run "ipmagic", $IPMAGIC_NAME, "-u", "root", "-b", "
   if [ -e /opt/klomp ]; then
     echo updating klomp git repo
     cd /opt/klomp
