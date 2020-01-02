@@ -2,8 +2,10 @@
 use strict;
 use warnings;
 
+my $IPMAGIC_NAME = "raspi";
+
 my $sshDir = "$ENV{HOME}/.ssh";
-my $host = `raspi`;
+my $host = `ipmagic $IPMAGIC_NAME --host`;
 chomp $host;
 
 sub run(@){
