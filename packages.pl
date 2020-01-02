@@ -3,7 +3,7 @@ use strict;
 use warnings;
 
 my $pkgConfig = '/etc/package-manager/config';
-my $ipmagicCmd = "raspi";
+my $IPMAGIC_NAME = "raspi";
 
 my @jobs = qw();
 my @packagesToRemove = qw(
@@ -40,15 +40,15 @@ my $debDestPrefix = '/opt';
 my $env = '';
 
 sub runRemote(@){
-  system $ipmagicCmd, @_;
-  die "error running '$ipmagicCmd @_'\n" if $? != 0;
+  system "ipmagic", $IPMAGIC_NAME, @_;
+  die "error running 'ipmagic $IPMAGIC_NAME @_'\n" if $? != 0;
 }
 sub readProcRemote(@){
-  return `$ipmagicCmd @_`;
-  die "error running '$ipmagicCmd @_'\n" if $? != 0;
+  return `ipmagic $IPMAGIC_NAME @_`;
+  die "error running 'ipmagic $IPMAGIC_NAME @_'\n" if $? != 0;
 }
 sub host(){
-  my $host = `$ipmagicCmd`;
+  my $host = `ipmagic $IPMAGIC_NAME --host`;
   chomp $host;
   return $host;
 }
@@ -106,7 +106,7 @@ sub setupRepos(){
       apt-key add "$x"
     done
   ';
-  
+
   my $after = getRepos();
   return $before ne $after;
 }
