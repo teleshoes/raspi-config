@@ -7,7 +7,6 @@ pi sudo reboot
 pi sudo apt-get update
 packages.pl
 pi sudo apt-get upgrade --with-new-pkgs
-install-wiringpi
 install-bigtext
 install-net
 install-nfs
