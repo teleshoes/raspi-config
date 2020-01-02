@@ -2,6 +2,8 @@
 use strict;
 use warnings;
 
+my $IPMAGIC_NAME = "raspi";
+
 my $type = shift;
 $type = 'all' if not defined $type;
 my $okTypes = join "|", qw(boing bin remove all);
@@ -9,7 +11,7 @@ die "Usage: $0 [$okTypes]\n" if @_ > 0 or $type !~ /^($okTypes)$/;
 
 my $src = 'CONFIG_FILES';
 my $dest = '/opt/CONFIG_FILES';
-my $host = `ipmagic raspi`;
+my $host = `ipmagic $IPMAGIC_NAME --host`;
 chomp $host;
 
 system 'rsync',
