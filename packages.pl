@@ -20,7 +20,7 @@ my $normalPackages = {
   )],
   '3' => [qw(
     x11vnc lsof psmisc zip unzip parted
-    fonts-droid fonts-vlgothic
+    fonts-droid-fallback fonts-vlgothic
     fonts-opensymbol fonts-liberation fonts-linuxlibertine
     fonts-sil-gentium fonts-sil-gentium-basic
     fonts-inconsolata
