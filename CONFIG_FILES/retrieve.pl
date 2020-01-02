@@ -2,7 +2,9 @@
 use strict;
 use warnings;
 
-my $host = `pi`;
+my $IPMAGIC_NAME = "raspi";
+
+my $host = `ipmagic $IPMAGIC_NAME --host`;
 my $user = "root";
 
 sub main(@){
