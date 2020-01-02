@@ -40,12 +40,15 @@ my $debDestPrefix = '/opt';
 my $env = '';
 
 sub runRemote(@){
-  system "ipmagic", $IPMAGIC_NAME, @_;
-  die "error running 'ipmagic $IPMAGIC_NAME @_'\n" if $? != 0;
+  my @cmd = ("ipmagic", $IPMAGIC_NAME, "-u", "root", @_);
+  system @cmd;
+  die "error running '@cmd'\n" if $? != 0;
 }
 sub readProcRemote(@){
-  return `ipmagic $IPMAGIC_NAME @_`;
-  die "error running 'ipmagic $IPMAGIC_NAME @_'\n" if $? != 0;
+  my $cmd = "ipmagic $IPMAGIC_NAME -u root @_";
+  my $out = `$cmd`;
+  die "error running '$cmd'\n" if $? != 0;
+  return $out;
 }
 sub host(){
   my $host = `ipmagic $IPMAGIC_NAME --host`;
