@@ -2,10 +2,14 @@
 use strict;
 use warnings;
 
+my $IPMAGIC_NAME = "raspi";
+my $host = `ipmagic $IPMAGIC_NAME --host`;
+chomp $host;
+
 if(@ARGV == 1 and $ARGV[0] eq 'backup'){
-  system "scp pi\@`raspi`:/home/pi/.cavestory-save backup/";
+  system "scp pi\@$host:/home/pi/.cavestory-save backup/";
 }elsif(@ARGV == 1 and $ARGV[0] eq 'restore'){
-  system "scp backup/.cavestory-save pi\@`raspi`:/home/pi/";
+  system "scp backup/.cavestory-save pi\@$host:/home/pi/";
 }else{
   die "Usage: $0 [backup|restore]\n";
 }
