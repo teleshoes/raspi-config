@@ -1,0 +1,38 @@
+#!/usr/bin/perl
+use strict;
+use warnings;
+
+my $IPMAGIC_NAME = "raspi";
+my $gitRepo = "git://github.com/iguanaworks/iguanair.git";
+
+sub run(@);
+
+sub main(@){
+  my $host = `ipmagic $IPMAGIC_NAME --host`;
+  chomp $host;
+
+  my $srcCacheDir = "/home/pi/.src-cache";
+  my $usbIRDir = "$srcCacheDir/iguanair/software/usb_ir";
+
+  run "ipmagic", $IPMAGIC_NAME, "
+    set -x
+    mkdir -p $srcCacheDir
+    if [ -e $srcCacheDir/iguanair ]; then
+      cd $srcCacheDir/iguanair
+      git pull
+    else
+      git clone $gitRepo $srcCacheDir/iguanair
+    fi
+
+    sudo apt-get install cmake libusb-1.0-0-dev swig
+
+    cd $usbIRDir && cmake . && make -j8 && sudo make install
+  ";
+}
+
+sub run(@){
+  print "@_\n";
+  system @_;
+}
+
+&main(@ARGV);
