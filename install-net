@@ -2,6 +2,7 @@
 use strict;
 use warnings;
 
+my $IPMAGIC_NAME = "raspi";
 my $gitRepo = "git://github.com/teleshoes/net.git";
 
 sub run(@){
@@ -9,7 +10,7 @@ sub run(@){
   system @_;
 }
 
-my $host = `raspi`;
+my $host = `ipmagic $IPMAGIC_NAME --host`;
 chomp $host;
 
 my $wifiConf = "/etc/wifi.conf";
@@ -18,7 +19,7 @@ my $wifiAutoConf = "/etc/wifi-auto.conf";
 run "scp", "$ENV{HOME}/wifi.conf","root\@$host:$wifiConf";
 run "scp", "$ENV{HOME}/wifi-auto.conf", "root\@$host:$wifiAutoConf";
 
-run "raspi", "-b", "
+run "ipmagic", $IPMAGIC_NAME, "-u", "root", "-b", "
   if [ -e /opt/net ]; then
     echo updating net git repo
     cd /opt/net
