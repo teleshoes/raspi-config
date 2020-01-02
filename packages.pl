@@ -31,6 +31,9 @@ my $normalPackages = {
   '5' => [qw(
     mplayer man python-pip alsa-utils xdotool unclutter xscreensaver
   )],
+  '6' => [qw(
+    libcec4 libcec-dev
+  )],
 };
 my $extraPackages = {};
 
