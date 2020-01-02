@@ -1,0 +1,26 @@
+#!/usr/bin/perl
+use strict;
+use warnings;
+
+my $IPMAGIC_NAME = "raspi";
+
+sub run(@);
+
+sub main(@){
+  my $host = `ipmagic $IPMAGIC_NAME --host`;
+  chomp $host;
+
+  run "rsync",
+    "-avP",
+    "--ignore-existing",
+    "/etc/bash_completion.d/",
+    "root\@$host:/etc/bash_completion.d/",
+    ;
+}
+
+sub run(@){
+  print "@_\n";
+  system @_;
+}
+
+&main(@ARGV);
