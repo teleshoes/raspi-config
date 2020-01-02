@@ -1,2 +1,3 @@
 #!/bin/bash
-pi -s sudo update-rc.d lightdm enable 2
+IPMAGIC_NAME="pi"
+ipmagic $IPMAGIC_NAME -s sudo update-rc.d lightdm enable 2
