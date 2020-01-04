@@ -2,8 +2,8 @@
 use strict;
 use warnings;
 
-my $ipmagicName = "sx";
-my $user = "nemo";
+my $ipmagicName = "raspi";
+my $user = "pi";
 
 my @HOME_RSYNC_FILES = qw(
   .bashrc
