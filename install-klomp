@@ -14,9 +14,6 @@ sub run(@){
 my $host = `ipmagic $IPMAGIC_NAME --host`;
 chomp $host;
 
-run "ipmagic", $IPMAGIC_NAME, "mkdir -p /home/pi/.klomp";
-run "scp $depsDir/.klomp/lib pi\@$host:/home/pi/.klomp/lib";
-
 run "ipmagic", $IPMAGIC_NAME, "-u", "root", "-b", "
   if [ -e /opt/klomp ]; then
     echo updating klomp git repo
