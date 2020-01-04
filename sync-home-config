@@ -1,0 +1,140 @@
+#!/usr/bin/perl
+use strict;
+use warnings;
+
+my $ipmagicName = "sx";
+my $user = "nemo";
+
+my @HOME_RSYNC_FILES = qw(
+  .bashrc
+  .gitconfig
+  .gpg
+  .secrets
+  .vimrc
+
+  .config/qtemail/
+  .config/ipmagic/
+  .vim/
+);
+
+my $USRLOCALBIN_LOCAL_DIR = "$ENV{HOME}/install/root-files/usr/local/bin";
+my $USRLOCALBIN_REMOTE_DIR = "/usr/local/bin";
+my @USRLOCALBIN_EXECS = qw(
+  alarm
+  ipmagic
+  term
+  pulse-enable
+  pulse-vol
+  vpn
+);
+
+my $HOMEBIN_LOCAL_DIR = "$ENV{HOME}/bin";
+my $HOMEBIN_REMOTE_DIR = "/home/$user/bin";
+my @HOMEBIN_EXECS = qw(
+  alert
+  ddrname
+  display-guess
+  escribe-hosts
+  gpg-sym
+  klomp-bigtext
+  lirr_train_time
+  loop
+  mtime
+  pidgin-logs
+  pix
+  qtscreen-daemon
+  revtun
+  sb-rt-status
+  sbcam
+  scoreddr
+  screen-cmd
+  screen-daemon
+  seedbox
+  sms-search
+  speedtest
+  transmission-webui
+);
+
+my @SPECIAL_RSYNCS = (
+  ["$ENV{HOME}/.klomp/config-$ipmagicName", "~/.klomp/config"],
+  ["$ENV{HOME}/.klomp/lib-$ipmagicName", "~/.klomp/lib"],
+  ["$ENV{HOME}/Music/sheet_music/shows/sheet_1080p/", "/media/sdcard/phone/sheet_music/shows/sheet_1080p/"],
+  ["$ENV{HOME}/Music/sheet_music/shows/music/", "/media/sdcard/phone/sheet_music/shows/music/"],
+  ["$ENV{HOME}/Music/sheet_music/trumpet/", "/media/sdcard/phone/sheet_music/trumpet/"],
+  ["/usr/share/alarms/", "/media/sdcard/phone/alarms/"],
+  ["/usr/share/sounds/custom/", "/media/sdcard/phone/sounds/"],
+);
+
+my @INITIAL_USER_CMDS = (
+  "mkdir -p /home/$user/.config/qtemail",
+  "mkdir -p /home/$user/.klomp",
+);
+my @FINAL_USER_CMDS = (
+);
+
+my @INITIAL_ROOT_CMDS = (
+  "mkdir -p /root/.config/qtemail",
+  "rmdir /root/bin 2>/dev/null",
+  "rm -f /root/bin",
+  "ln -s /home/$user/bin/ /root/bin",
+);
+my @FINAL_ROOT_CMDS = (
+  "sed -i 's/›/>/g' /home/$user/.vimrc",
+  "sed -i 's/›/>/g' /root/.vimrc",
+);
+
+sub run(@);
+
+sub main(@){
+  die "Usage: $0\n" if @_ > 0;
+
+  print "making sure $ipmagicName is ssh-able\n";
+  system "ipmagic", $ipmagicName, "-s", "echo found $ipmagicName!\n";
+  die "failed" if $? != 0;
+
+  my $host = `ipmagic $ipmagicName`;
+  chomp $host;
+
+  print "\n\n===INITIAL COMMANDS\n";
+  for my $cmd(@INITIAL_USER_CMDS){
+    run "ipmagic", $ipmagicName, "-u", $user, $cmd;
+  }
+  for my $cmd(@INITIAL_ROOT_CMDS){
+    run "ipmagic", $ipmagicName, "-u", "root", $cmd;
+  }
+
+  print "\n\n===RSYNC /usr/local/bin FILES\n";
+  my @usrlocalbinFiles = map {"$USRLOCALBIN_LOCAL_DIR/$_"} @USRLOCALBIN_EXECS;
+  run "rsync", "-avP", @usrlocalbinFiles, "root\@$host:$USRLOCALBIN_REMOTE_DIR/";
+
+  print "\n\n===RSYNC ~/bin FILES\n";
+  my @homebinFiles = map {"$HOMEBIN_LOCAL_DIR/$_"} @HOMEBIN_EXECS;
+  run "rsync", "-avP", @homebinFiles, "$user\@$host:$HOMEBIN_REMOTE_DIR/";
+
+  print "\n\n===RSYNC HOME FILES\n";
+  for my $file(@HOME_RSYNC_FILES){
+    run "rsync", "-avP", "$ENV{HOME}/$file", "$user\@$host:~/$file";
+    run "rsync", "-avP", "$ENV{HOME}/$file", "root\@$host:~/$file";
+  }
+
+  print "\n\n===RSYNC SPECIAL FILES\n";
+  for my $rsync(@SPECIAL_RSYNCS){
+    my ($src, $dest) = @$rsync;
+    run "rsync", "-avP", $src, "$user\@$host:$dest";
+  }
+
+  print "\n\n===FINAL COMMANDS\n";
+  for my $cmd(@FINAL_USER_CMDS){
+    run "ipmagic", $ipmagicName, "-u", $user, $cmd;
+  }
+  for my $cmd(@FINAL_ROOT_CMDS){
+    run "ipmagic", $ipmagicName, "-u", "root", $cmd;
+  }
+}
+
+sub run(@){
+  print "@_\n";
+  system @_;
+}
+
+&main(@ARGV);
