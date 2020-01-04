@@ -38,8 +38,8 @@ my @SPECIAL_RSYNCS = (
   ["$ENV{HOME}/Music/sheet_music/shows/sheet_1080p/", "/home/$user/Music/sheet_music/shows/sheet_1080p/"],
   ["$ENV{HOME}/Music/sheet_music/shows/music/", "/home/$user/Music/sheet_music/shows/music/"],
   ["$ENV{HOME}/Music/sheet_music/trumpet/", "/home/$user/Music/sheet_music/trumpet/"],
-  ["/usr/share/alarms/", "/media/sdcard/phone/alarms/"],
-  ["/usr/share/sounds/custom/", "/media/sdcard/phone/sounds/"],
+  ["/usr/share/alarms/", "/usr/share/alarms/"],
+  ["/usr/share/sounds/custom/", "/usr/share/sounds/custom/"],
 );
 
 my @INITIAL_USER_CMDS = (
