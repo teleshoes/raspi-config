@@ -13,7 +13,7 @@ my @packagesToRemove = qw(
 
 my $normalPackages = {
   '1' => [qw(
-    vim-gtk rsync wget git openvpn
+    vim-gtk rsync wget git openvpn screen
   )],
   '2' => [qw(
     libterm-readkey-perl libtext-csv-perl libts0
