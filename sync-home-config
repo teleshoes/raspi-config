@@ -12,6 +12,7 @@ my @HOME_RSYNC_FILES = qw(
   .secrets
   .vimrc
 
+  .config/iguana/
   .config/qtemail/
   .config/ipmagic/
   .vim/

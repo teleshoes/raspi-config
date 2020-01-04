@@ -30,8 +30,6 @@ sub main(@){
 
     cd $usbIRDir && cmake . && make -j8 && sudo make install
   ";
-
-  run "rsync", "-avP", "$ENV{HOME}/.config/iguana/", "$USER\@$host:~/.config/iguana/";
 }
 
 sub run(@){
