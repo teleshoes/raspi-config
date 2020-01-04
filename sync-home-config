@@ -22,7 +22,9 @@ my $USRLOCALBIN_LOCAL_DIR = "$ENV{HOME}/install/root-files/usr/local/bin";
 my $USRLOCALBIN_REMOTE_DIR = "/usr/local/bin";
 my @USRLOCALBIN_EXECS = qw(
   alarm
+  igstart
   ipmagic
+  mnt
   term
   pulse-enable
   pulse-vol
