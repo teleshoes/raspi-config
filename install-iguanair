@@ -3,6 +3,8 @@ use strict;
 use warnings;
 
 my $IPMAGIC_NAME = "raspi";
+my $USER = "pi";
+
 my $gitRepo = "git://github.com/iguanaworks/iguanair.git";
 
 sub run(@);
@@ -11,7 +13,7 @@ sub main(@){
   my $host = `ipmagic $IPMAGIC_NAME --host`;
   chomp $host;
 
-  my $srcCacheDir = "/home/pi/.src-cache";
+  my $srcCacheDir = "/home/$USER/.src-cache";
   my $usbIRDir = "$srcCacheDir/iguanair/software/usb_ir";
 
   run "ipmagic", $IPMAGIC_NAME, "
@@ -29,7 +31,7 @@ sub main(@){
     cd $usbIRDir && cmake . && make -j8 && sudo make install
   ";
 
-  run "rsync", "-avP", "$ENV{HOME}/.config/iguana/", "pi\@$host:~/.config/iguana/";
+  run "rsync", "-avP", "$ENV{HOME}/.config/iguana/", "$USER\@$host:~/.config/iguana/";
 }
 
 sub run(@){
