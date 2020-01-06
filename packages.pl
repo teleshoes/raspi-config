@@ -29,7 +29,7 @@ my $normalPackages = {
     xinit midori time
   )],
   '5' => [qw(
-    mplayer man python-pip alsa-utils xdotool unclutter xscreensaver
+    mplayer mpv man python-pip alsa-utils xdotool unclutter xscreensaver
   )],
   '6' => [qw(
     libcec4 libcec-dev
