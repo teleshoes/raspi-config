@@ -1,0 +1,31 @@
+#!/usr/bin/perl
+use strict;
+use warnings;
+
+my $IPMAGIC_NAME = "raspi";
+my $USER = "pi";
+
+my $PCMANFM_CONF_DIR = "/home/$USER/.config/pcmanfm/LXDE-$USER";
+
+sub run(@);
+
+sub main(@){
+  my $host = `ipmagic $IPMAGIC_NAME --host`;
+  chomp $host;
+
+  run "ipmagic", $IPMAGIC_NAME, "-u", $USER, "
+    set -x
+    mkdir -p $PCMANFM_CONF_DIR/
+    rm -f $PCMANFM_CONF_DIR/pcmanfm.conf
+    echo '[volume]' >> $PCMANFM_CONF_DIR/pcmanfm.conf
+    echo 'mount_on_startup=0' >> $PCMANFM_CONF_DIR/pcmanfm.conf
+    echo 'mount_removable=0' >> $PCMANFM_CONF_DIR/pcmanfm.conf
+  ";
+}
+
+sub run(@){
+  print "@_\n";
+  system @_;
+}
+
+&main(@ARGV);
