@@ -14,7 +14,7 @@
 PATH="/usr/local/sbin:/usr/local/bin:/usr/sbin:/usr/bin:/sbin:/bin"
 
 ( initctl stop network-manager; wired; wauto ) &
-fix-mount &
+mount-init &
 ntpd -gq &
 ( outlet --clear; outlet 3 on ) &
 igstart &
