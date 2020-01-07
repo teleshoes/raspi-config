@@ -47,25 +47,29 @@ my @SPECIAL_RSYNCS = (
   ["/usr/share/sounds/custom/", "/usr/share/sounds/custom/"],
 );
 
-my @INITIAL_USER_CMDS = (
-  "mkdir -p /home/$user/.config/qtemail",
-  "mkdir -p /home/$user/.klomp",
-  "mkdir -p /home/$user/Music/sheet_music/shows",
-  "mkdir -p /home/$user/Music/sheet_music/trumpet",
-);
-my @FINAL_USER_CMDS = (
-);
+my $INITIAL_USER_CMD = "
+  mkdir -p /home/$user/.config/qtemail && \
+  mkdir -p /home/$user/.klomp && \
+  mkdir -p /home/$user/Music/sheet_music/shows && \
+  mkdir -p /home/$user/Music/sheet_music/trumpet && \
+  echo ok
+";
+my $FINAL_USER_CMD = "
+  echo ok
+";
 
-my @INITIAL_ROOT_CMDS = (
-  "mkdir -p /root/.config/qtemail",
-  "rmdir /root/bin 2>/dev/null",
-  "rm -f /root/bin",
-  "ln -s /home/$user/bin/ /root/bin",
-);
-my @FINAL_ROOT_CMDS = (
-  "sed -i 's/›/>/g' /home/$user/.vimrc",
-  "sed -i 's/›/>/g' /root/.vimrc",
-);
+my $INITIAL_ROOT_CMD = "
+  mkdir -p /root/.config/qtemail && \
+  rmdir /root/bin 2>/dev/null && \
+  rm -f /root/bin && \
+  ln -s /home/$user/bin/ /root/bin && \
+  echo ok
+";
+my $FINAL_ROOT_CMD = "
+  sed -i 's/›/>/g' /home/$user/.vimrc && \
+  sed -i 's/›/>/g' /root/.vimrc && \
+  echo ok
+";
 
 sub run(@);
 
@@ -80,12 +84,8 @@ sub main(@){
   chomp $host;
 
   print "\n\n===INITIAL COMMANDS\n";
-  for my $cmd(@INITIAL_USER_CMDS){
-    run "ipmagic", $ipmagicName, "-u", $user, $cmd;
-  }
-  for my $cmd(@INITIAL_ROOT_CMDS){
-    run "ipmagic", $ipmagicName, "-u", "root", $cmd;
-  }
+  run "ipmagic", $ipmagicName, "-u", $user, $INITIAL_USER_CMD;
+  run "ipmagic", $ipmagicName, "-u", "root", $INITIAL_ROOT_CMD;
 
   print "\n\n===RSYNC /usr/local/bin FILES\n";
   my @usrlocalbinFiles = map {"$USRLOCALBIN_LOCAL_DIR/$_"} @USRLOCALBIN_EXECS;
@@ -107,12 +107,8 @@ sub main(@){
   }
 
   print "\n\n===FINAL COMMANDS\n";
-  for my $cmd(@FINAL_USER_CMDS){
-    run "ipmagic", $ipmagicName, "-u", $user, $cmd;
-  }
-  for my $cmd(@FINAL_ROOT_CMDS){
-    run "ipmagic", $ipmagicName, "-u", "root", $cmd;
-  }
+  run "ipmagic", $ipmagicName, "-u", $user, $FINAL_USER_CMD;
+  run "ipmagic", $ipmagicName, "-u", "root", $FINAL_ROOT_CMD;
 }
 
 sub run(@){
