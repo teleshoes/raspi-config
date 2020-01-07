@@ -118,6 +118,9 @@ sub main(@){
 sub run(@){
   print "@_\n";
   system @_;
+  if($? != 0){
+    die "ERROR: \"@_\" failed\n";
+  }
 }
 
 &main(@ARGV);
