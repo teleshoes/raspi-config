@@ -60,8 +60,8 @@ my $FINAL_USER_CMD = "
 
 my $INITIAL_ROOT_CMD = "
   mkdir -p /root/.config/qtemail && \
-  rmdir /root/bin 2>/dev/null && \
-  rm -f /root/bin && \
+  if [ -L /root/bin ]; then rm -f /root/bin; fi && \
+  if [ -d /root/bin ]; then rmdir /root/bin; fi && \
   ln -s /home/$user/bin/ /root/bin && \
   echo ok
 ";
