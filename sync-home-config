@@ -27,6 +27,7 @@ my @USRLOCALBIN_EXECS = qw(
   igstart
   ipmagic
   mnt
+  off-cmd
   term
   pulse-enable
   pulse-vol
