@@ -10,14 +10,14 @@
 
 # uncomment this if your display has a black border of unused pixels visible
 # and your display can output without overscan
-disable_overscan=1
+#disable_overscan=1
 
 # uncomment the following to adjust overscan. Use positive numbers if console
 # goes off screen, and negative if there is too much border
-#overscan_left=16
-#overscan_right=16
-#overscan_top=16
-#overscan_bottom=16
+overscan_left=-32
+overscan_right=193
+overscan_top=-32
+overscan_bottom=88
 
 # uncomment to force a console size. By default it will be display's size minus
 # overscan.
