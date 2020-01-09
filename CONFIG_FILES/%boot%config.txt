@@ -3,7 +3,7 @@
 # Some settings may impact device functionality. See link above for details
 
 #required for RCA output, breaks HDMI output and also possibly downclocks
-enable_tvout=1
+#enable_tvout=1
 
 # uncomment if you get no picture on HDMI for a default "safe" mode
 #hdmi_safe=1
