@@ -13,27 +13,35 @@ my $stateMismatchDelayMs = 3000;
 my $okCmd = join "|", qw(push|toggle|get|on|off);
 
 my $usage = "Usage:
-  $0 [push|toggle]   {default command}
-    write 1 to wiringpi#$writePin
-    sleep $delayMs ms
-    write 0 to wiringpi#$writePin
-    toggles 'on' <=> 'off' for last intended state in $stateFile
+  $0
+  $0 push|toggle
+    'push' the tv power button by using gpio
+      -write 1 to wiringpi#$writePin
+      -sleep $delayMs ms
+      -write 0 to wiringpi#$writePin
+      -toggles 'on' <=> 'off' for last intended state in $stateFile
 
   $0 get
-    read wiringpi#$readPin and print 'on' for 1 and 'off' for 0
-    exit with code 0 for 'on' and 1 for 'off'
+    read the tv on/off pin
+      -read wiringpi#$readPin
+      -if pin is 1: print 'on' and exit with code 0
+      -if pin is 0: print 'off' and exit with code 1
 
   $0 on
-    do 'get': if pin is 1, do nothing, else do 'push'
-      check to make sure 'get' matches $stateFile
-      if it does not, merely wait and do 'get' again
-    stores 'on' for last intended state in $stateFile
+    do 'push' unless tv is already on
+      -read wiringpi#$readPin
+      -check to make sure pin matches last intended state in $stateFile
+      -if state and pin mismatch: sleep ${stateMismatchDelayMs}ms and re-read pin
+      -if pin is 1: exit with code 0
+      -if pin is 0: do `$0 push` and store 'on' for last intended state in $stateFile
 
   $0 off
-    do 'get': if pin is 0, do nothing, else do 'push'
-      check to make sure 'get' matches $stateFile
-      if it does not, merely wait and do 'get' again
-    stores 'off' for last intended state in $stateFile
+    do 'push' unless tv is already off
+      -read wiringpi#$readPin
+      -check to make sure pin matches last intended state in $stateFile
+      -if state and pin mismatch: sleep ${stateMismatchDelayMs}ms and re-read pin
+      -if pin is 0: exit with code 0
+      -if pin is 1: do `$0 push` and store 'off' for last intended state in $stateFile
 ";
 
 sub get();
