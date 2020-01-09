@@ -10,8 +10,6 @@ my $writePin = 2; #BCM 21/27 => GPIO2 => wiringpi 2
 my $delayMs = 500;
 my $stateMismatchDelayMs = 3000;
 
-my $okCmd = join "|", qw(push|toggle|get|on|off);
-
 my $usage = "Usage:
   $0
   $0 push|toggle
@@ -44,6 +42,7 @@ my $usage = "Usage:
       -if pin is 1: do `$0 push` and store 'off' for last intended state in $stateFile
 ";
 
+sub readPinUntilStateMatches();
 sub get();
 sub pushButton();
 sub run(@);
@@ -52,41 +51,46 @@ sub readLastState();
 sub writeLastState($);
 
 sub main(@){
-  my $arg = shift;
-  $arg = 'push' if not defined $arg;
-  die $usage if @_ > 0 or $arg !~ /^($okCmd)$/;
-
-  if($arg =~ /^(push|toggle)$/){
-    writeLastState(not readLastState());
+  if(@_ == 0 or (@_ == 1 and $_[0] =~ /^(push|toggle)$/)){
     pushButton();
-  }else{
+    writeLastState(not readLastState());
+  }elsif(@_ == 1 and $_[0] =~ /^(get)$/){
     my $isOn = get();
-    my $wasOn = readLastState();
-    if($arg =~ /^(on|off)$/ and ((not $isOn and $wasOn) or ($isOn and not $wasOn))){
-      print "state/pin mismatch: wait ${stateMismatchDelayMs}ms and recheck\n";
-      sleep $stateMismatchDelayMs/1000.0;
-      $isOn = get();
-    }
-    if($arg =~ /^(on)$/){
-      if(not $isOn){
-        pushButton();
-      }else{
-        print "skipping\n";
-      }
+    print $isOn ? "on\n" : "off\n";
+    exit $isOn ? 0 : 1;
+  }elsif(@_ == 1 and $_[0] =~ /^(on)$/){
+    my $isOn = readPinUntilStateMatches();
+    if(not $isOn){
+      pushButton();
       writeLastState(1);
-    }elsif($arg =~ /^(off)$/){
-      if($isOn){
-        pushButton();
-      }else{
-        print "skipping\n";
-      }
-      writeLastState(0);
-    }elsif($arg =~ /^(get)$/){
-      print $isOn ? 'on' : 'off';
-      print "\n";
-      exit $isOn ? 0 : 1;
+    }else{
+      print "skipping\n";
     }
+  }elsif(@_ == 1 and $_[0] =~ /^(off)$/){
+    my $isOn = readPinUntilStateMatches();
+    if($isOn){
+      pushButton();
+      writeLastState(0);
+    }else{
+      print "skipping\n";
+    }
+  }else{
+    die $usage;
   }
+}
+
+sub readPinUntilStateMatches(){
+  my $isOn = get();
+  my $wasOn = readLastState();
+  if($isOn != $wasOn){
+    print "state/pin mismatch: wait ${stateMismatchDelayMs}ms and recheck\n";
+    sleep $stateMismatchDelayMs/1000.0;
+    $isOn = get();
+  }
+  if($isOn != $wasOn){
+    print STDERR "\n\nWARNING: on/off pin says '$isOn', but last state was '$wasOn'\n";
+  }
+  return $isOn;
 }
 
 sub get(){
