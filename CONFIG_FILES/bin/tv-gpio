@@ -11,6 +11,9 @@ my $delayMs = 500;
 my $stateMismatchDelayMs = 3000;
 
 my $usage = "Usage:
+  $0 -h|--help
+    show this message
+
   $0
   $0 push|toggle
     'push' the tv power button by using gpio
@@ -51,7 +54,10 @@ sub readLastState();
 sub writeLastState($);
 
 sub main(@){
-  if(@_ == 0 or (@_ == 1 and $_[0] =~ /^(push|toggle)$/)){
+  if(@_ == 1 and $_[0] =~ /^(-h|--help)$/){
+    print $usage;
+    exit 0;
+  }elsif(@_ == 0 or (@_ == 1 and $_[0] =~ /^(push|toggle)$/)){
     pushButton();
     writeLastState(not readLastState());
   }elsif(@_ == 1 and $_[0] =~ /^(get)$/){
