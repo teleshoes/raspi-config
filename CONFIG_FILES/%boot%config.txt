@@ -2,7 +2,7 @@
 # http://rpf.io/configtxt
 # Some settings may impact device functionality. See link above for details
 
-#possibly required for RCA output
+#required for RCA output, breaks HDMI output and also possibly downclocks
 enable_tvout=1
 
 # uncomment if you get no picture on HDMI for a default "safe" mode
