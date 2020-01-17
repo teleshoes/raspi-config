@@ -38,8 +38,8 @@ my $HOMEBIN_LOCAL_DIR = "$ENV{HOME}/bin";
 my $HOMEBIN_REMOTE_DIR = "/home/$user/bin";
 
 my @SPECIAL_USER_RSYNCS = (
-  ["$ENV{HOME}/.klomp/config-$ipmagicName", "~/.klomp/config"],
-  ["$ENV{HOME}/.klomp/lib-$ipmagicName", "~/.klomp/lib"],
+  ["$ENV{HOME}/.klomp/config-$ipmagicName", "/home/$user/.klomp/config"],
+  ["$ENV{HOME}/.klomp/lib-$ipmagicName", "/home/$user/.klomp/lib"],
   ["$ENV{HOME}/Music/sheet_music/shows/sheet_1080p/", "/home/$user/Music/sheet_music/shows/sheet_1080p/"],
   ["$ENV{HOME}/Music/sheet_music/shows/music/", "/home/$user/Music/sheet_music/shows/music/"],
   ["$ENV{HOME}/Music/sheet_music/trumpet/", "/home/$user/Music/sheet_music/trumpet/"],
