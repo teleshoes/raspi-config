@@ -37,7 +37,7 @@ my @USRLOCALBIN_EXECS = qw(
 my $HOMEBIN_LOCAL_DIR = "$ENV{HOME}/bin";
 my $HOMEBIN_REMOTE_DIR = "/home/$user/bin";
 
-my @SPECIAL_HOME_RSYNCS = (
+my @SPECIAL_USER_RSYNCS = (
   ["$ENV{HOME}/.klomp/config-$ipmagicName", "~/.klomp/config"],
   ["$ENV{HOME}/.klomp/lib-$ipmagicName", "~/.klomp/lib"],
   ["$ENV{HOME}/Music/sheet_music/shows/sheet_1080p/", "/home/$user/Music/sheet_music/shows/sheet_1080p/"],
@@ -101,7 +101,7 @@ sub main(@){
   }
 
   print "\n\n===RSYNC SPECIAL FILES\n";
-  for my $rsync(@SPECIAL_HOME_RSYNCS){
+  for my $rsync(@SPECIAL_USER_RSYNCS){
     my ($src, $dest) = @$rsync;
     run "rsync", "-avP", $src, "$user\@$host:$dest";
   }
