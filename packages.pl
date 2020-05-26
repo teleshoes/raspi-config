@@ -26,7 +26,7 @@ my $normalPackages = {
     fonts-inconsolata
   )],
   '4' => [qw(
-    xinit midori time
+    xinit midori time streamer
   )],
   '5' => [qw(
     mplayer mpv man python-pip alsa-utils xdotool unclutter xscreensaver
