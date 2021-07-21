@@ -11,7 +11,7 @@
 #
 # By default this script does nothing.
 
-PATH="/usr/local/sbin:/usr/local/bin:/usr/sbin:/usr/bin:/sbin:/bin"
+PATH="/home/pi/bin:/usr/local/sbin:/usr/local/bin:/usr/sbin:/usr/bin:/sbin:/bin"
 
 ( initctl stop network-manager; wired; wauto ) &
 mount-init &
