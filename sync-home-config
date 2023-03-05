@@ -12,6 +12,7 @@ my @HOME_RSYNC_FILES = qw(
   .secrets
   .vimrc
 
+  .config/screen-daemon.conf
   .config/wemo-devices.conf
 
   .config/iguana/
