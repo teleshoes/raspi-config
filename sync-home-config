@@ -32,6 +32,7 @@ my @USRLOCALBIN_EXECS = qw(
   pulse-enable
   pulse-vol
   vpn
+  wifi-fix
 );
 
 my $HOMEBIN_LOCAL_DIR = "$ENV{HOME}/bin";
