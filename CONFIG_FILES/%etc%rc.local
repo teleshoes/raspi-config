@@ -13,7 +13,9 @@
 
 PATH="/home/pi/bin:/usr/local/sbin:/usr/local/bin:/usr/sbin:/usr/bin:/sbin:/bin"
 
-( initctl stop network-manager; wired; wauto ) &
+initctl stop network-manager &
+su pi -c bash -c "export PATH=$PATH ; export HOME=/home/pi ; cd /home/pi; sleep 5 ; screen-daemon wifi-fix --start &"
+
 mount-init &
 ntpd -gq &
 sh -c 'sleep 5 ; igstart' &
