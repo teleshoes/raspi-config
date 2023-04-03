@@ -19,6 +19,6 @@ ntpd -gq &
 sh -c 'sleep 5 ; igstart' &
 tv-gpio on &
 su pi -c bash -c "export PATH=$PATH ; export HOME=/home/pi ; cd /home/pi; screen-daemon midea --start &"
-/home/pi/bin/midea-ir-cmd --reset
+/home/pi/bin/midea-ir-cmd --reset &
 
 exit 0
