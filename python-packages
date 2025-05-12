@@ -4,16 +4,18 @@ use warnings;
 
 sub run(@);
 
+my $IPMAGIC_NAME = "raspi";
+
 my @pip = qw(
   rpi.gpio RPLCD
 );
 
 sub main(@){
-  run "raspi", "
+  run "ipmagic", $IPMAGIC_NAME, "
     set -x
     apt-get install python-dev python-pip
     easy_install -U distribute
-    pip install @pip
+    pip install --break-system-packages @pip
   ";
 }
 
