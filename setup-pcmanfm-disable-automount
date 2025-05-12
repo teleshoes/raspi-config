@@ -10,9 +10,6 @@ my $PCMANFM_CONF_DIR = "/home/$USER/.config/pcmanfm/LXDE-$USER";
 sub run(@);
 
 sub main(@){
-  my $host = `ipmagic $IPMAGIC_NAME --host`;
-  chomp $host;
-
   run "ipmagic", $IPMAGIC_NAME, "-u", $USER, "
     set -x
     mkdir -p $PCMANFM_CONF_DIR/
