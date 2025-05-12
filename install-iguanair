@@ -5,7 +5,7 @@ use warnings;
 my $IPMAGIC_NAME = "raspi";
 my $USER = "pi";
 
-my $gitRepo = "git://github.com/iguanaworks/iguanair.git";
+my $gitRepo = "https://github.com/iguanaworks/iguanair.git";
 
 sub run(@);
 
