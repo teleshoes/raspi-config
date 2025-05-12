@@ -13,6 +13,7 @@ sub main(@){
   run "rsync",
     "-avP",
     "--ignore-existing",
+    "--exclude=000_bash_completion_compat.bash",
     "/etc/bash_completion.d/",
     "root\@$host:/etc/bash_completion.d/",
     ;
