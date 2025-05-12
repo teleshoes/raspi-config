@@ -9,6 +9,7 @@ sub main(@){
   system "sudo rmdir /media/* 2>/dev/null";
   system "sudo /usr/local/bin/mnt 2>/dev/null";
 
+  print "waiting 5s and re-running `mnt`\n";
   sleep 5;
   system "sudo /usr/local/bin/mnt 2>/dev/null";
 }
