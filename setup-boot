@@ -11,6 +11,10 @@ my $IPMAGIC_NAME = "raspi";
 my $FW_CONFIG_FILE = "/boot/firmware/config.txt";
 my $FW_CMDLINE_FILE = "/boot/firmware/cmdline.txt";
 
+my $CMDLINE_VIDEO_NAME = "HDMI-A-1";
+my $MARGIN_OVERSCAN_WIDTH = 225;
+my $MARGIN_OVERSCAN_HEIGHT = 120;
+
 sub main(@){
   editRemoteFile($FW_CONFIG_FILE, sub {
     my ($contents) = shift;
@@ -19,6 +23,28 @@ sub main(@){
 
   editRemoteFile($FW_CMDLINE_FILE, sub {
     my ($contents) = shift;
+
+    $contents =~ s/[\r\n]+$//;
+    if($contents =~ /\n/){
+      die "ERROR: multi-line cmdline $contents\n";
+    }
+
+    #remove existing margins from end of cmdline for idempotency
+    $contents =~ s/\s+video=$CMDLINE_VIDEO_NAME:(,?margin_(?:left|right|top|bottom)=\d+)*\s*$//;
+
+    if($contents =~ /\bvideo=/){
+      die "ERROR: unknown video= arg in cmdline\n$contents\n";
+    }
+
+    $contents .= " video=$CMDLINE_VIDEO_NAME:"
+      . "margin_left=0,"
+      . "margin_right=$MARGIN_OVERSCAN_WIDTH,"
+      . "margin_top=0,"
+      . "margin_bottom=$MARGIN_OVERSCAN_HEIGHT"
+    ;
+
+    $contents .= "\n";
+
     return $contents;
   });
 }
