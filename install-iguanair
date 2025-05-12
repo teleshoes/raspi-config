@@ -28,7 +28,7 @@ sub main(@){
 
     sudo apt-get install cmake libusb-1.0-0-dev swig
 
-    cd $usbIRDir && cmake . && make -j8 && sudo make install
+    cd $usbIRDir && cmake . && make && sudo make install
   ";
 }
 
