@@ -4,7 +4,7 @@ use warnings;
 
 my $IPMAGIC_NAME = "raspi";
 my $depsDir = "$ENV{HOME}/Code/raspi/klomp";
-my $gitRepo = "git://github.com/teleshoes/klomp.git";
+my $gitRepo = "https://github.com/teleshoes/klomp.git";
 
 sub run(@){
   print "@_\n";
