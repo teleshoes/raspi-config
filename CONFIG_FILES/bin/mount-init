@@ -7,10 +7,10 @@ sub main(@){
   system "sudo umount -f -l /media/* 2>/dev/null";
   system "sudo rmdir /media/*/* 2>/dev/null";
   system "sudo rmdir /media/* 2>/dev/null";
-  system "sudo /usr/local/bin/mnt 2>dev/null";
+  system "sudo /usr/local/bin/mnt 2>/dev/null";
 
   sleep 5;
-  system "sudo /usr/local/bin/mnt 2>dev/null";
+  system "sudo /usr/local/bin/mnt 2>/dev/null";
 }
 
 &main(@ARGV);
