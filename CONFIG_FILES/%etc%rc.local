@@ -14,8 +14,8 @@
 PATH="/home/pi/bin:/usr/local/sbin:/usr/local/bin:/usr/sbin:/usr/bin:/sbin:/bin"
 
 initctl stop network-manager &
-su pi -c bash -c "export PATH=$PATH ; export HOME=/home/pi ; cd /home/pi; screen-daemon wifi-fix --start &"
-su pi -c bash -c "export PATH=$PATH ; export HOME=/home/pi ; cd /home/pi; screen-daemon midea --start &"
+sudo -u pi bash -c "export PATH=$PATH ; cd /home/pi; screen-daemon wifi-fix --start &"
+sudo -u pi bash -c "export PATH=$PATH ; cd /home/pi; screen-daemon midea --start &"
 
 mount-init &
 ntpd -gq &
