@@ -13,7 +13,6 @@
 
 PATH="/home/pi/bin:/usr/local/sbin:/usr/local/bin:/usr/sbin:/usr/bin:/sbin:/bin"
 
-initctl stop network-manager &
 sudo -u pi bash -c "
   export PATH=$PATH
   cd /home/pi
