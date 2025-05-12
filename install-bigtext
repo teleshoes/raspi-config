@@ -3,7 +3,7 @@ use strict;
 use warnings;
 
 my $IPMAGIC_NAME = "raspi";
-my $gitRepo = "git://github.com/teleshoes/qtbigtext.git";
+my $gitRepo = "https://github.com/teleshoes/qtbigtext.git";
 my $dir = "/tmp/qtbigtext";
 
 sub run(@){
