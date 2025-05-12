@@ -1,4 +1,0 @@
-IPMAGIC_NAME="raspi"
-HOST=`ipmagic $IPMAGIC_NAME --host`
-ssh pi@$HOST sudo apt-get remove nfs-common nfs-kernel-server rpcbind
-ssh pi@$HOST sudo DEBIAN_FRONTEND=noninteractive apt-get install nfs-common nfs-kernel-server rpcbind
