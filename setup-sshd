@@ -1,0 +1,18 @@
+#!/usr/bin/perl
+use strict;
+use warnings;
+use lib "$ENV{HOME}/install/bin";
+use ScriptScript;
+
+my $IPMAGIC_NAME = "raspi";
+
+my $SSHD_CONFIG_FILE = "/etc/ssh/sshd_config";
+
+sub main(@){
+  my @cmds;
+
+  my $cmdFmt = join "", map {"$_\n"} @cmds;
+  run "ipmagic", $IPMAGIC_NAME, "-u", "root", $cmdFmt;
+}
+
+&main(@ARGV);
