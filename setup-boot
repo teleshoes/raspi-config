@@ -1,0 +1,45 @@
+#!/usr/bin/perl
+use strict;
+use warnings;
+use lib "$ENV{HOME}/install/bin";
+use ScriptScript;
+
+sub editRemoteFile($$);
+
+my $IPMAGIC_NAME = "raspi";
+
+my $FW_CONFIG_FILE = "/boot/firmware/config.txt";
+my $FW_CMDLINE_FILE = "/boot/firmware/cmdline.txt";
+
+sub main(@){
+  editRemoteFile($FW_CONFIG_FILE, sub {
+    my ($contents) = shift;
+    return $contents;
+  });
+
+  editRemoteFile($FW_CMDLINE_FILE, sub {
+    my ($contents) = shift;
+    return $contents;
+  });
+}
+
+sub editRemoteFile($$){
+  my ($remoteFile, $editSub) = @_;
+
+  my $tmpFile = "/tmp/raspi-boot-tmp-file-" . nowMillis();
+  run "ipmagic", $IPMAGIC_NAME, "-u", "root", "--scp",
+    ":$remoteFile", "$tmpFile";
+
+  if(editFile($tmpFile, $editSub)){
+    run "ipmagic", $IPMAGIC_NAME, "-u", "root", "--scp",
+      "$tmpFile", ":$remoteFile";
+
+    print "\n\n===== UPDATED $remoteFile\n\n";
+  }else{
+    print "\n\n===== skipped $remoteFile\n\n";
+  }
+
+  run "rm", $tmpFile;
+}
+
+&main(@ARGV);
