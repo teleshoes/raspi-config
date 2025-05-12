@@ -1,0 +1,26 @@
+#!/usr/bin/perl
+use strict;
+use warnings;
+use lib "$ENV{HOME}/install/bin";
+use ScriptScript;
+
+my $IPMAGIC_NAME = "raspi";
+
+my $LOCALE_FILE = "/etc/locale.gen";
+
+my @LOCALES = (
+  "en_US.UTF-8 UTF-8",
+);
+
+sub main(@){
+  my @cmds;
+  push @cmds, "sed -i 's/^[^#]/# \\0/' $LOCALE_FILE";
+  for my $locale(@LOCALES){
+    push @cmds, "sed -i 's/#\\s*$locale\$/$locale/' $LOCALE_FILE";
+  }
+
+  my $cmdFmt = join "", map {"$_\n"} @cmds;
+  run "ipmagic", $IPMAGIC_NAME, "-u", "root", $cmdFmt;
+}
+
+&main(@ARGV);
