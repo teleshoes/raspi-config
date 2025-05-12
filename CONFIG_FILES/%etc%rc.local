@@ -15,12 +15,12 @@ PATH="/home/pi/bin:/usr/local/sbin:/usr/local/bin:/usr/sbin:/usr/bin:/sbin:/bin"
 
 initctl stop network-manager &
 su pi -c bash -c "export PATH=$PATH ; export HOME=/home/pi ; cd /home/pi; screen-daemon wifi-fix --start &"
+su pi -c bash -c "export PATH=$PATH ; export HOME=/home/pi ; cd /home/pi; screen-daemon midea --start &"
 
 mount-init &
 ntpd -gq &
 sh -c 'sleep 5 ; igstart' &
 tv-gpio on &
-su pi -c bash -c "export PATH=$PATH ; export HOME=/home/pi ; cd /home/pi; screen-daemon midea --start &"
 /home/pi/bin/midea-ir-cmd --reset &
 
 exit 0
