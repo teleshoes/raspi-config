@@ -10,6 +10,7 @@ my $SSHD_CONFIG_FILE = "/etc/ssh/sshd_config";
 
 sub main(@){
   my @cmds;
+  push @cmds, "sed -i 's/^\\s*#*\\s*UseDNS\\s.*/UseDNS no/' $SSHD_CONFIG_FILE";
 
   my $cmdFmt = join "", map {"$_\n"} @cmds;
   run "ipmagic", $IPMAGIC_NAME, "-u", "root", $cmdFmt;
