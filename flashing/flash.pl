@@ -72,6 +72,9 @@ sub main(@){
     run "sudo mount -t vfat $devBoot ./boot";
     run "sudo mount -t ext4 $devRoot ./root";
 
+    #flag to enable sshd on first startup
+    run "sudo touch ./boot/ssh";
+
     run "sync";
     run "sleep 1";
 
