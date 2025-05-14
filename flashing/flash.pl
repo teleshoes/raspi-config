@@ -77,6 +77,10 @@ sub main(@){
 
     run "sudo ../setup-boot --local";
 
+    run "sudo mkdir -p ./root/home/pi/.ssh/";
+    run "sudo cp -ar ~/.ssh/authorized_keys ./root/home/pi/.ssh/";
+    run "sudo chown --reference ~/.ssh/ -R ./root/home/pi/.ssh/";
+
     run "sync";
     run "sleep 1";
 
