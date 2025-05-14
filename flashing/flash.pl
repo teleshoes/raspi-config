@@ -75,6 +75,8 @@ sub main(@){
     #flag to enable sshd on first startup
     run "sudo touch ./boot/ssh";
 
+    run "sudo ../setup-boot --local";
+
     run "sync";
     run "sleep 1";
 
