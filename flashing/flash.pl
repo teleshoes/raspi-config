@@ -9,6 +9,9 @@ sub run(@);
 my $IMG = "image_to_flash.img";
 my $IMG_XZ = "$IMG.xz";
 
+my $PART_IDX_BOOT="1";
+my $PART_IDX_ROOT="2";
+
 my $EXEC = basename $0;
 
 my $USAGE = "Usage:
@@ -46,6 +49,11 @@ sub main(@){
   if(promptYesNo("\n\nRUN \"ddusb $IMG $dev\"?")){
     run "ddusb", $IMG, $dev;
   }
+
+  my $devBoot="${dev}${PART_IDX_BOOT}";
+  my $devRoot="${dev}${PART_IDX_ROOT}";
+  die "ERROR: \"$devBoot\" is not a block device\n" if not -b $devBoot;
+  die "ERROR: \"$devRoot\" is not a block device\n" if not -b $devRoot;
 }
 
 sub promptYesNo($){
