@@ -54,6 +54,17 @@ sub main(@){
   my $devRoot="${dev}${PART_IDX_ROOT}";
   die "ERROR: \"$devBoot\" is not a block device\n" if not -b $devBoot;
   die "ERROR: \"$devRoot\" is not a block device\n" if not -b $devRoot;
+
+  if(promptYesNo("\n\nRESIZE $devRoot root PARTITION?")){
+    run "sudo parted -s -a opt $dev 'print free'";
+    run "sudo parted -s -a opt $dev 'resizepart $PART_IDX_ROOT 100%'";
+    run "sudo parted -s -a opt $dev 'print free'";
+
+    run "sudo e2fsck -f $devRoot";
+    run "sudo resize2fs $devRoot";
+
+    run "sync";
+  }
 }
 
 sub promptYesNo($){
