@@ -5,6 +5,7 @@ use File::Basename qw(basename);
 
 sub prompt($$);
 sub run(@);
+sub tryrun(@);
 
 my $IMG_XZ = "image_to_flash.img.xz";
 
@@ -53,7 +54,13 @@ sub main(@){
     run "sudo parted -s -a opt $dev 'resizepart $PART_IDX_ROOT 100%'";
     run "sudo parted -s -a opt $dev 'print free'";
 
-    run "sudo e2fsck -f $devRoot";
+    #allow resize if no fsck errors, or all errors are fixed
+    tryrun "sudo e2fsck -f $devRoot";
+    my $exitCode = $? >> 8;
+    print "fsck exit code: $exitCode\n";
+    if($exitCode != 0 and $exitCode != 1){
+      die "ERROR: fsck failed, not resizing\n";
+    }
     run "sudo resize2fs $devRoot";
 
     run "sync";
@@ -120,9 +127,12 @@ sub prompt($$){
 }
 
 sub run(@){
+  tryrun(@_);
+  die "ERROR: command '@_' failed\n" if $? != 0;
+}
+sub tryrun(@){
   print "@_\n";
   system @_;
-  die "ERROR: command '@_' failed\n" if $? != 0;
 }
 
 &main(@ARGV);
