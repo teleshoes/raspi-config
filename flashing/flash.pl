@@ -84,10 +84,12 @@ sub main(@){
     run "sudo rm -f ./root/etc/ssh/sshd_config.d/rename_user.conf";
 
     run "sync";
-    run "sleep 1";
 
+    run "sleep 1";
     run "sudo umount ./boot";
     run "sudo umount ./root";
+    run "sleep 1";
+
     run "sudo rmdir boot";
     run "sudo rmdir root";
 
