@@ -43,7 +43,7 @@ sub main(@){
   }
   die "ERROR: missing $IMG\n" if not -f $IMG;
 
-  if(promptYesNo("\nddusb $IMG $dev\nRUN THE ABOVE CMD?")){
+  if(promptYesNo("\n\nRUN \"ddusb $IMG $dev\"?")){
     run "ddusb", $IMG, $dev;
   }
 }
