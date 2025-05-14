@@ -81,6 +81,8 @@ sub main(@){
     run "sudo cp -ar ~/.ssh/authorized_keys ./root/home/pi/.ssh/";
     run "sudo chown --reference ~/.ssh/ -R ./root/home/pi/.ssh/";
 
+    run "sudo rm -f ./root/etc/ssh/sshd_config.d/rename_user.conf";
+
     run "sync";
     run "sleep 1";
 
