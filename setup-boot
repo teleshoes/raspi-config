@@ -13,6 +13,8 @@ my $IPMAGIC_NAME = "raspi";
 my $FW_CONFIG_FILE = "/boot/firmware/config.txt";
 my $FW_CMDLINE_FILE = "/boot/firmware/cmdline.txt";
 
+my $WIFI_COUNTRY = "US";
+
 my $CMDLINE_VIDEO_NAME = "HDMI-A-1";
 my $MARGIN_OVERSCAN_WIDTH = 225;
 my $MARGIN_OVERSCAN_HEIGHT = 120;
@@ -35,12 +37,20 @@ sub editCmdlineContents($){
     die "ERROR: multi-line cmdline $contents\n";
   }
 
+  #remove existing wifi country from cmdline
+  $contents =~ s/ cfg80211\.ieee80211_regdom=\w+( |$)/$1/;
+
   #remove existing margins from cmdline
   $contents =~ s/ video=$CMDLINE_VIDEO_NAME:(?:,?margin_(?:left|right|top|bottom)=\d+)*( |$)/$1/;
 
+  if($contents =~ /\bcfg80211\.ieee80211_regdom=/){
+    die "ERROR: unknown video= arg in cmdline\n$contents\n";
+  }
   if($contents =~ /\bvideo=/){
     die "ERROR: unknown video= arg in cmdline\n$contents\n";
   }
+
+  $contents .= " cfg80211.ieee80211_regdom=$WIFI_COUNTRY";
 
   $contents .= " video=$CMDLINE_VIDEO_NAME:"
     . "margin_left=0,"
