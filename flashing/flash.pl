@@ -65,6 +65,23 @@ sub main(@){
 
     run "sync";
   }
+
+  if(promptYesNo("\n\nMOUNT /boot AND root PARTITIONS AND EDIT FILES?")){
+    run "sudo mkdir -p boot";
+    run "sudo mkdir -p root";
+    run "sudo mount -t vfat $devBoot ./boot";
+    run "sudo mount -t ext4 $devRoot ./root";
+
+    run "sync";
+    run "sleep 1";
+
+    run "sudo umount ./boot";
+    run "sudo umount ./root";
+    run "sudo rmdir boot";
+    run "sudo rmdir root";
+
+    run "sync";
+  }
 }
 
 sub promptYesNo($){
