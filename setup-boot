@@ -13,6 +13,9 @@ my $IPMAGIC_NAME = "raspi";
 my $FW_CONFIG_FILE = "/boot/firmware/config.txt";
 my $FW_CMDLINE_FILE = "/boot/firmware/cmdline.txt";
 
+my $LOCAL_MOUNTED_FW_CONFIG_FILE = "$ENV{HOME}/Code/raspi/flashing/boot/config.txt";
+my $LOCAL_MOUNTED_FW_CMDLINE_FILE = "$ENV{HOME}/Code/raspi/flashing/boot/cmdline.txt";
+
 my $WIFI_COUNTRY = "US";
 
 my $CMDLINE_VIDEO_NAME = "HDMI-A-1";
@@ -27,21 +30,34 @@ my $USAGE = "Usage:
     edit the following files remotely on `ipmagic $IPMAGIC_NAME`:
       $FW_CONFIG_FILE
       $FW_CMDLINE_FILE
+
+  $0 -l | --local
+    edit the following files locally:
+      $LOCAL_MOUNTED_FW_CONFIG_FILE
+      $LOCAL_MOUNTED_FW_CMDLINE_FILE
 ";
 
 sub main(@){
+  my $isLocal = 0;
   while(@_ > 0){
     my $arg = shift @_;
     if($arg =~ /^(-h|--help)$/){
       print $USAGE;
       exit 0;
+    }elsif($arg =~ /^(-l|--local)$/){
+      $isLocal = 1;
     }else{
       die "$USAGE\nERROR: unknown arg $arg\n";
     }
   }
 
-  editRemoteFile($FW_CONFIG_FILE, \&editConfigContents);
-  editRemoteFile($FW_CMDLINE_FILE, \&editCmdlineContents);
+  if($isLocal){
+    editFile($LOCAL_MOUNTED_FW_CONFIG_FILE, \&editConfigContents);
+    editFile($LOCAL_MOUNTED_FW_CMDLINE_FILE, \&editCmdlineContents);
+  }else{
+    editRemoteFile($FW_CONFIG_FILE, \&editConfigContents);
+    editRemoteFile($FW_CMDLINE_FILE, \&editCmdlineContents);
+  }
 }
 
 sub editConfigContents($){
