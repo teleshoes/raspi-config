@@ -84,14 +84,19 @@ my $USAGE = "Usage:
     sync files between local home and remote with `ipmagic $ipmagicName`
 
   OPTS
+    -q | --quick
+      omit special syncs
 ";
 
 sub main(@){
+  my $quick = 0;
   while(@_ > 0){
     my $arg = shift @_;
     if($arg =~ /^(-h|--help)$/){
       print $USAGE;
       exit 0;
+    }elsif($arg =~ /^(-q|--quick)$/){
+      $quick = 1;
     }else{
       die "$USAGE\nERROR: unknown arg $arg\n";
     }
@@ -123,14 +128,18 @@ sub main(@){
     run "rsync", "-avP", "$ENV{HOME}/$file", "root\@$host:~/$file";
   }
 
-  print "\n\n===RSYNC SPECIAL FILES\n";
-  for my $rsync(@SPECIAL_USER_RSYNCS){
-    my ($src, $dest) = @$rsync;
-    run "rsync", "-avP", $src, "$user\@$host:$dest";
-  }
-  for my $rsync(@SPECIAL_ROOT_RSYNCS){
-    my ($src, $dest) = @$rsync;
-    run "rsync", "-avP", $src, "root\@$host:$dest";
+  if($quick){
+    print "\n\n===skipping special syncs\n";
+  }else{
+    print "\n\n===RSYNC SPECIAL FILES\n";
+    for my $rsync(@SPECIAL_USER_RSYNCS){
+      my ($src, $dest) = @$rsync;
+      run "rsync", "-avP", $src, "$user\@$host:$dest";
+    }
+    for my $rsync(@SPECIAL_ROOT_RSYNCS){
+      my ($src, $dest) = @$rsync;
+      run "rsync", "-avP", $src, "root\@$host:$dest";
+    }
   }
 
   print "\n\n===FINAL COMMANDS\n";
