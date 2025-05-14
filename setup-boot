@@ -35,8 +35,8 @@ sub editCmdlineContents($){
     die "ERROR: multi-line cmdline $contents\n";
   }
 
-  #remove existing margins from end of cmdline for idempotency
-  $contents =~ s/\s+video=$CMDLINE_VIDEO_NAME:(,?margin_(?:left|right|top|bottom)=\d+)*\s*$//;
+  #remove existing margins from cmdline
+  $contents =~ s/ video=$CMDLINE_VIDEO_NAME:(?:,?margin_(?:left|right|top|bottom)=\d+)*( |$)/$1/;
 
   if($contents =~ /\bvideo=/){
     die "ERROR: unknown video= arg in cmdline\n$contents\n";
