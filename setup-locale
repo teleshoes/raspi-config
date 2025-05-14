@@ -18,6 +18,7 @@ sub main(@){
   for my $locale(@LOCALES){
     push @cmds, "sed -i 's/#\\s*$locale\$/$locale/' $LOCALE_FILE";
   }
+  push @cmds, "locale-gen";
 
   my $cmdFmt = join "", map {"$_\n"} @cmds;
   run "ipmagic", $IPMAGIC_NAME, "-u", "root", $cmdFmt;
