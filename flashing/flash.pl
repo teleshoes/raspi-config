@@ -95,6 +95,10 @@ sub main(@){
 
     run "sync";
   }
+
+  if(-f $IMG_XZ and promptYesNo("\n\nDELETE $IMG (keeping $IMG_XZ)?")){
+    run "rm", $IMG;
+  }
 }
 
 sub promptYesNo($){
