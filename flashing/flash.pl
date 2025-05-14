@@ -6,8 +6,7 @@ use File::Basename qw(basename);
 sub prompt($$);
 sub run(@);
 
-my $IMG = "image_to_flash.img";
-my $IMG_XZ = "$IMG.xz";
+my $IMG_XZ = "image_to_flash.img.xz";
 
 my $PART_IDX_BOOT="1";
 my $PART_IDX_ROOT="2";
@@ -19,7 +18,7 @@ my $USAGE = "Usage:
     show this message
 
   $EXEC
-    flash $IMG using ddusb
+    flash $IMG_XZ using ddusb --xzcat
       NOTE: runs lsblk and prompts before writing to block devices
 ";
 
@@ -40,14 +39,8 @@ sub main(@){
   my $dev = prompt("ENTER BLOCK DEVICE OF SDCARD: ", "/dev/sdb");
   die "ERROR: \"$dev\" is not a block device\n" if not -b $dev;
 
-  if(not -f $IMG and -f $IMG_XZ){
-    print "\n\n  (decompressing $IMG_XZ)\n";
-    run "xz -d -k $IMG_XZ";
-  }
-  die "ERROR: missing $IMG\n" if not -f $IMG;
-
-  if(promptYesNo("\n\nRUN \"ddusb $IMG $dev\"?")){
-    run "ddusb", $IMG, $dev;
+  if(promptYesNo("\n\nRUN \"ddusb --xzcat $IMG_XZ $dev\"?")){
+    run "ddusb", "--xzcat", $IMG_XZ, $dev;
   }
 
   my $devBoot="${dev}${PART_IDX_BOOT}";
@@ -94,10 +87,6 @@ sub main(@){
     run "sudo rmdir root";
 
     run "sync";
-  }
-
-  if(-f $IMG_XZ and promptYesNo("\n\nDELETE $IMG (keeping $IMG_XZ)?")){
-    run "rm", $IMG;
   }
 }
 
