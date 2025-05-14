@@ -1,5 +1,3 @@
-2) run this to copy it, assuming mmcblk0 is the sd card
-gunzip -c `readlink image` | sudo dcfldd bs=1M of=/dev/mmcblk0
 4) mount newly created 'boot' partition
 5) create an empty file called 'ssh' in boot
 touch /media/boot/ssh
