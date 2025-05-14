@@ -41,7 +41,7 @@ sub main(@){
   die "ERROR: \"$dev\" is not a block device\n" if not -b $dev;
 
   if(not -f $IMG and -f $IMG_XZ){
-    print "echo decompressing $IMG_XZ\n";
+    print "\n\n  (decompressing $IMG_XZ)\n";
     run "xz -d -k $IMG_XZ";
   }
   die "ERROR: missing $IMG\n" if not -f $IMG;
