@@ -60,15 +60,15 @@ sub promptYesNo($){
 
 sub prompt($$){
   my ($msg, $default) = @_;
-  print $msg;
-
   $default = "" if not defined $default;
-  my $val = `bash -c 'read -e -i "$default" PROMPT; echo "\$PROMPT"'`;
+
+  $msg =~ s/'/'\\''/g;
+  $msg =~ s/"/\\"/g;
+
+  my $val = `bash -c 'read -p "$msg" -e -i "$default" PROMPT; echo "\$PROMPT"'`;
   chomp $val;
   $val =~ s/^\s*//;
   $val =~ s/\s*$//;
-
-  print "\n" if $val eq "";
 
   if($val =~ /[ \t\r\n]/){
     die "ERROR: prompt for single value resulted in '$val'\n";
