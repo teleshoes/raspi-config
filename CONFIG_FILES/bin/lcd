@@ -7,7 +7,7 @@ import csv
 import sys
 import time
 import getpass
-import StringIO
+from io import StringIO
 from subprocess import call
 
 CONFIG = { 'COLS':     20     #length of the lines
@@ -22,7 +22,7 @@ GPIO_MODE = GPIO.BCM
 
 def ensureRoot():
   if getpass.getuser() != 'root':
-    print "rerunning as root..\n"
+    print("rerunning as root..\n")
     cmd = ["sudo"] + sys.argv
     sys.exit(call(cmd))
 
@@ -47,7 +47,7 @@ def main(args):
         break
       (page, lines) = parseInputLine(inputLine)
       if lines == None:
-        print >> sys.stderr, "Malformed input line: " + inputLine
+        print("Malformed input line: " + inputLine, file=sys.stderr)
         continue
       CONFIG['PAGE'] = page
       setText(lcd, lines)
@@ -73,7 +73,7 @@ def main(args):
     die()
 
 def die():
-  print >> sys.stderr, ("Usage:\n"
+  print("Usage:\n"
     + "  [-e E-PIN] [--page PAGE] LINE [LINE LINE LINE ..]\n"
     + "    set LCD text\n"
     + "  [-e E-PIN] --stdin\n"
@@ -99,7 +99,7 @@ def die():
     + "        if page is specified, ~ is prepended/appended to the page\n"
     + "          if there are additional pages before/after it\n"
     + "        the page width is " + str(CONFIG['COLS']) + "\n"
-    )
+    + "", file=sys.stderr)
   sys.exit(1)
 
 def parseInputLine(inputLine):
