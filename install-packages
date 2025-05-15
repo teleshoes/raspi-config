@@ -35,8 +35,6 @@ my $normalPackages = {
 };
 my $extraPackages = {};
 
-my $repoDir = 'repos';
-
 sub runRemote(@){
   my @cmd = ("ipmagic", $IPMAGIC_NAME, "-u", "root", @_);
   system @cmd;
@@ -48,67 +46,22 @@ sub readProcRemote(@){
   die "error running '$cmd'\n" if $? != 0;
   return $out;
 }
-sub host(){
-  my $host = `ipmagic $IPMAGIC_NAME --host`;
-  chomp $host;
-  return $host;
-}
 
 sub installPackages($);
 sub removePackages();
-sub setupRepos();
 
 sub main(@){
   my $arg = shift;
   $arg = 'all' if not defined $arg;
-  my $valid = join '|', qw(all repos packages extra remove);
+  my $valid = join '|', qw(all packages extra remove);
   if(@_ > 0 or $arg !~ /^($valid)/){
     die "Usage: $0 TYPE {type must start with one of: $valid}\n";
-  }
-  if($arg =~ /^(all|repos)/){
-    if(setupRepos()){
-      runRemote "apt-get update";
-    }
   }
   installPackages($normalPackages) if $arg =~ /^(all|packages)/;
   removePackages() if $arg =~ /^(all|remove)/;
   installPackages($extraPackages) if $arg =~ /^(all|extra)/;
 }
 
-
-sub getRepos(){
-  #important to sort the files and not the lines
-  my $cmd = "'ls /etc/apt/sources.list.d/*.list | sort | xargs cat'";
-  return readProcRemote $cmd;
-}
-
-sub setupRepos(){
-  if(not -d $repoDir){
-    print "skipping repo setup; \"$repoDir\" doesnt exist\n";
-    return 0;
-  }
-  my $before = getRepos();
-  my $host = host();
-
-  print "Copying $repoDir => remote\n";
-  system "scp $repoDir/* root\@$host:/etc/apt/sources.list.d/";
-  print "\n\n";
-
-  print "Content of the copied lists:\n";
-  system "cat $repoDir/*.list";
-  print "\n\n";
-
-  runRemote '
-    echo INSTALLING KEYS:
-    for x in /etc/apt/sources.list.d/*.key; do
-      echo $x
-      apt-key add "$x"
-    done
-  ';
-
-  my $after = getRepos();
-  return $before ne $after;
-}
 
 sub installPackages($){
   my $pkgGroups = shift;
