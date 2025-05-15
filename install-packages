@@ -4,7 +4,7 @@ use warnings;
 
 my $IPMAGIC_NAME = "raspi";
 
-my @packagesToRemove = (
+my @PKG_REMOVALS = (
   "libtag1-rusxmms",
   "wolfram-engine",  #deps: libxcb-cursor0 pi-language-support
 );
@@ -50,7 +50,7 @@ sub main(@){
     die "Usage: $0 TYPE {type must start with one of: $valid}\n";
   }
   installPackages($normalPackages) if $arg =~ /^(all|packages)/;
-  runRemote("apt remove @packagesToRemove") if $arg =~ /^(all|remove)/;
+  runRemote("apt remove @PKG_REMOVALS") if $arg =~ /^(all|remove)/;
 }
 
 
