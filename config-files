@@ -20,6 +20,6 @@ system 'rsync',
   '-v', '--progress',
   "$src/", "root\@$host:$dest";
 
-system 'ssh', "root\@$host", "chown root.root -R $dest";
+system 'ssh', "root\@$host", "chown root:root -R $dest";
 
 system 'ssh', "root\@$host", "$dest/config-overwrite.pl $type";
