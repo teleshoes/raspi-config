@@ -9,7 +9,7 @@ my @PKG_REMOVALS = (
   "wolfram-engine",  #deps: libxcb-cursor0 pi-language-support
 );
 
-my $normalPackages = {
+my $PKG_INSTALLS = {
   '1' => [qw(
     vim-gtk rsync wget git openvpn screen
   )],
@@ -49,7 +49,7 @@ sub main(@){
   if(@_ > 0 or $arg !~ /^($valid)/){
     die "Usage: $0 TYPE {type must start with one of: $valid}\n";
   }
-  installPackages($normalPackages) if $arg =~ /^(all|packages)/;
+  installPackages($PKG_INSTALLS) if $arg =~ /^(all|packages)/;
   runRemote("apt remove @PKG_REMOVALS") if $arg =~ /^(all|remove)/;
 }
 
