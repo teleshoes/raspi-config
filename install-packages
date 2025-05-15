@@ -33,7 +33,6 @@ my $normalPackages = {
     libcec4 libcec-dev
   )],
 };
-my $extraPackages = {};
 
 sub runRemote(@){
   my @cmd = ("ipmagic", $IPMAGIC_NAME, "-u", "root", @_);
@@ -53,13 +52,12 @@ sub removePackages();
 sub main(@){
   my $arg = shift;
   $arg = 'all' if not defined $arg;
-  my $valid = join '|', qw(all packages extra remove);
+  my $valid = join '|', qw(all packages remove);
   if(@_ > 0 or $arg !~ /^($valid)/){
     die "Usage: $0 TYPE {type must start with one of: $valid}\n";
   }
   installPackages($normalPackages) if $arg =~ /^(all|packages)/;
   removePackages() if $arg =~ /^(all|remove)/;
-  installPackages($extraPackages) if $arg =~ /^(all|extra)/;
 }
 
 
