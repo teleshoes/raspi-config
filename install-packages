@@ -29,7 +29,7 @@ my %PKG_INSTALLS = (
     xinit time streamer
   )],
   '5' => [qw(
-    mplayer mpv man python-pip alsa-utils xdotool unclutter xscreensaver
+    mplayer mpv man python3-pip alsa-utils xdotool unclutter xscreensaver
   )],
   '6' => [qw(
     libcec4 libcec-dev
