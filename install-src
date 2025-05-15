@@ -1,0 +1,91 @@
+#!/usr/bin/perl
+use strict;
+use warnings;
+use File::Basename qw(basename);
+
+sub install($$$$);
+
+my $IPMAGIC_NAME = "raspi";
+my $USER = "pi";
+
+my $REMOTE_SRC_DIR = "/home/$USER/Code";
+
+my @INSTALLS_ARR = (
+);
+
+my %INSTALLS_BY_NAME = @INSTALLS_ARR;
+
+my @INSTALL_NAMES = map {$INSTALLS_ARR[$_]} grep {$_ % 2 == 0} (0..$#INSTALLS_ARR);
+my %TYPES = map {$_ => ${$INSTALLS_BY_NAME{$_}}[0]} @INSTALL_NAMES;
+my %URLS = map {$_ => ${$INSTALLS_BY_NAME{$_}}[1]} @INSTALL_NAMES;
+my %CMDS = map {$_ => ${$INSTALLS_BY_NAME{$_}}[2]} @INSTALL_NAMES;
+
+my $PROJECT_FMT = join '', map {sprintf "      %-20s => %s\n", $_, $URLS{$_}} @INSTALL_NAMES;
+
+my $EXEC = basename $0;
+
+my $USAGE = "Usage:
+  $EXEC -h | --help
+    show this message
+
+  $EXEC [NAME NAME ..]
+    install named projects from URLs
+    if no projects are named, default is to install all
+
+    NAME => URL:\n$PROJECT_FMT
+";
+
+sub main(@){
+  my @names;
+  while(@_ > 0){
+    my $arg = shift @_;
+    if($arg =~ /^(-h|--help)$/){
+      print $USAGE;
+      exit 0;
+    }elsif(defined $INSTALLS_BY_NAME{$arg}){
+      push @names, $arg;
+    }else{
+      die "$USAGE\nERROR: unknown arg $arg\n";
+    }
+  }
+
+  @names = @INSTALL_NAMES if @names == 0;
+
+  for my $name(@names){
+    install $name, $TYPES{$name}, $URLS{$name}, $CMDS{$name};
+  }
+}
+
+sub install($$$$){
+  my ($projectName, $type, $url, $cmd) = @_;
+  print "\n\n\ninstalling $projectName\n";
+  if($type eq "GIT"){
+    system "ipmagic", $IPMAGIC_NAME, "-u", $USER, "-s", ""
+      . " set -x"
+      . " && rm -rf $REMOTE_SRC_DIR/$projectName"
+      . " && mkdir -p $REMOTE_SRC_DIR"
+      . " && git clone $url $REMOTE_SRC_DIR/$projectName"
+      . " && cd $REMOTE_SRC_DIR/$projectName"
+      . " && echo -ne \"=====\\n=====\\n=====\\n\""
+      . " && $cmd"
+      ;
+  }elsif($type eq "TAR"){
+    my $nowMillis = nowMillis();
+    my $tmpTar = "/tmp/install-src-$IPMAGIC_NAME-$projectName-$nowMillis-tarfile";
+    system "ipmagic", $IPMAGIC_NAME, "-u", $USER, "-s", ""
+      . " set -x"
+      . " && rm -rf $REMOTE_SRC_DIR/$projectName"
+      . " && mkdir -p $REMOTE_SRC_DIR/$projectName"
+      . " && curl '$url' -o $tmpTar"
+      . " && tar -xf $tmpTar --directory $REMOTE_SRC_DIR/$projectName"
+      . " && rm $tmpTar"
+      . " && cd $REMOTE_SRC_DIR/$projectName"
+      . " && echo -ne \"=====\\n=====\\n=====\\n\""
+      . " && $cmd"
+      ;
+  }else{
+    die "ERROR: unknown project type $type\n";
+  }
+}
+
+&main(@ARGV);
