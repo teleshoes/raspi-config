@@ -14,6 +14,10 @@ my @INSTALLS_ARR = (
   qtbigtext => ["GIT", "https://github.com/teleshoes/qtbigtext", ""
     . "./install.pl"
   ],
+
+  net       => ["GIT", "https://github.com/teleshoes/net", ""
+    . "./install.pl"
+  ],
 );
 
 my %INSTALLS_BY_NAME = @INSTALLS_ARR;
