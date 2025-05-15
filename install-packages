@@ -39,15 +39,8 @@ sub runRemote(@){
   system @cmd;
   die "error running '@cmd'\n" if $? != 0;
 }
-sub readProcRemote(@){
-  my $cmd = "ipmagic $IPMAGIC_NAME -u root @_";
-  my $out = `$cmd`;
-  die "error running '$cmd'\n" if $? != 0;
-  return $out;
-}
 
 sub installPackages($);
-sub removePackages();
 
 sub main(@){
   my $arg = shift;
@@ -57,7 +50,7 @@ sub main(@){
     die "Usage: $0 TYPE {type must start with one of: $valid}\n";
   }
   installPackages($normalPackages) if $arg =~ /^(all|packages)/;
-  removePackages() if $arg =~ /^(all|remove)/;
+  runRemote("apt remove @packagesToRemove") if $arg =~ /^(all|remove)/;
 }
 
 
@@ -72,41 +65,6 @@ sub installPackages($){
       . " apt-get install"
       . " -y --allow-unauthenticated"
       . " @packages";
-  }
-}
-
-sub removePackages(){
-  if(@packagesToRemove == 0){
-    print "skipping removal, no packages to remove\n";
-    return;
-  }
-  print "\n\nInstalling the deps for removed packages to unmarkauto\n";
-  my %deps;
-  my $dependsOut = readProcRemote "apt-cache depends @packagesToRemove";
-  for my $line(split /[\r\n]+/, $dependsOut){
-    if($line =~ /^\s*Depends: ([^<>]*)/){
-      my $pkg = $1;
-      chomp $pkg;
-      $deps{$pkg} = 1;
-    }
-  }
-  for my $pkg(@packagesToRemove){
-    delete $deps{$pkg};
-  }
-  my $depInstallCmd = "apt-get install \\\n";
-  for my $dep(keys %deps){
-    $depInstallCmd .= "  $dep \\\n";
-  }
-  print $depInstallCmd;
-  runRemote $depInstallCmd;
-
-  print "\n\nChecking uninstalled packages\n";
-  my $removeCmd = "dpkg --purge --force-all";
-  for my $pkg(@packagesToRemove){
-    $removeCmd .= " $pkg";
-  }
-  if(@packagesToRemove > 0){
-    runRemote $removeCmd;
   }
 }
 
