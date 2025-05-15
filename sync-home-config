@@ -11,6 +11,8 @@ my @HOME_RSYNC_FILES = qw(
   .gpg
   .secrets
   .vimrc
+  wifi.conf
+  wifi-auto.conf
 
   .config/screen-daemon.conf
   .config/wemo-devices.conf
