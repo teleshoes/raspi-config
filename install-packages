@@ -4,9 +4,9 @@ use warnings;
 
 my $IPMAGIC_NAME = "raspi";
 
-my @packagesToRemove = qw(
-  libtag1-rusxmms
-  wolfram-engine
+my @packagesToRemove = (
+  "libtag1-rusxmms",
+  "wolfram-engine",  #deps: libxcb-cursor0 pi-language-support
 );
 
 my $normalPackages = {
