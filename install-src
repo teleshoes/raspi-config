@@ -22,6 +22,15 @@ my @INSTALLS_ARR = (
   klomp     => ["GIT", "https://github.com/teleshoes/klomp", ""
     . "./install.pl /usr && ./dependency-install.pl"
   ],
+
+  iguanair  => ["GIT", "https://github.com/iguanaworks/iguanair", ""
+    . "echo install iguanair"
+    . " && sudo apt-get install cmake libusb-1.0-0-dev swig"
+    . " && cd $REMOTE_SRC_DIR/iguanair/software/usb_ir"
+    . " && cmake ."
+    . " && make"
+    . " && sudo make install"
+  ],
 );
 
 my %INSTALLS_BY_NAME = @INSTALLS_ARR;
