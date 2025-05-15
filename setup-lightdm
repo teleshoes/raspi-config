@@ -1,3 +1,31 @@
-#!/bin/bash
-IPMAGIC_NAME="pi"
-ipmagic $IPMAGIC_NAME -s sudo update-rc.d lightdm enable 2
+#!/usr/bin/perl
+use strict;
+use warnings;
+use lib "$ENV{HOME}/install/bin";
+use ScriptScript;
+
+my $IPMAGIC_NAME = "raspi";
+
+my $USAGE = "Usage:
+  $0 -h | --help
+    show this message
+
+  $0
+    setup lightdm display manager
+";
+
+sub main(@){
+  while(@_ > 0){
+    my $arg = shift @_;
+    if($arg =~ /^(-h|--help)$/){
+      print $USAGE;
+      exit 0;
+    }else{
+      die "$USAGE\nERROR: unknown arg $arg\n";
+    }
+  }
+
+  run "ipmagic", $IPMAGIC_NAME, "sudo update-rc.d lightdm enable 2";
+}
+
+&main(@ARGV);
