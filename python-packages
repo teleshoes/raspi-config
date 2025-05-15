@@ -11,7 +11,7 @@ my @pip = qw(
 );
 
 sub main(@){
-  run "ipmagic", $IPMAGIC_NAME, "
+  run "ipmagic", $IPMAGIC_NAME, "-u", "root", "
     set -x
     apt-get install python-dev python-pip
     pip install --break-system-packages @pip
