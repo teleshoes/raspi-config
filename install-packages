@@ -32,7 +32,7 @@ my %PKG_INSTALLS = (
     mplayer mpv man python3-pip alsa-utils xdotool unclutter xscreensaver
   )],
   '6' => [qw(
-    libcec4 libcec-dev
+    libcec6 libcec-dev
   )],
 );
 
