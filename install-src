@@ -31,6 +31,12 @@ my @INSTALLS_ARR = (
     . " && make"
     . " && sudo make install"
   ],
+
+  wiringpi  => ["GIT", "https://github.com/WiringPi/WiringPi", ""
+    . "rm -f debian-template/wiringpi*.deb"
+    . " && ./build debian"
+    . " && sudo dpkg -i debian-template/wiringpi*.deb"
+  ],
 );
 
 my %INSTALLS_BY_NAME = @INSTALLS_ARR;
