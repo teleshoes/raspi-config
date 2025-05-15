@@ -11,7 +11,7 @@ my @PKG_REMOVALS = (
   "wolfram-engine",  #deps: libxcb-cursor0 pi-language-support
 );
 
-my $PKG_INSTALLS = {
+my %PKG_INSTALLS = (
   '1' => [qw(
     vim-gtk rsync wget git openvpn screen
   )],
@@ -34,43 +34,67 @@ my $PKG_INSTALLS = {
   '6' => [qw(
     libcec4 libcec-dev
   )],
-};
+);
+
+my @PKG_GROUPS = sort keys %PKG_INSTALLS;
+my %PKG_ALIAS_BY_GROUP = map {$_ => substr($_, 0, 1)} @PKG_GROUPS;
+my %PKG_GROUP_BY_ALIAS = map {$PKG_ALIAS_BY_GROUP{$_} => $_} @PKG_GROUPS;
+die "ERROR: duplicate pkg group name alias\n" if %PKG_ALIAS_BY_GROUP != %PKG_GROUP_BY_ALIAS;
+
+my $CMD_REMOVALS = "removals";
 
 my $USAGE = "Usage:
   $0 -h|--help
     show this message
 
-  $0 [all|packages|remove]
-    install+remove configured packages
+  $0 [CMD CMD ..]
+    install/remove packages
+      -run each CMD given
+      -if none given, run all in order
+
+  CMD" . join("", map {"\n    $_ | $PKG_ALIAS_BY_GROUP{$_}
+      `apt install` packages in group $_"
+    } @PKG_GROUPS) . "
+    remove | removals
+      `apt remove` packages in removals
 ";
 
 sub main(@){
-  my $type = "all";
+  my @cmds;
   while(@_ > 0){
     my $arg = shift;
     if($arg =~ /^(-h|--help)$/){
       print $USAGE;
       exit 0;
-    }elsif($arg =~ /^(all|packages|remove)$/){
-      $type = $arg;
+    }elsif(defined $PKG_INSTALLS{$arg}){
+      push @cmds, $arg;
+    }elsif(defined $PKG_GROUP_BY_ALIAS{$arg}){
+      push @cmds, $PKG_GROUP_BY_ALIAS{$arg};
+    }elsif($arg =~ /^(remove|removals)$/){
+      push @cmds, $CMD_REMOVALS;
     }else{
       die "$USAGE\nERROR: unknown arg $arg\n";
     }
   }
 
-  if($type =~ /^(all|packages)$/){
-    for my $pkgGroup(sort keys %$PKG_INSTALLS){
-      my @packages = @{$$PKG_INSTALLS{$pkgGroup}};
+  @cmds = (@PKG_GROUPS, $CMD_REMOVALS) if @cmds == 0;
+
+  for my $cmd(@cmds){
+    if(defined $PKG_INSTALLS{$cmd}){
+      my $pkgGroup = $cmd;
+      my @packages = @{$PKG_INSTALLS{$pkgGroup}};
       print "\n\nInstalling group[$pkgGroup]:\n----\n@packages\n----\n";
       runRemote ''
         . "yes |"
         . " apt-get install"
         . " -y --allow-unauthenticated"
         . " @packages";
+    }elsif($cmd eq $CMD_REMOVALS){
+      runRemote("apt remove @PKG_REMOVALS");
+    }else{
+      die "ERROR: unknown cmd $cmd\n";
     }
   }
-
-  runRemote("apt remove @PKG_REMOVALS") if $type =~ /^(all|remove)/;
 }
 
 sub runRemote(@){
