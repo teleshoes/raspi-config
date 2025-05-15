@@ -11,6 +11,9 @@ my $USER = "pi";
 my $REMOTE_SRC_DIR = "/home/$USER/Code";
 
 my @INSTALLS_ARR = (
+  qtbigtext => ["GIT", "https://github.com/teleshoes/qtbigtext", ""
+    . "./install.pl"
+  ],
 );
 
 my %INSTALLS_BY_NAME = @INSTALLS_ARR;
