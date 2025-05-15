@@ -13,7 +13,7 @@ my @PKG_REMOVALS = (
 
 my %PKG_INSTALLS = (
   '1' => [qw(
-    vim-gtk rsync wget git openvpn screen
+    vim rsync wget git openvpn screen
   )],
   '2' => [qw(
     libterm-readkey-perl libtext-csv-perl libts0
