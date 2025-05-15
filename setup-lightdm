@@ -8,6 +8,7 @@ sub editConfContents($);
 sub editRemoteFile($$);
 
 my $IPMAGIC_NAME = "raspi";
+my $USER = "pi";
 
 my $CONF = "/etc/lightdm/lightdm.conf";
 
@@ -36,6 +37,14 @@ sub main(@){
 
 sub editConfContents($){
   my ($contents) = shift;
+
+  $contents =~ s/^#?(autologin-session)=.*$/#$1=/gm;
+  $contents =~ s/^#?(autologin-user)=.*$/$1=$USER/gm;
+
+  if($contents !~ /^autologin-user/m){
+    die "ERROR: $CONF file does not contain autologin-user\n";
+  }
+
   return $contents;
 }
 
