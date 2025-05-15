@@ -14,7 +14,6 @@ sub main(@){
   run "ipmagic", $IPMAGIC_NAME, "
     set -x
     apt-get install python-dev python-pip
-    easy_install -U distribute
     pip install --break-system-packages @pip
   ";
 }
