@@ -2,6 +2,8 @@
 use strict;
 use warnings;
 
+sub runRemote(@);
+
 my $IPMAGIC_NAME = "raspi";
 
 my @PKG_REMOVALS = (
@@ -34,12 +36,6 @@ my $PKG_INSTALLS = {
   )],
 };
 
-sub runRemote(@){
-  my @cmd = ("ipmagic", $IPMAGIC_NAME, "-u", "root", @_);
-  system @cmd;
-  die "error running '@cmd'\n" if $? != 0;
-}
-
 sub main(@){
   my $arg = shift;
   $arg = 'all' if not defined $arg;
@@ -61,6 +57,12 @@ sub main(@){
   }
 
   runRemote("apt remove @PKG_REMOVALS") if $arg =~ /^(all|remove)/;
+}
+
+sub runRemote(@){
+  my @cmd = ("ipmagic", $IPMAGIC_NAME, "-u", "root", @_);
+  system @cmd;
+  die "error running '@cmd'\n" if $? != 0;
 }
 
 &main(@ARGV);
