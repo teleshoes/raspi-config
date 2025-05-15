@@ -18,6 +18,10 @@ my @INSTALLS_ARR = (
   net       => ["GIT", "https://github.com/teleshoes/net", ""
     . "./install.pl"
   ],
+
+  klomp     => ["GIT", "https://github.com/teleshoes/klomp", ""
+    . "./install.pl /usr && ./dependency-install.pl"
+  ],
 );
 
 my %INSTALLS_BY_NAME = @INSTALLS_ARR;
