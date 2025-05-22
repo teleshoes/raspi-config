@@ -7,7 +7,7 @@ sshc --close $USER@$HOST
 sshc $USER@$HOST echo ok $USER
 
 echo enable ssh root login
-sshc $USER@$HOST 'su -c "
+sshc $USER@$HOST "sudo su -c '
   sed -i \"s/^\s*#*\s*PermitRootLogin\s.*/PermitRootLogin yes/\" /etc/ssh/sshd_config;
   sed -i \"s/^\s*#*\s*GatewayPorts\s.*/GatewayPorts yes/\" /etc/ssh/sshd_config;
   sed -i \"s/^\s*#*\s*UseDNS\s.*/UseDNS no/\" /etc/ssh/sshd_config;
