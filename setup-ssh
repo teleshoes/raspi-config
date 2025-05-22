@@ -19,14 +19,19 @@ my $USAGE = "Usage:
     setup ssh keys on host $IPMAGIC_NAME
 
   OPTS
+    -p | --passwd
+      run `passwd $USER && passwd root` during initial setup
 ";
 
 sub main(@){
+  my $isRunPasswd = 0;
   while(@_ > 0){
     my $arg = shift;
     if($arg =~ /^(-h|--help)$/){
       print $USAGE;
       exit 0;
+    }elsif($arg =~ /^(-p|--passwd)$/){
+      $isRunPasswd = 1;
     }else{
       die "ERROR: unknown arg $arg\n";
     }
@@ -39,11 +44,13 @@ sub main(@){
   runIpmagic $USER, "--sshc-close";
   runIpmagic $USER, "echo ok $USER";
 
+  my $passwdCmd = $isRunPasswd ? "passwd" : "echo skipping passwd";
+
   print "set passwords and enable ssh root login\n";
   runIpmagic $USER, "sudo su -c '
     set -x
-    passwd $USER
-    passwd root
+    $passwdCmd $USER
+    $passwdCmd root
     sed -i \"s/^\\s*#*\\s*PermitRootLogin\\s.*/PermitRootLogin yes/\" /etc/ssh/sshd_config;
     sed -i \"s/^\\s*#*\\s*GatewayPorts\\s.*/GatewayPorts yes/\" /etc/ssh/sshd_config;
     sed -i \"s/^\\s*#*\\s*UseDNS\\s.*/UseDNS no/\" /etc/ssh/sshd_config;
