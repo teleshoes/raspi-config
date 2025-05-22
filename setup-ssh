@@ -13,7 +13,7 @@ sshc $USER@$HOST "sudo su -c '
   sed -i \"s/^\s*#*\s*UseDNS\s.*/UseDNS no/\" /etc/ssh/sshd_config;
 
   systemctl restart sshd;
-"'
+'"
 
 echo sleep 3s
 sleep 3
