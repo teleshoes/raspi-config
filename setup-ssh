@@ -4,6 +4,7 @@ use warnings;
 use File::Basename qw(basename);
 
 sub run(@);
+sub runIpmagic($@);
 
 my $EXEC = basename $0;
 
@@ -30,11 +31,11 @@ sub main(@){
   chomp $host;
 
   print "setup sshc $USER\n";
-  run "sshc", "--close", "$USER\@$host";
-  run "sshc", "$USER\@$host", "echo ok $USER\n";
+  runIpmagic $USER, "--sshc-close";
+  runIpmagic $USER, "echo ok $USER";
 
   print "set passwords and enable ssh root login\n";
-  run "sshc", "$USER\@$host", "sudo su -c '
+  runIpmagic $USER, "sudo su -c '
     set -x
     passwd $USER
     passwd root
@@ -49,11 +50,11 @@ sub main(@){
   sleep 3;
 
   print "setup sshc root\n";
-  run "sshc", "--close", "root\@$host";
-  run "sshc", "root\@$host", "echo ok root";
+  runIpmagic "root", "--sshc-close";
+  runIpmagic "root", "echo ok root";
 
   print "ssh-keygen\n";
-  run "sshc", "$USER\@$host", "
+  runIpmagic $USER, "
     set -x
     if [ ! -f ~/.ssh/$host.pub ]; then
       ssh-keygen -f ~/.ssh/id_rsa -N '' -t rsa
@@ -62,13 +63,13 @@ sub main(@){
   ";
 
   print "create root ssh dir\n";
-  run "sshc", "root\@$host", "
+  runIpmagic "root", "
     set -x
     mkdir -p /root/.ssh/
   ";
 
   print "fetch pubkey\n";
-  run "sshc", "--scp", "$USER\@$host:~/.ssh/$host.pub", "~/.ssh/$host.pub";
+  runIpmagic $USER, "--scp", ":~/.ssh/$host.pub", "~/.ssh/$host.pub";
 
   print "run pubkeys\n";
   run "pubkeys", "$IPMAGIC_NAME", "scp";
@@ -76,17 +77,22 @@ sub main(@){
 
 
   print "set perms on ssh config\n";
-  run "ipmagic", "$IPMAGIC_NAME", "-u", "$USER", "touch", "/home/$USER/.ssh/config";
-  run "ipmagic", "$IPMAGIC_NAME", "-u", "$USER", "chmod 655", "/home/$USER/.ssh/config";
+  runIpmagic $USER, "touch /home/$USER/.ssh/config";
+  runIpmagic $USER, "chmod 655 /home/$USER/.ssh/config";
 
   print "cleanup\n";
-  run "sshc", "--close", "$USER\@$host";
-  run "sshc", "--close", "root\@$host";
+  runIpmagic $USER, "--sshc-close";
+  runIpmagic "root", "--sshc-close";
 }
 
 sub run(@){
   print "@_\n";
   system @_;
+}
+
+sub runIpmagic($@){
+  my ($user, @args) = @_;
+  run "ipmagic", "--sshc", $IPMAGIC_NAME, "-u", $user, @args;
 }
 
 &main(@ARGV);
