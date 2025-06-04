@@ -38,7 +38,10 @@ sub main(@){
 sub editConfContents($){
   my ($contents) = shift;
 
-  $contents =~ s/^#?(autologin-session)=.*$/#$1=/gm;
+  $contents =~ s/^#?(greeter-session)=.*$/$1=$USER-greeter/gm;
+  $contents =~ s/^#?(user-session)=.*$/$1=LXDE-$USER-x/gm;
+  $contents =~ s/^#?(autologin-session)=.*$/$1=LXDE-$USER-x/gm;
+
   $contents =~ s/^#?(autologin-user)=.*$/$1=$USER/gm;
 
   if($contents !~ /^autologin-user/m){
