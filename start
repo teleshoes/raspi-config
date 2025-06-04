@@ -9,6 +9,8 @@
 ./install-src
 ./python-packages
 
+./sync-home-config --quick
+
 ./setup-ssh #for sshd_config after apt upgrade
 ./setup-boot
 ./setup-bash-completion
