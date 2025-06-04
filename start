@@ -10,6 +10,7 @@
 ./python-packages
 
 ./setup-boot
+./setup-bash-completion
 ./setup-lightdm
 
 ./fetch-cavestory restore
