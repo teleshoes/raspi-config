@@ -114,7 +114,7 @@ sub main(@){
         . " -y --allow-unauthenticated"
         . " @packages";
     }elsif($cmd eq $CMD_REMOVALS){
-      runRemote("apt remove @PKG_REMOVALS");
+      runRemote("apt remove -y @PKG_REMOVALS");
     }else{
       die "ERROR: unknown cmd $cmd\n";
     }
