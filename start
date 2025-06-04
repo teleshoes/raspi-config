@@ -7,7 +7,6 @@ pi sudo reboot
 
 ./install-packages
 ./install-src
-install-nfs
 config-files
 ./setup-locale
 fetch-cavestory restore
