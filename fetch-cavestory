@@ -6,8 +6,8 @@ use File::Basename qw(basename);
 my $IPMAGIC_NAME = "raspi";
 my $USER = "pi";
 
-my $LOCAL_SAVE_FILE = "$ENV{HOME}/Code/raspi/backup/.cavestory-save";
-my $REMOTE_SAVE_FILE = "/home/$USER/.cavestory-save";
+my $LOCAL_SAVE_DIR = "$ENV{HOME}/Code/raspi/backup/cavestory-saves";
+my $REMOTE_SAVE_DIR = "/home/$USER/.local/share/nxengine";
 
 my $EXEC = basename $0;
 
@@ -16,10 +16,10 @@ my $USAGE = "Usage:
     show this message
 
   $EXEC backup
-    copy remote $REMOTE_SAVE_FILE to local $LOCAL_SAVE_FILE
+    copy remote $REMOTE_SAVE_DIR/profile*.dat to local $LOCAL_SAVE_DIR/
 
   $EXEC restore
-    copy local $LOCAL_SAVE_FILE to remote $REMOTE_SAVE_FILE
+    copy local $LOCAL_SAVE_DIR/* to remote $REMOTE_SAVE_DIR/
 ";
 
 my $CMD_BACKUP = "backup";
@@ -46,14 +46,15 @@ sub main(@){
   if($cmd eq $CMD_BACKUP){
     system "ipmagic", $IPMAGIC_NAME, "-u", $USER, "--rsync",
       "-avP",
-      ":$REMOTE_SAVE_FILE",
-      "$LOCAL_SAVE_FILE",
+      "--mkpath",
+      ":$REMOTE_SAVE_DIR/profile*.dat",
+      "$LOCAL_SAVE_DIR/latest/"
     ;
   }elsif($cmd eq $CMD_RESTORE){
     system "ipmagic", $IPMAGIC_NAME, "-u", $USER, "--rsync",
       "-avP",
-      "$LOCAL_SAVE_FILE",
-      ":$REMOTE_SAVE_FILE",
+      "$LOCAL_SAVE_DIR/latest/",
+      ":$REMOTE_SAVE_DIR/",
     ;
   }else{
     die "ERROR: unknown command $cmd\n";
