@@ -6,7 +6,7 @@ setup-lightdm
 pi sudo reboot
 
 ./install-packages
-./install-src qtbigtext net klomp
+./install-src
 install-nfs
 config-files
 ./setup-locale
