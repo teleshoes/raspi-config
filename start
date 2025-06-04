@@ -3,11 +3,9 @@
 ./setup-ssh --passwd
 
 setup-lightdm
-pi sudo reboot
 
 ./install-packages
 ./install-src
 config-files
 ./setup-locale
 fetch-cavestory restore
-raspi reboot
