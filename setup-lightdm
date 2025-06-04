@@ -31,7 +31,6 @@ sub main(@){
     }
   }
 
-  run "ipmagic", $IPMAGIC_NAME, "sudo update-rc.d lightdm enable 2";
   editRemoteFile($CONF, \&editConfContents);
 }
 
