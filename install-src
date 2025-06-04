@@ -86,8 +86,11 @@ my $USAGE = "Usage:
   OPTS
 ";
 
+my $MODE_INSTALL = "install";
+
 sub main(@){
   my @names;
+  my $mode = $MODE_INSTALL;
   my $opts = {
   };
   while(@_ > 0){
@@ -105,7 +108,11 @@ sub main(@){
   @names = @INSTALL_NAMES if @names == 0;
 
   for my $name(@names){
-    install $opts, $name, $TYPES{$name}, $URLS{$name}, $CMDS{$name};
+    if($mode eq $MODE_INSTALL){
+      install $opts, $name, $TYPES{$name}, $URLS{$name}, $CMDS{$name};
+    }else{
+      die "ERROR: unknown mode $mode\n";
+    }
   }
 }
 
