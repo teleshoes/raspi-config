@@ -42,10 +42,11 @@ my %PKG_GROUP_BY_ALIAS = map {$PKG_ALIAS_BY_GROUP{$_} => $_} @PKG_GROUPS;
 die "ERROR: duplicate pkg group name alias\n" if %PKG_ALIAS_BY_GROUP != %PKG_GROUP_BY_ALIAS;
 
 my $CMD_UPDATE = "update";
+my $CMD_UPGRADE = "upgrade";
 my $CMD_INSTALLS = "installs";
 my $CMD_REMOVALS = "removals";
 
-my @ALL_CMDS = ($CMD_UPDATE, $CMD_INSTALLS, $CMD_REMOVALS);
+my @ALL_CMDS = ($CMD_UPDATE, $CMD_UPGRADE, $CMD_INSTALLS, $CMD_REMOVALS);
 
 my $USAGE = "Usage:
   $0 -h|--help
@@ -59,6 +60,8 @@ my $USAGE = "Usage:
   CMD
     update
       run `apt update`
+    upgrade
+      run `apt upgrade`
     installs
       run `apt install` packages in all groups"
     . join("", map {"\n    $_ | $PKG_ALIAS_BY_GROUP{$_}
@@ -77,6 +80,8 @@ sub main(@){
       exit 0;
     }elsif($arg =~ /^(update)$/){
       push @cmds, $CMD_UPDATE;
+    }elsif($arg =~ /^(upgrade)$/){
+      push @cmds, $CMD_UPGRADE;
     }elsif($arg =~ /^(installs)$/){
       push @cmds, $CMD_INSTALLS;
     }elsif(defined $PKG_INSTALLS{$arg}){
@@ -97,6 +102,8 @@ sub main(@){
   for my $cmd(@cmds){
     if($cmd eq $CMD_UPDATE){
       runRemote("apt update -y");
+    }elsif($cmd eq $CMD_UPGRADE){
+      runRemote("apt upgrade -y");
     }elsif(defined $PKG_INSTALLS{$cmd}){
       my $pkgGroup = $cmd;
       my @packages = @{$PKG_INSTALLS{$pkgGroup}};
