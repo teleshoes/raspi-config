@@ -79,7 +79,11 @@ sub main(@){
 
     run "sudo mkdir -p ./root/home/pi/.ssh/";
     run "sudo cp -ar ~/.ssh/authorized_keys ./root/home/pi/.ssh/";
-    run "sudo chown --reference ~/.ssh/ -R ./root/home/pi/.ssh/";
+    run "sudo chown -R --reference ~/.ssh/ ./root/home/pi/.ssh/";
+
+    run "sudo mkdir -p ./root/root/.ssh/";
+    run "sudo cp -ar ~/.ssh/authorized_keys ./root/root/.ssh/";
+    run "sudo chown -R root:root ./root/root/.ssh/";
 
     run "sudo rm -f ./root/etc/ssh/sshd_config.d/rename_user.conf";
 
