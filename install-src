@@ -89,12 +89,19 @@ my $USAGE = "Usage:
         -fetch source code and place in $REMOTE_SRC_DIR
       -run custom install script remotely in $REMOTE_SRC_DIR
 
+  $EXEC --fetch-cache [NAME NAME ..]
+    for each named project, run:
+      ipmagic $IPMAGIC_NAME --rsync -avP --del \\
+        :$REMOTE_SRC_DIR/NAME \\
+        $LOCAL_CACHE_DIR/NAME
+
   NAME => URL:\n"
     . $PROJECT_FMT . "
   OPTS
 ";
 
 my $MODE_INSTALL = "install";
+my $MODE_FETCH_CACHE = "fetch-cache";
 
 sub main(@){
   my @names;
@@ -106,6 +113,8 @@ sub main(@){
     if($arg =~ /^(-h|--help)$/){
       print $USAGE;
       exit 0;
+    }elsif($arg =~ /^(--fetch-cache)$/){
+      $mode = $MODE_FETCH_CACHE;
     }elsif(defined $INSTALLS_BY_NAME{$arg}){
       push @names, $arg;
     }else{
@@ -118,6 +127,14 @@ sub main(@){
   for my $name(@names){
     if($mode eq $MODE_INSTALL){
       install $opts, $name, $TYPES{$name}, $URLS{$name}, $CMDS{$name};
+    }elsif($mode eq $MODE_FETCH_CACHE){
+      runIpmagic $USER, "--rsync",
+        "-avP",
+        "--mkpath",
+        "--del",
+        ":$REMOTE_SRC_DIR/$name/",
+        "$LOCAL_CACHE_DIR/$name/",
+      ;
     }else{
       die "ERROR: unknown mode $mode\n";
     }
