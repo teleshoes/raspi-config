@@ -4,6 +4,8 @@ use warnings;
 use File::Basename qw(basename);
 
 sub install($$$$);
+sub runIpmagic($@);
+sub run(@);
 
 my $IPMAGIC_NAME = "raspi";
 my $USER = "pi";
@@ -107,7 +109,7 @@ sub install($$$$){
   my ($projectName, $type, $url, $cmd) = @_;
   print "\n\n\ninstalling $projectName\n";
   if($type eq "GIT"){
-    system "ipmagic", $IPMAGIC_NAME, "-u", $USER, "-s", ""
+    runIpmagic $USER, "-s", ""
       . " set -x"
       . " && rm -rf $REMOTE_SRC_DIR/$projectName"
       . " && mkdir -p $REMOTE_SRC_DIR"
@@ -119,7 +121,7 @@ sub install($$$$){
   }elsif($type eq "TAR"){
     my $nowMillis = nowMillis();
     my $tmpTar = "/tmp/install-src-$IPMAGIC_NAME-$projectName-$nowMillis-tarfile";
-    system "ipmagic", $IPMAGIC_NAME, "-u", $USER, "-s", ""
+    runIpmagic $USER, "-s", ""
       . " set -x"
       . " && rm -rf $REMOTE_SRC_DIR/$projectName"
       . " && mkdir -p $REMOTE_SRC_DIR/$projectName"
@@ -132,6 +134,19 @@ sub install($$$$){
       ;
   }else{
     die "ERROR: unknown project type $type\n";
+  }
+}
+
+sub runIpmagic($@){
+  my ($user, @args) = @_;
+  run "ipmagic", "--sshc", $IPMAGIC_NAME, "-u", $user, @args;
+}
+
+sub run(@){
+  print "@_\n";
+  system @_;
+  if($? != 0){
+    die "ERROR: cmd '@_' failed\n";
   }
 }
 
