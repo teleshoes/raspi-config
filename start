@@ -12,7 +12,7 @@ install-bigtext
 install-net
 install-nfs
 config-files
-pi sudo locale-gen
+./setup-locale
 fetch-cavestory restore
 install-klomp
 raspi reboot
