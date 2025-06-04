@@ -99,6 +99,8 @@ sub main(@){
   #expand 'installs' to all groups
   @cmds = map {$_ eq $CMD_INSTALLS ? @PKG_GROUPS : $_} @cmds;
 
+  print "running commands: @cmds\n";
+
   for my $cmd(@cmds){
     if($cmd eq $CMD_UPDATE){
       runRemote("apt update -y");
