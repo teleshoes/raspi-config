@@ -37,6 +37,27 @@ my @INSTALLS_ARR = (
     . " && ./build debian"
     . " && sudo dpkg -i debian-template/wiringpi*.deb"
   ],
+
+  cavestory => ["GIT", "https://github.com/nxengine/nxengine-evo", ""
+    . "sudo apt-get install libsdl2-dev libsdl2-mixer-dev libsdl2-image-dev"
+    . "                     libjpeg-dev libpng-dev ninja-build"
+    . " && mkdir -p build"
+    . " && cd build"
+    . " && cmake -DCMAKE_BUILD_TYPE=Release .."
+    . " && make -j8"
+    . " && if [ -d data ]; then"
+    . "      echo skipping nxextract"
+    . "      ;"
+    . "    else"
+    . "      wget https://www.cavestory.org/downloads/cavestoryen.zip"
+    . "      && unzip cavestoryen.zip"
+    . "      && cp -r CaveStory/Doukutsu.exe CaveStory/data ./"
+    . "      && ./nxextract"
+    . "      ;"
+    . "    fi"
+    . " && sudo make install"
+    . " && sudo rsync -avP ./data/ /usr/local/share/nxengine/data/"
+  ],
 );
 
 my %INSTALLS_BY_NAME = @INSTALLS_ARR;
