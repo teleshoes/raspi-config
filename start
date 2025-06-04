@@ -6,11 +6,9 @@ setup-lightdm
 pi sudo reboot
 
 ./install-packages
-install-bigtext
-install-net
+./install-src qtbigtext net klomp
 install-nfs
 config-files
 ./setup-locale
 fetch-cavestory restore
-install-klomp
 raspi reboot
