@@ -22,6 +22,7 @@ my @HOME_RSYNC_FILES = qw(
   .config/ipmagic/
   .vim/
   resolv/
+  resconfig-screens/
 );
 
 my $USRLOCALBIN_LOCAL_DIR = "$ENV{HOME}/install/root-files/usr/local/bin";
