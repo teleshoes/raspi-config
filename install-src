@@ -69,7 +69,7 @@ my %TYPES = map {$_ => ${$INSTALLS_BY_NAME{$_}}[0]} @INSTALL_NAMES;
 my %URLS = map {$_ => ${$INSTALLS_BY_NAME{$_}}[1]} @INSTALL_NAMES;
 my %CMDS = map {$_ => ${$INSTALLS_BY_NAME{$_}}[2]} @INSTALL_NAMES;
 
-my $PROJECT_FMT = join '', map {sprintf "      %-20s => %s\n", $_, $URLS{$_}} @INSTALL_NAMES;
+my $PROJECT_FMT = join '', map {sprintf "    %-20s => %s\n", $_, $URLS{$_}} @INSTALL_NAMES;
 
 my $EXEC = basename $0;
 
@@ -81,7 +81,8 @@ my $USAGE = "Usage:
     install named projects from URLs
     if no projects are named, default is to install all
 
-    NAME => URL:\n$PROJECT_FMT
+  NAME => URL:\n"
+    . $PROJECT_FMT . "
   OPTS
 ";
 
