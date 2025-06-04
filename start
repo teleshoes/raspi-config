@@ -12,3 +12,5 @@
 ./setup-lightdm
 
 ./fetch-cavestory restore
+
+./sync-home-config
