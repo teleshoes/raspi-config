@@ -18,6 +18,7 @@ my %PKG_INSTALLS = (
   )],
   '2' => [qw(
     libterm-readkey-perl libtext-csv-perl libts0
+    cmake
   )],
   '3' => [qw(
     x11vnc lsof psmisc zip unzip parted
