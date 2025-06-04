@@ -1,6 +1,7 @@
 #flash with: flashing/flash.pl
 
 ./setup-ssh --passwd
+./install-packages update 1 #for convenience, e.g.: vim
 
 ./config-files
 ./setup-locale
