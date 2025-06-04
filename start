@@ -2,10 +2,10 @@
 
 ./setup-ssh --passwd
 
-setup-lightdm
+./setup-lightdm
 
 ./install-packages
 ./install-src
-config-files
+./config-files
 ./setup-locale
-fetch-cavestory restore
+./fetch-cavestory restore
