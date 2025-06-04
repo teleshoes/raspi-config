@@ -41,6 +41,7 @@ my %PKG_ALIAS_BY_GROUP = map {$_ => substr($_, 0, 1)} @PKG_GROUPS;
 my %PKG_GROUP_BY_ALIAS = map {$PKG_ALIAS_BY_GROUP{$_} => $_} @PKG_GROUPS;
 die "ERROR: duplicate pkg group name alias\n" if %PKG_ALIAS_BY_GROUP != %PKG_GROUP_BY_ALIAS;
 
+my $CMD_INSTALLS = "installs";
 my $CMD_REMOVALS = "removals";
 
 my $USAGE = "Usage:
@@ -52,7 +53,10 @@ my $USAGE = "Usage:
       -run each CMD given
       -if none given, run all in order
 
-  CMD" . join("", map {"\n    $_ | $PKG_ALIAS_BY_GROUP{$_}
+  CMD
+    installs
+      run `apt install` packages in all groups"
+    . join("", map {"\n    $_ | $PKG_ALIAS_BY_GROUP{$_}
       `apt install` packages in group $_"
     } @PKG_GROUPS) . "
     remove | removals
@@ -66,6 +70,8 @@ sub main(@){
     if($arg =~ /^(-h|--help)$/){
       print $USAGE;
       exit 0;
+    }elsif($arg =~ /^(installs)$/){
+      push @cmds, $CMD_INSTALLS;
     }elsif(defined $PKG_INSTALLS{$arg}){
       push @cmds, $arg;
     }elsif(defined $PKG_GROUP_BY_ALIAS{$arg}){
@@ -78,6 +84,8 @@ sub main(@){
   }
 
   @cmds = (@PKG_GROUPS, $CMD_REMOVALS) if @cmds == 0;
+  #expand 'installs' to all groups
+  @cmds = map {$_ eq $CMD_INSTALLS ? @PKG_GROUPS : $_} @cmds;
 
   for my $cmd(@cmds){
     if(defined $PKG_INSTALLS{$cmd}){
