@@ -1,15 +1,63 @@
 #!/usr/bin/perl
 use strict;
 use warnings;
+use File::Basename qw(basename);
 
 my $IPMAGIC_NAME = "raspi";
-my $host = `ipmagic $IPMAGIC_NAME --host`;
-chomp $host;
+my $USER = "pi";
 
-if(@ARGV == 1 and $ARGV[0] eq 'backup'){
-  system "scp pi\@$host:/home/pi/.cavestory-save backup/";
-}elsif(@ARGV == 1 and $ARGV[0] eq 'restore'){
-  system "scp backup/.cavestory-save pi\@$host:/home/pi/";
-}else{
-  die "Usage: $0 [backup|restore]\n";
+my $LOCAL_SAVE_FILE = "$ENV{HOME}/Code/raspi/backup/.cavestory-save";
+my $REMOTE_SAVE_FILE = "/home/$USER/.cavestory-save";
+
+my $EXEC = basename $0;
+
+my $USAGE = "Usage:
+  $EXEC -h|--help
+    show this message
+
+  $EXEC backup
+    copy remote $REMOTE_SAVE_FILE to local $LOCAL_SAVE_FILE
+
+  $EXEC restore
+    copy local $LOCAL_SAVE_FILE to remote $REMOTE_SAVE_FILE
+";
+
+my $CMD_BACKUP = "backup";
+my $CMD_RESTORE = "restore";
+
+sub main(@){
+  my $cmd = undef;
+  while(@_ > 0){
+    my $arg = shift;
+    if($arg =~ /^(-h|--help)$/){
+      print $USAGE;
+      exit 0;
+    }elsif($arg =~ /^(backup)$/){
+      $cmd = $CMD_BACKUP;
+    }elsif($arg =~ /^(restore)$/){
+      $cmd = $CMD_RESTORE;
+    }else{
+      die "ERROR: unknown arg $arg\n";
+    }
+  }
+
+  die $USAGE if not defined $cmd;
+
+  if($cmd eq $CMD_BACKUP){
+    system "ipmagic", $IPMAGIC_NAME, "-u", $USER, "--rsync",
+      "-avP",
+      ":$REMOTE_SAVE_FILE",
+      "$LOCAL_SAVE_FILE",
+    ;
+  }elsif($cmd eq $CMD_RESTORE){
+    system "ipmagic", $IPMAGIC_NAME, "-u", $USER, "--rsync",
+      "-avP",
+      "$LOCAL_SAVE_FILE",
+      ":$REMOTE_SAVE_FILE",
+    ;
+  }else{
+    die "ERROR: unknown command $cmd\n";
+  }
 }
+
+&main(@ARGV);
