@@ -9,6 +9,7 @@
 ./install-src
 ./python-packages
 
+./setup-ssh #for sshd_config after apt upgrade
 ./setup-boot
 ./setup-bash-completion
 ./setup-pcmanfm-disable-automount
