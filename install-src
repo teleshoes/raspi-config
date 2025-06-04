@@ -98,6 +98,10 @@ my $USAGE = "Usage:
   NAME => URL:\n"
     . $PROJECT_FMT . "
   OPTS
+    --no-cache
+      rebuild from scratch without local cache
+        -delete remote dir $REMOTE_SRC_DIR/NAME
+        -do not sync from $LOCAL_CACHE_DIR/NAME
 ";
 
 my $MODE_INSTALL = "install";
@@ -107,6 +111,7 @@ sub main(@){
   my @names;
   my $mode = $MODE_INSTALL;
   my $opts = {
+    allowCache => 1,
   };
   while(@_ > 0){
     my $arg = shift @_;
@@ -115,6 +120,8 @@ sub main(@){
       exit 0;
     }elsif($arg =~ /^(--fetch-cache)$/){
       $mode = $MODE_FETCH_CACHE;
+    }elsif($arg =~ /^(--no-cache)$/){
+      $$opts{allowCache} = 0;
     }elsif(defined $INSTALLS_BY_NAME{$arg}){
       push @names, $arg;
     }else{
@@ -144,7 +151,7 @@ sub main(@){
 sub install($$$$$){
   my ($opts, $projectName, $type, $url, $cmd) = @_;
   print "\n\n\ninstalling $projectName\n";
-  if(-d "$LOCAL_CACHE_DIR/$projectName"){
+  if($$opts{allowCache} && -d "$LOCAL_CACHE_DIR/$projectName"){
     runIpmagic $USER, "--rsync",
       "-avP",
       "--mkpath",
