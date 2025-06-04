@@ -44,6 +44,8 @@ die "ERROR: duplicate pkg group name alias\n" if %PKG_ALIAS_BY_GROUP != %PKG_GRO
 my $CMD_INSTALLS = "installs";
 my $CMD_REMOVALS = "removals";
 
+my @ALL_CMDS = ($CMD_INSTALLS, $CMD_REMOVALS);
+
 my $USAGE = "Usage:
   $0 -h|--help
     show this message
@@ -51,7 +53,7 @@ my $USAGE = "Usage:
   $0 [CMD CMD ..]
     install/remove packages
       -run each CMD given
-      -if none given, run all in order
+      -if none given, run: $0 @ALL_CMDS
 
   CMD
     installs
@@ -83,7 +85,7 @@ sub main(@){
     }
   }
 
-  @cmds = (@PKG_GROUPS, $CMD_REMOVALS) if @cmds == 0;
+  @cmds = (@ALL_CMDS) if @cmds == 0;
   #expand 'installs' to all groups
   @cmds = map {$_ eq $CMD_INSTALLS ? @PKG_GROUPS : $_} @cmds;
 
