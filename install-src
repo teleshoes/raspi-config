@@ -11,6 +11,7 @@ my $IPMAGIC_NAME = "raspi";
 my $USER = "pi";
 
 my $REMOTE_SRC_DIR = "/home/$USER/Code";
+my $LOCAL_CACHE_DIR = "$ENV{HOME}/Code/raspi/backup/install-src-cache";
 
 my @INSTALLS_ARR = (
   qtbigtext => ["GIT", "https://github.com/teleshoes/qtbigtext", ""
@@ -80,6 +81,13 @@ my $USAGE = "Usage:
   $EXEC [OPTS] [NAME NAME ..]
     install named projects from URLs
     if no projects are named, default is to install all
+      -if local dir $LOCAL_CACHE_DIR/NAME exists, run:
+        ipmagic $IPMAGIC_NAME --rsync -avP --del \\
+          :$REMOTE_SRC_DIR/NAME \\
+          $LOCAL_CACHE_DIR/NAME
+      -if remote dir $REMOTE_SRC_DIR/NAME does not exist:
+        -fetch source code and place in $REMOTE_SRC_DIR
+      -run custom install script remotely in $REMOTE_SRC_DIR
 
   NAME => URL:\n"
     . $PROJECT_FMT . "
@@ -119,33 +127,44 @@ sub main(@){
 sub install($$$$$){
   my ($opts, $projectName, $type, $url, $cmd) = @_;
   print "\n\n\ninstalling $projectName\n";
-  if($type eq "GIT"){
-    runIpmagic $USER, "-s", ""
-      . " set -x"
-      . " && rm -rf $REMOTE_SRC_DIR/$projectName"
-      . " && mkdir -p $REMOTE_SRC_DIR"
-      . " && git clone $url $REMOTE_SRC_DIR/$projectName"
-      . " && cd $REMOTE_SRC_DIR/$projectName"
-      . " && echo -ne \"=====\\n=====\\n=====\\n\""
-      . " && $cmd"
-      ;
-  }elsif($type eq "TAR"){
-    my $nowMillis = nowMillis();
-    my $tmpTar = "/tmp/install-src-$IPMAGIC_NAME-$projectName-$nowMillis-tarfile";
-    runIpmagic $USER, "-s", ""
-      . " set -x"
-      . " && rm -rf $REMOTE_SRC_DIR/$projectName"
-      . " && mkdir -p $REMOTE_SRC_DIR/$projectName"
-      . " && curl '$url' -o $tmpTar"
-      . " && tar -xf $tmpTar --directory $REMOTE_SRC_DIR/$projectName"
-      . " && rm $tmpTar"
-      . " && cd $REMOTE_SRC_DIR/$projectName"
-      . " && echo -ne \"=====\\n=====\\n=====\\n\""
-      . " && $cmd"
-      ;
+  if(-d "$LOCAL_CACHE_DIR/$projectName"){
+    runIpmagic $USER, "--rsync",
+      "-avP",
+      "--mkpath",
+      "--del",
+      "$LOCAL_CACHE_DIR/$projectName/",
+      ":$REMOTE_SRC_DIR/$projectName/",
+    ;
   }else{
-    die "ERROR: unknown project type $type\n";
+    if($type eq "GIT"){
+      runIpmagic $USER, "-s", ""
+        . " set -x"
+        . " && rm -rf $REMOTE_SRC_DIR/$projectName"
+        . " && mkdir -p $REMOTE_SRC_DIR"
+        . " && git clone $url $REMOTE_SRC_DIR/$projectName"
+      ;
+    }elsif($type eq "TAR"){
+      my $nowMillis = nowMillis();
+      my $tmpTar = "/tmp/install-src-$IPMAGIC_NAME-$projectName-$nowMillis-tarfile";
+      runIpmagic $USER, "-s", ""
+        . " set -x"
+        . " && rm -rf $REMOTE_SRC_DIR/$projectName"
+        . " && mkdir -p $REMOTE_SRC_DIR/$projectName"
+        . " && curl '$url' -o $tmpTar"
+        . " && tar -xf $tmpTar --directory $REMOTE_SRC_DIR/$projectName"
+        . " && rm $tmpTar"
+      ;
+    }else{
+      die "ERROR: unknown project type $type\n";
+    }
   }
+
+  runIpmagic $USER, "-s", ""
+    . " set -x"
+    . " && cd $REMOTE_SRC_DIR/$projectName"
+    . " && echo -ne \"=====\\n=====\\n=====\\n\""
+    . " && $cmd"
+  ;
 }
 
 sub runIpmagic($@){
