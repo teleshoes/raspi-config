@@ -9,6 +9,7 @@ my $IPMAGIC_NAME = "raspi";
 my @PKG_REMOVALS = (
   "libtag1-rusxmms",
   "wolfram-engine",  #deps: libxcb-cursor0 pi-language-support
+  "pi-wiz",
 );
 
 my %PKG_INSTALLS = (
