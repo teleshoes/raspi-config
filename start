@@ -1,6 +1,7 @@
-flashing
-keygen.pl
-expand-rootfs
+#flash with: flashing/flash.pl
+
+./setup-ssh --passwd
+
 setup-lightdm
 pi sudo reboot
 
