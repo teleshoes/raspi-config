@@ -7,6 +7,7 @@
 
 ./install-packages
 ./install-src
+./python-packages
 
 ./setup-lightdm
 
